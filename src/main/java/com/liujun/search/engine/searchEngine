@@ -1,0 +1,5 @@
+demo search engine
+1,collect 数据的收集 采用http方式下载
+2,analyze 数据分析
+3,index   索引阶段
+4,query   最后的查询操作
