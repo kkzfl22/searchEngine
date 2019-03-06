@@ -19,8 +19,9 @@ public class TestFileManage {
   public void testPutData() {
 
     String msg = "这是数据内容!";
+    long htmlId = 0;
 
-    FileChunkMsg data = FileManage.INSTANCE.putData(msg);
+    FileChunkMsg data = FileManage.INSTANCE.putData(htmlId, msg);
 
     Assert.assertNotNull(data);
   }
@@ -31,7 +32,9 @@ public class TestFileManage {
     int fileIndex = 0;
     int chunkIndex = 0;
 
-    String msg = FileManage.INSTANCE.getData(fileIndex, chunkIndex);
+    FileChunkMsg chunkmsg = new FileChunkMsg(0, 0, 0);
+
+    String msg = FileManage.INSTANCE.getData(chunkmsg);
 
     Assert.assertNotNull(msg);
   }

@@ -14,15 +14,15 @@ public class FileChunkMsg {
   /** 文件的索引号 */
   private int fileIndex;
 
-  /** 文件块的起始索引 */
-  private int chunkStartIndex;
+  /** 文件位置 */
+  private long startPostion;
 
   /** 文件大小 */
   private int dataLength;
 
-  public FileChunkMsg(int fileIndex, int chunkStartIndex, int dataLength) {
+  public FileChunkMsg(int fileIndex, long startPostion, int dataLength) {
     this.fileIndex = fileIndex;
-    this.chunkStartIndex = chunkStartIndex;
+    this.startPostion = startPostion;
     this.dataLength = dataLength;
   }
 
@@ -34,14 +34,6 @@ public class FileChunkMsg {
     this.fileIndex = fileIndex;
   }
 
-  public int getChunkStartIndex() {
-    return chunkStartIndex;
-  }
-
-  public void setChunkStartIndex(int chunkStartIndex) {
-    this.chunkStartIndex = chunkStartIndex;
-  }
-
   public int getDataLength() {
     return dataLength;
   }
@@ -50,13 +42,11 @@ public class FileChunkMsg {
     this.dataLength = dataLength;
   }
 
-  @Override
-  public String toString() {
-    final StringBuilder sb = new StringBuilder("FileChunkMsg{");
-    sb.append("fileIndex=").append(fileIndex);
-    sb.append(", chunkStartIndex=").append(chunkStartIndex);
-    sb.append(", dataLength=").append(dataLength);
-    sb.append('}');
-    return sb.toString();
+  public long getStartPostion() {
+    return startPostion;
+  }
+
+  public void setStartPostion(long startPostion) {
+    this.startPostion = startPostion;
   }
 }

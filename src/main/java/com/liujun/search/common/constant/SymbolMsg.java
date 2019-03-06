@@ -17,4 +17,10 @@ public class SymbolMsg {
 
   /** 逗号 */
   public static final String COMMA = ",";
+
+  /** 行数据结束标识 */
+  public static final String LINE_OVER = "\r\n\r\n";
+
+  /** 数据列分隔符 */
+  public static final String DATA_COLUMN = "\t";
 }
