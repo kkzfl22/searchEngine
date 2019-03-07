@@ -1,10 +1,9 @@
 package com.liujun.search.engine.collect;
 
-import com.google.common.base.Charsets;
-import com.liujun.search.common.constant.PropertyEnum;
+import com.liujun.search.common.constant.SysPropertyEnum;
 import com.liujun.search.common.constant.SymbolMsg;
 import com.liujun.search.common.io.IOUtils;
-import com.liujun.search.common.properties.PropertiesUtils;
+import com.liujun.search.common.properties.SysPropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ public class FileQueue {
 
   /** 基础路径 */
   private static final String BASEPATH =
-      PropertiesUtils.getInstance().getValue(PropertyEnum.FILE_PROCESS_PATH);
+      SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
 
   /** 数据收集的目录 */
   private static final String COLLEC_PATH = "collect/";

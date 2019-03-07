@@ -1,6 +1,5 @@
 package com.liujun.search.common.number;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

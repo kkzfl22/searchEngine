@@ -1,27 +1,33 @@
 package com.liujun.search.common.properties;
 
-import com.liujun.search.common.constant.PropertyEnum;
+import com.liujun.search.common.constant.SysPropertyEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/** properties file loader */
-public class PropertiesUtils {
+/**
+ *  只读属性文件，
+ *
+ * @author liujun
+ * @date 2014年6月10日
+ * @vsersion 0.0.1
+ */
+public class SysPropertiesUtils {
 
   private static final String DEF_FILENAME = "application.properties";
 
   private Properties prop = new Properties();
 
-  private static final PropertiesUtils PROINSTANCE = new PropertiesUtils();
+  private static final SysPropertiesUtils PROINSTANCE = new SysPropertiesUtils();
 
-  public PropertiesUtils() {
+  public SysPropertiesUtils() {
     // loader default property fiile application.properties
     loadProperties(DEF_FILENAME);
   }
 
-  public static PropertiesUtils getInstance() {
+  public static SysPropertiesUtils getInstance() {
     return PROINSTANCE;
   }
 
@@ -30,9 +36,9 @@ public class PropertiesUtils {
       InputStream in = null;
 
       try {
-        in = PropertiesUtils.class.getResourceAsStream(fileName);
+        in = SysPropertiesUtils.class.getResourceAsStream(fileName);
         if (in == null) {
-          in = PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
+          in = SysPropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
         }
         if (in == null) {
           in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
@@ -61,7 +67,7 @@ public class PropertiesUtils {
    * @param key key信息
    * @return 返回
    */
-  public String getValue(PropertyEnum key) {
+  public String getValue(SysPropertyEnum key) {
     return prop.getProperty(key.getKey());
   }
 
@@ -72,7 +78,7 @@ public class PropertiesUtils {
    * @param defValue 默认值
    * @return
    */
-  public int getIntegerValueOrDef(PropertyEnum key, int defValue) {
+  public int getIntegerValueOrDef(SysPropertyEnum key, int defValue) {
     String value = prop.getProperty(key.getKey());
 
     if (StringUtils.isNotEmpty(value)) {
@@ -85,4 +91,6 @@ public class PropertiesUtils {
       return defValue;
     }
   }
+
+
 }
