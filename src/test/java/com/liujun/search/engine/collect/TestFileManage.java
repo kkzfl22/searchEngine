@@ -1,15 +1,10 @@
 package com.liujun.search.engine.collect;
 
-import com.liujun.search.engine.collect.FileManage;
 import com.liujun.search.engine.collect.html.FileChunkMsg;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-
-import java.lang.reflect.Field;
 
 /**
  * 测试文件管理器

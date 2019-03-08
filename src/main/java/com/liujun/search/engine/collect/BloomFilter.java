@@ -2,6 +2,7 @@ package com.liujun.search.engine.collect;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import com.liujun.search.common.constant.PathCfg;
 import com.liujun.search.common.constant.SysPropertyEnum;
 import com.liujun.search.common.io.IOUtils;
 import com.liujun.search.common.properties.SysPropertiesUtils;
@@ -28,14 +29,13 @@ public class BloomFilter implements Serializable {
   private static final String BASEPATH =
       SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
 
-  /** 数据收集的目录 */
-  private static final String COLLEC_PATH = "collect/";
+
 
   /** 待爬取网页链接文件 */
   private static final String BLOOM_FILTER_FILE = "bloom_filter.bin";
 
   /** 布隆过滤器文件 */
-  private static final String PROCESS_BLOOM_FILTER = BASEPATH + COLLEC_PATH + BLOOM_FILTER_FILE;
+  private static final String PROCESS_BLOOM_FILTER = BASEPATH + PathCfg.COLLEC_PATH + BLOOM_FILTER_FILE;
 
   /** 日志对象 */
   private Logger logger = LoggerFactory.getLogger(BloomFilter.class);

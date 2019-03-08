@@ -1,5 +1,6 @@
 package com.liujun.search.engine.collect;
 
+import com.liujun.search.common.constant.PathCfg;
 import com.liujun.search.common.constant.SysPropertyEnum;
 import com.liujun.search.common.constant.SymbolMsg;
 import com.liujun.search.common.io.IOUtils;
@@ -23,13 +24,6 @@ import java.util.List;
  */
 public class FileQueue {
 
-  /** 基础路径 */
-  private static final String BASEPATH =
-      SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
-
-  /** 数据收集的目录 */
-  private static final String COLLEC_PATH = "collect/";
-
   /** 待爬取网页链接文件 */
   private static final String LINKS_FILE = "links.bin";
 
@@ -37,10 +31,11 @@ public class FileQueue {
   private static final String LINKS_FILE_OFFSET = "links_offset.bin";
 
   /** 偏移的文件 */
-  private static final String PROCESS_LINK_FILEOFFSET = BASEPATH + COLLEC_PATH + LINKS_FILE_OFFSET;
+  private static final String PROCESS_LINK_FILEOFFSET =
+      PathCfg.COLLEC_PATH + PathCfg.COLLEC_PATH + LINKS_FILE_OFFSET;
 
   /** 操作的文件路径 */
-  private static final String PRECESS_FILE = BASEPATH + COLLEC_PATH + LINKS_FILE;
+  private static final String PRECESS_FILE = PathCfg.BASEPATH + PathCfg.COLLEC_PATH + LINKS_FILE;
 
   /** 最大buffer的大小 */
   private static final int MAX_BYTEBUFFERSIZE = 4096;

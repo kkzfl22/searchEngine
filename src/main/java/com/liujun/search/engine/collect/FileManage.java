@@ -1,10 +1,9 @@
 package com.liujun.search.engine.collect;
 
+import com.liujun.search.common.constant.PathCfg;
 import com.liujun.search.common.constant.PropertiesEnum;
-import com.liujun.search.common.constant.SysPropertyEnum;
 import com.liujun.search.common.io.IOUtils;
 import com.liujun.search.common.properties.PropertiesUtilProcess;
-import com.liujun.search.common.properties.SysPropertiesUtils;
 import com.liujun.search.engine.collect.html.FileChunkMsg;
 import com.liujun.search.engine.collect.html.HtmlRawInfoBusi;
 import org.slf4j.Logger;
@@ -32,13 +31,6 @@ public class FileManage {
 
   /** 单文件的最大大小，限制为1Gb */
   private static final int FILE_SIZE = 1 * 1024 * 1024 * 1024;
-
-  /** 基础路径 */
-  private static final String BASEPATH =
-      SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
-
-  /** 数据收集的目录 */
-  private static final String COLLEC_PATH = "collect/";
 
   /** 待爬取网页链接文件 */
   private static final String FILE_HTML_DOC = "html_proc_";
@@ -85,7 +77,8 @@ public class FileManage {
 
   public void openFile() {
     // 获取指定的文件
-    String outputName = BASEPATH + COLLEC_PATH + FILE_HTML_DOC + fileIndex.get() + FILE_OUT_PREFIX;
+    String outputName =
+        PathCfg.BASEPATH + PathCfg.COLLEC_PATH + FILE_HTML_DOC + fileIndex.get() + FILE_OUT_PREFIX;
 
     try {
       // 修改为允许文件进行追加操作
@@ -219,7 +212,11 @@ public class FileManage {
     FileChannel channel = null;
 
     String outputName =
-        BASEPATH + COLLEC_PATH + FILE_HTML_DOC + chunkmsg.getFileIndex() + FILE_OUT_PREFIX;
+        PathCfg.BASEPATH
+            + PathCfg.COLLEC_PATH
+            + FILE_HTML_DOC
+            + chunkmsg.getFileIndex()
+            + FILE_OUT_PREFIX;
 
     try {
       input = new FileInputStream(outputName);
