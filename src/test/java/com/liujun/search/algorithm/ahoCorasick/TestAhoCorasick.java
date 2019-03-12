@@ -7,6 +7,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 测试ac自动机进行多模式串的匹配操作
@@ -49,7 +50,8 @@ public class TestAhoCorasick {
 
     ahoCorasick.buildFailure(ahoCorasickList);
 
-    List<Integer> matList = ahoCorasick.matchs("11311401151160117118");
+    Map<String, Integer> matList = ahoCorasick.matchs("11311401151160117118");
+    System.out.println(matList);
     Assert.assertNotNull(matList);
   }
 }

@@ -51,6 +51,7 @@ public class AhoCorasick {
     // 最后一个节点，需要标识为结束节点
     tmpRoot.isEndingChar = true;
     tmpRoot.length = srcArrays.length;
+    tmpRoot.srcData = src;
   }
 
   /** 构建失败指针 */
@@ -146,7 +147,9 @@ public class AhoCorasick {
    * @param src 字符信息
    * @return 模式串出现的位置信息
    */
-  public List<Integer> matchs(String src) {
+  public Map<String, Integer> matchs(String src) {
+
+    Map<String, Integer> matchMap = new HashMap<>();
 
     // 进行字符串的匹配操作
     char[] mainChar = src.toCharArray();
@@ -175,13 +178,15 @@ public class AhoCorasick {
       while (tmpMatch != root) {
         if (tmpMatch.isEndingChar == true) {
           int matPostion = i - tmpMatch.length + 1;
-          System.out.println("当前匹配下标:" + matPostion + ";长度:" + tmpMatch.length);
+
+          // System.out.println("当前匹配下标:" + matPostion + ";长度:" + tmpMatch.length);
+          matchMap.put(tmpMatch.srcData, matPostion);
         }
         tmpMatch = tmpMatch.fail;
       }
     }
 
-    return null;
+    return matchMap;
   }
 
   /** trie 树的节点信息 */
@@ -198,6 +203,9 @@ public class AhoCorasick {
 
     /** 当isEndingChar为true时记录下模式串的长度 */
     public int length = -1;
+
+    /** 原始数据 */
+    public String srcData;
 
     /** 失败指针 */
     public AcNode fail;
