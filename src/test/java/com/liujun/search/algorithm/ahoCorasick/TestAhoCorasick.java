@@ -25,9 +25,20 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestAhoCorasick {
 
+  /** 进行失败指针的构建 */
+  @Test
+  public void test01add() {
+    AhoCorasick ahoCorasick = new AhoCorasick();
+    ahoCorasick.insert("1234");
+    ahoCorasick.insert("234");
+    ahoCorasick.insert("23");
+    ahoCorasick.insert("3");
+    ahoCorasick.builderFailurePointer();
+  }
+
   /** 进行多模式串的匹配操作 */
   @Test
-  public void putAndMatch() {
+  public void test02putAndMatch() {
     AhoCorasick ahoCorasick = new AhoCorasick();
 
     List<String> ahoCorasickList = new ArrayList<>();
@@ -36,9 +47,9 @@ public class TestAhoCorasick {
     ahoCorasickList.add("115116");
     ahoCorasickList.add("117118");
 
-    ahoCorasick.addPointList(ahoCorasickList);
+    ahoCorasick.buildFailure(ahoCorasickList);
 
-    List<Integer> matList = ahoCorasick.matchs("113114,115116,117118");
+    List<Integer> matList = ahoCorasick.matchs("11311401151160117118");
     Assert.assertNotNull(matList);
   }
 }
