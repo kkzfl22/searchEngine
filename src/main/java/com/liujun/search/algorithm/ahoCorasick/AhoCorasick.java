@@ -21,6 +21,19 @@ public class AhoCorasick {
     SPECIAL_MAP.put('\t', 11);
   }
 
+  /**
+   * 获取ac自动机的实例对象，通过传入的模式串数组
+   *
+   * @param matchStr 模式串信息
+   * @return ac自动机的实例对象
+   */
+  public static AhoCorasick GetAhoCorasickInstance(List<String> matchStr) {
+    AhoCorasick ahoCorasick = new AhoCorasick();
+    ahoCorasick.buildFailure(matchStr);
+
+    return ahoCorasick;
+  }
+
   /** 根节点 */
   private AcNode root = new AcNode('/');
 
@@ -112,7 +125,7 @@ public class AhoCorasick {
    * @param srcArray
    * @return
    */
-  public int getIndex(int srcArray) {
+  public int getIndex(char srcArray) {
     int index = -1;
     Integer getSpecialIndex = SPECIAL_MAP.get(srcArray);
     if (getSpecialIndex != null) {
@@ -142,12 +155,62 @@ public class AhoCorasick {
   }
 
   /**
-   * 进行字符串的匹配操作
+   * 进行字符的匹配操作,进行多次字符匹配操作
    *
-   * @param src 字符信息
-   * @return 模式串出现的位置信息
+   * <p>即方法多次调用，通过matchMap记录下查找的位置信息
+   *
+   * @param src 匹配的字符串信息
    */
-  public Map<String, Integer> matchs(String src) {
+  public String matchOne(String src) {
+
+    // 进行字符串的匹配操作
+    char[] mainChar = src.toCharArray();
+
+    AcNode pmatch = root;
+
+    // 进行主串遍历
+    for (int i = 0; i < mainChar.length; i++) {
+      int index = this.getIndex(mainChar[i]);
+
+      if (index >= AC_SIZE || index == -1) {
+        continue;
+      }
+
+      // 失败指针的检查,如果当前字符的下一个字符不能被找到，并且不是根节点
+      while (pmatch.childred[index] == null && pmatch != root) {
+        pmatch = pmatch.fail;
+      }
+
+      // 获取当前字符在失败指针中的位置
+      pmatch = pmatch.childred[index];
+
+      // 如果不能被找到，则重新从root节点开始匹配
+      if (pmatch == null) {
+        pmatch = root;
+      }
+
+      AcNode tmpMatch = pmatch;
+
+      while (tmpMatch != root) {
+        // 如果当前能够被匹配成功，则返回匹配的字符串信息,并结束
+        if (tmpMatch.isEndingChar == true) {
+          return tmpMatch.srcData;
+        }
+        tmpMatch = tmpMatch.fail;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * 进行字符的匹配操作,进行多次字符匹配操作
+   *
+   * <p>即方法多次调用，通过matchMap记录下查找的位置信息
+   *
+   * @param src 匹配的字符串信息
+   */
+  public Map<String, Integer> matchMult(String src) {
 
     Map<String, Integer> matchMap = new HashMap<>();
 
@@ -179,7 +242,6 @@ public class AhoCorasick {
         if (tmpMatch.isEndingChar == true) {
           int matPostion = i - tmpMatch.length + 1;
 
-          // System.out.println("当前匹配下标:" + matPostion + ";长度:" + tmpMatch.length);
           matchMap.put(tmpMatch.srcData, matPostion);
         }
         tmpMatch = tmpMatch.fail;

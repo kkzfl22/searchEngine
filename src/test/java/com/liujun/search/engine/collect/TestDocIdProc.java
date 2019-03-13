@@ -7,6 +7,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用于测试链接与与id的对应关系
@@ -43,18 +44,29 @@ public class TestDocIdProc {
     // 网页与对应的id的关系
     boolean rsp2 = DocIdproc.INSTANCE.putDoc("http://www.taobao.com", 2);
     Assert.assertEquals(true, rsp2);
+
+    // 写入完成关闭文件
+    DocIdproc.INSTANCE.close();
   }
 
   /** 测试数据的获取操作 */
   @Test
-  public void test02getDocId() {
-    List<Long> docIds = new ArrayList<>();
-    docIds.add(0l);
-    docIds.add(1l);
-    docIds.add(2l);
+  public void test02putAndMatch() {
+    DocIdproc.INSTANCE.openFile();
+    DocIdproc.INSTANCE.putDoc("http://www.baidu.com", 1);
+    DocIdproc.INSTANCE.putDoc("http://www.163.com", 2);
+    DocIdproc.INSTANCE.putDoc("http://www.taobao.com", 3);
+    DocIdproc.INSTANCE.putDoc("http://www.qq.com", 4);
+    DocIdproc.INSTANCE.close();
 
-    List<String> values = DocIdproc.INSTANCE.getDoc(docIds);
+    List<String> ids = new ArrayList<>(2);
+    ids.add("\t1");
+    ids.add("\t3");
 
-    Assert.assertNotNull(values);
+    Map<String, String> machMap = DocIdproc.INSTANCE.getDoc(ids);
+
+    System.out.println(machMap);
+
+    Assert.assertNotNull(machMap);
   }
 }

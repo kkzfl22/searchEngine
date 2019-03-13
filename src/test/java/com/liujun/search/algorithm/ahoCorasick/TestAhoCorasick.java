@@ -50,8 +50,26 @@ public class TestAhoCorasick {
 
     ahoCorasick.buildFailure(ahoCorasickList);
 
-    Map<String, Integer> matList = ahoCorasick.matchs("11311401151160117118");
+    Map<String, Integer> matList = ahoCorasick.matchMult("11311401151160117118");
     System.out.println(matList);
     Assert.assertNotNull(matList);
+  }
+
+  /** 进行多模式串匹配一个就返回 */
+  @Test
+  public void test03putAndMatchOne() {
+    AhoCorasick ahoCorasick = new AhoCorasick();
+
+    List<String> ahoCorasickList = new ArrayList<>();
+    ahoCorasickList.add("112113");
+    ahoCorasickList.add("113114");
+
+    ahoCorasickList.add("117118");
+
+    ahoCorasick.buildFailure(ahoCorasickList);
+
+    String matValue = ahoCorasick.matchOne("0011211300117118000");
+    System.out.println(matValue);
+    Assert.assertNotNull(matValue);
   }
 }
