@@ -53,15 +53,15 @@ public class TestDocIdProc {
   @Test
   public void test02putAndMatch() {
     DocIdproc.INSTANCE.openFile();
-    DocIdproc.INSTANCE.putDoc("http://www.baidu.com", 1);
-    DocIdproc.INSTANCE.putDoc("http://www.163.com", 2);
-    DocIdproc.INSTANCE.putDoc("http://www.taobao.com", 3);
-    DocIdproc.INSTANCE.putDoc("http://www.qq.com", 4);
+    DocIdproc.INSTANCE.putDoc("http://www.baidu.com", 100000);
+    DocIdproc.INSTANCE.putDoc("http://www.163.com", 100001);
+    DocIdproc.INSTANCE.putDoc("http://www.taobao.com", 100002);
+    DocIdproc.INSTANCE.putDoc("http://www.qq.com", 100003);
     DocIdproc.INSTANCE.close();
 
     List<String> ids = new ArrayList<>(2);
-    ids.add("\t1");
-    ids.add("\t3");
+    ids.add("100000");
+    ids.add("100002");
 
     Map<String, String> machMap = DocIdproc.INSTANCE.getDoc(ids);
 

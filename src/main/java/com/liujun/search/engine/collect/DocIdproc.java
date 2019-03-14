@@ -155,8 +155,10 @@ public class DocIdproc {
 
     } catch (FileNotFoundException e) {
       e.printStackTrace();
+      logger.error("DocIdproc getDoc FileNotFoundException", e);
     } catch (IOException e) {
       e.printStackTrace();
+      logger.error("DocIdproc getDoc IOException", e);
     } finally {
       IOUtils.close(bufferReader);
       IOUtils.close(reader);
