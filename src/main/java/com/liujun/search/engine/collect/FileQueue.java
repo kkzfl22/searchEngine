@@ -1,10 +1,8 @@
 package com.liujun.search.engine.collect;
 
 import com.liujun.search.common.constant.PathCfg;
-import com.liujun.search.common.constant.SysPropertyEnum;
 import com.liujun.search.common.constant.SymbolMsg;
 import com.liujun.search.common.io.IOUtils;
-import com.liujun.search.common.properties.SysPropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +10,6 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +21,9 @@ import java.util.List;
  */
 public class FileQueue {
 
+  /** 默认获取的偏移，即为当前读取能不能的位置为起始点 */
+  public static final long DEFAULT_GET_OFFSET = -1;
+
   /** 待爬取网页链接文件 */
   private static final String LINKS_FILE = "links.bin";
 
@@ -32,7 +32,7 @@ public class FileQueue {
 
   /** 偏移的文件 */
   private static final String PROCESS_LINK_FILEOFFSET =
-      PathCfg.COLLEC_PATH + PathCfg.COLLEC_PATH + LINKS_FILE_OFFSET;
+      PathCfg.BASEPATH + PathCfg.COLLEC_PATH + LINKS_FILE_OFFSET;
 
   /** 操作的文件路径 */
   private static final String PRECESS_FILE = PathCfg.BASEPATH + PathCfg.COLLEC_PATH + LINKS_FILE;
@@ -40,8 +40,8 @@ public class FileQueue {
   /** 最大buffer的大小 */
   private static final int MAX_BYTEBUFFERSIZE = 4096;
 
-  /** 默认每次读取大小 */
-  private static final int DEFAULT_READ_SIZE = 100;
+  /** 读取文件队列的字符的大小,即最大URL地址长度 */
+  private static final int DEFAULT_READ_SIZE = 255;
 
   /** 日志 */
   private Logger log = LoggerFactory.getLogger(FileQueue.class);
@@ -62,7 +62,7 @@ public class FileQueue {
   private FileChannel readChannel;
 
   /** buffer用于缓存数据 */
-  private ByteBuffer readBuffer = ByteBuffer.allocateDirect(MAX_BYTEBUFFERSIZE);
+  private ByteBuffer readBuffer = ByteBuffer.allocateDirect(DEFAULT_READ_SIZE);
 
   /** 写入流对象 */
   private FileOutputStream writeOutput;
@@ -75,10 +75,10 @@ public class FileQueue {
 
   /** 打开文件队列 */
   public void openFileQueue() {
-    this.openPut();
-    this.openTake();
     // 读取偏移量信息
     this.readOffset();
+    this.openWrite();
+    this.openRead();
   }
 
   /** 从本地文件中读取偏移量信息 */
@@ -90,35 +90,29 @@ public class FileQueue {
     if (!offsetFile.exists()) {
       this.readOffset = 0;
       this.writeOffset = 0;
-      return;
-    }
+    } else {
+      InputStream input = null;
+      byte[] buffer = new byte[32];
 
-    InputStream input = null;
+      try {
+        input = new FileInputStream(PROCESS_LINK_FILEOFFSET);
+        int size = input.read(buffer);
 
-    byte[] buffer = new byte[32];
+        String value = new String(buffer, 0, size);
+        int spitIndex = value.indexOf(SymbolMsg.COMMA);
 
-    try {
-      input = new FileInputStream(PROCESS_LINK_FILEOFFSET);
-      int size = input.read(buffer);
-
-      String value = new String(buffer, 0, size);
-      int spitIndex = value.indexOf(SymbolMsg.COMMA);
-
-      // 重新设置当前的集合信息
-      this.readOffset = Long.parseLong(value.substring(0, spitIndex));
-      this.writeOffset = Long.parseLong(value.substring(spitIndex + 1));
-
-      this.readChannel.position(readOffset);
-      this.writeChannel.position(writeOffset);
-
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      log.error("FileQueue readOffset FileNotFoundException", e);
-    } catch (IOException e) {
-      e.printStackTrace();
-      log.error("FileQueue readOffset IOException", e);
-    } finally {
-      IOUtils.close(input);
+        // 重新设置当前的集合信息
+        this.readOffset = Long.parseLong(value.substring(0, spitIndex));
+        this.writeOffset = Long.parseLong(value.substring(spitIndex + 1));
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+        log.error("FileQueue readAndSetOffset FileNotFoundException", e);
+      } catch (IOException e) {
+        e.printStackTrace();
+        log.error("FileQueue readAndSetOffset IOException", e);
+      } finally {
+        IOUtils.close(input);
+      }
     }
   }
 
@@ -154,7 +148,7 @@ public class FileQueue {
   }
 
   /** 打开读取队列 */
-  private void openTake() {
+  public void openRead() {
     try {
       // 当前读取的文件路径
       readInput = new FileInputStream(PRECESS_FILE);
@@ -172,7 +166,7 @@ public class FileQueue {
   }
 
   /** 打开放入队列 */
-  private void openPut() {
+  public void openWrite() {
     try {
       // 文件写入流
       writeOutput = new FileOutputStream(PRECESS_FILE, true);
@@ -191,7 +185,7 @@ public class FileQueue {
   /** 进行文件队列的清理操作 */
   public void clean() {
     // 进行关闭操作
-    this.close();
+    this.closeAll();
 
     // 进行文件的清理操作
     new File(PRECESS_FILE).delete();
@@ -201,10 +195,20 @@ public class FileQueue {
   }
 
   /** 关闭操作 */
-  public void close() {
+  public void closeAll() {
+    this.closeWrite();
+    this.closeRead();
+  }
+
+  /** 关闭写入通道 */
+  public void closeWrite() {
     // 关闭写入
     IOUtils.close(writeChannel);
     IOUtils.close(writeOutput);
+  }
+
+  /** 关闭读取 */
+  public void closeRead() {
     // 再关闭读取
     IOUtils.close(readChannel);
     IOUtils.close(readInput);
@@ -261,8 +265,9 @@ public class FileQueue {
         }
         curOffset += offset;
       }
+
       // 将数据进行一次刷盘操作
-      writeChannel.force(true);
+      writeChannel.force(false);
       this.writeOffset = this.writeOffset + curOffset;
 
       return true;
@@ -274,19 +279,18 @@ public class FileQueue {
     return false;
   }
 
-  /** 获取一个数据，按默认的偏移 */
-  public List<String> get() {
-    return this.get(-1, DEFAULT_READ_SIZE);
+  public String get() {
+    return get(DEFAULT_GET_OFFSET);
   }
 
   /**
    * 获取一个变量按指定的偏移
    *
    * @param offset 指定偏移位置
-   * @param getSzie 获取大小
    */
-  public List<String> get(long offset, int getSzie) {
-    List<String> result = new ArrayList<>(getSzie + 1);
+  public String get(long offset) {
+
+    String readData = null;
 
     try {
       if (offset != -1) {
@@ -295,59 +299,38 @@ public class FileQueue {
 
       long fileStartPostion = this.readChannel.position();
 
-      boolean readNext;
       long tmpReadOffset = 0;
-      boolean readFull = false;
 
-      do {
-        // 将数据读取到缓冲区中
-        readChannel.read(readBuffer);
+      // 将数据读取到缓冲区中
+      readChannel.read(readBuffer, fileStartPostion);
 
-        readBuffer.flip();
+      readBuffer.flip();
 
-        int startPostion = 0;
-        int endPostion = 0;
+      int startPostion = 0;
+      int endPostion;
 
-        for (int i = startPostion; i < readBuffer.limit(); i++) {
-          // 如果当前找到了换行符，就添加到集合中
-          if (readBuffer.get(i) == SymbolMsg.LINE_INT) {
-            endPostion = i;
-            byte[] buffCode = new byte[endPostion - startPostion + 1];
-            readBuffer.get(buffCode);
-            result.add(new String(buffCode));
-            startPostion = i + 1;
-            // 偏移加上缓冲区大小
-            tmpReadOffset = tmpReadOffset + buffCode.length;
+      for (int i = startPostion; i < readBuffer.limit(); i++) {
+        // 如果当前找到了换行符，就添加到集合中
+        if (readBuffer.get(i) == SymbolMsg.LINE_INT) {
+          endPostion = i;
+          byte[] buffCode = new byte[endPostion - startPostion + 1];
 
-            buffCode = null;
+          readBuffer.get(buffCode, startPostion, buffCode.length);
+          readData = new String(buffCode);
 
-            // 如果当前到达缓冲区大小
-            if (result.size() >= getSzie) {
-              readBuffer.clear();
-              readFull = true;
-              break;
-            }
-          }
-        }
-
-        // 如果当前缓冲区已经满了，则退出循环，下次再读取
-        if (readFull) {
+          // 读取完成清空队列
           readBuffer.clear();
-          readNext = false;
-        } else {
-          // 如果当前已经完成读取，则退出，等待下一次
-          if (readBuffer.position() == readBuffer.limit()) {
-            readBuffer.clear();
-            readNext = false;
-          } else {
-            // 进行压缩操作
-            readBuffer.compact();
-            // 只要启动了压缩，则需要再次遍历
-            readNext = true;
-          }
-        }
-      } while (readNext);
 
+          // 偏移加上缓冲区大小
+          tmpReadOffset = tmpReadOffset + buffCode.length;
+
+          buffCode = null;
+          break;
+        }
+      }
+
+      // 读取完成清空队列
+      readBuffer.clear();
       // 更新偏移位置
       this.readOffset = this.readOffset + tmpReadOffset;
       // 将位置写入到postion中
@@ -357,6 +340,6 @@ public class FileQueue {
       log.error("FileQueue get list offset IOException ,offset " + offset, e);
     }
 
-    return result;
+    return readData;
   }
 }

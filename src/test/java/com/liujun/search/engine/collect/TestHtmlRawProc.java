@@ -34,12 +34,12 @@ public class TestHtmlRawProc {
     String html = "";
 
     // 将数据保存到文件中
-    HtmlRawProc.INSTANCE.putHtml(seqId, html);
+    DocRawProc.INSTANCE.putHtml(seqId, html);
   }
 
   /** 通过id去获取html的内容信息 */
   public void testGetHtmlRaw() {
     // 将数据保存到文件中
-    HtmlRawProc.INSTANCE.getHtml(seqId);
+    DocRawProc.INSTANCE.getHtml(seqId);
   }
 }

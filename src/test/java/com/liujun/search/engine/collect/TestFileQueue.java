@@ -31,42 +31,41 @@ public class TestFileQueue {
     FileQueue.INSTANCE.openFileQueue();
   }
 
-  /** 测试文件队列的放入 */
-  @Test
-  public void test01QueuePut() {
-    boolean result = FileQueue.INSTANCE.put("http://www.sohu.com/" + SymbolMsg.LINE);
-    Assert.assertEquals(true, result);
-  }
-
   /** 从队列中获取一个数据 */
   @Test
   public void test02QueueGet() {
-    List<String> result = FileQueue.INSTANCE.get();
 
-    List<String> resultList = new ArrayList<>();
-    resultList.add("http://www.sohu.com/" + SymbolMsg.LINE);
+    String lineData = "http://www.sohu.com/" + SymbolMsg.LINE;
 
-    Assert.assertEquals(resultList, result);
+    boolean result = FileQueue.INSTANCE.put(lineData);
+
+    Assert.assertEquals(true, result);
+
+    String getData = FileQueue.INSTANCE.get();
+
+    Assert.assertEquals(lineData, getData);
   }
 
   @Test
   public void test03QueuePutList() {
     List<String> list = new ArrayList<>();
 
-    list.add("http://www.sohu.com1/" + SymbolMsg.LINE);
-    list.add("http://www.sohu.com2/" + SymbolMsg.LINE);
-    list.add("http://www.sohu.com3/" + SymbolMsg.LINE);
-    list.add("http://www.sohu.com4/" + SymbolMsg.LINE);
+    String line1 = "http://www.sohu.com1/" + SymbolMsg.LINE;
+    list.add(line1);
+    String line2 = "http://www.sohu.com2/" + SymbolMsg.LINE;
+    list.add(line2);
+    String line3 = "http://www.sohu.com3/" + SymbolMsg.LINE;
+    list.add(line3);
+    String line4 = "http://www.sohu.com4/" + SymbolMsg.LINE;
+    list.add(line4);
 
     boolean result = FileQueue.INSTANCE.put(list);
-
     Assert.assertEquals(true, result);
-  }
 
-  @Test
-  public void test04QueuegetOffset() {
-    List<String> result = FileQueue.INSTANCE.get();
-    Assert.assertNotNull(result);
+    Assert.assertEquals(line1, FileQueue.INSTANCE.get());
+    Assert.assertEquals(line2, FileQueue.INSTANCE.get());
+    Assert.assertEquals(line3, FileQueue.INSTANCE.get());
+    Assert.assertEquals(line4, FileQueue.INSTANCE.get());
   }
 
   /** 测试队列的功能，超过一个buffer大小的情况时 */
@@ -84,10 +83,10 @@ public class TestFileQueue {
 
     List<String> getList = new ArrayList<>(maxFileQueue);
 
-    List<String> getBuffList = null;
+    String getBuffList = null;
 
-    while ((getBuffList = FileQueue.INSTANCE.get()) != null && !getBuffList.isEmpty()) {
-      getList.addAll(getBuffList);
+    while ((getBuffList = FileQueue.INSTANCE.get()) != null) {
+      getList.add(getBuffList);
     }
 
     Assert.assertEquals(result, getList);
@@ -98,7 +97,7 @@ public class TestFileQueue {
   public void test07FileQueue() {
 
     // 先执行下清理操作,再开户操作
-    FileQueue.INSTANCE.close();
+    FileQueue.INSTANCE.closeAll();
     FileQueue.INSTANCE.clean();
     FileQueue.INSTANCE.openFileQueue();
 
@@ -114,8 +113,13 @@ public class TestFileQueue {
 
     List<String> compResult = new ArrayList<>(maxFileQueue);
 
+    // 首次需要从0开始读取
+    String data = FileQueue.INSTANCE.get();
+
+    Assert.assertNotNull(data);
+
     // 读取10
-    compResult.addAll(FileQueue.INSTANCE.get(-1, 100));
+    compResult.add(data);
 
     // 保存offset
     FileQueue.INSTANCE.writeOffset();
@@ -123,10 +127,10 @@ public class TestFileQueue {
     FileQueue.INSTANCE.readOffset();
 
     // 再进行读取操作
-    List<String> getBuffList = null;
+    String getBuffList = null;
 
-    while ((getBuffList = FileQueue.INSTANCE.get()) != null && !getBuffList.isEmpty()) {
-      compResult.addAll(getBuffList);
+    while ((getBuffList = FileQueue.INSTANCE.get()) != null) {
+      compResult.add(getBuffList);
     }
 
     // 再保存一次

@@ -13,19 +13,9 @@ import java.util.List;
  */
 public class DataCollect {
 
-  public static List<String> INTEL_ENTRY_LIST = new ArrayList<>();
-
-  static {
-    INTEL_ENTRY_LIST.add("https://www.qq.com");
-    INTEL_ENTRY_LIST.add("http://www.sohu.com");
-    INTEL_ENTRY_LIST.add("https://www.163.com");
-  }
-
   public void collect() {
 
-    LinkedList<String> queue = new LinkedList<>();
-
-    // 1,将入放入到队列中作为起妈搜索点
+    // 1,读取文件队列中首个地址，做为图的搜索顶点
 
 
   }

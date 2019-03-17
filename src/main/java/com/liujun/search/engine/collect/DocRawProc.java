@@ -7,9 +7,9 @@ package com.liujun.search.engine.collect;
  * @version 0.0.1
  * @date 2019/03/04
  */
-public class HtmlRawProc {
+public class DocRawProc {
 
-  public static final HtmlRawProc INSTANCE = new HtmlRawProc();
+  public static final DocRawProc INSTANCE = new DocRawProc();
 
   /** 文件中每个块的大小 */
   private static final int CHUNK = 1 * 1024;
