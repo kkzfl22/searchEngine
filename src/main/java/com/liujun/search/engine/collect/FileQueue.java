@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +21,6 @@ import java.util.List;
  * @date 2019/03/01
  */
 public class FileQueue {
-
-  /** 默认获取的偏移，即为当前读取能不能的位置为起始点 */
-  public static final long DEFAULT_GET_OFFSET = -1;
 
   /** 待爬取网页链接文件 */
   private static final String LINKS_FILE = "links.bin";
@@ -147,41 +145,6 @@ public class FileQueue {
     }
   }
 
-  /** 打开读取队列 */
-  public void openRead() {
-    try {
-      // 当前读取的文件路径
-      readInput = new FileInputStream(PRECESS_FILE);
-      // 获取文件通道
-      readChannel = readInput.getChannel();
-      // 设置当前默认的offset
-      readChannel.position(readOffset);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      log.error("FileQueue openRead FileNotFoundException", e);
-    } catch (IOException e) {
-      e.printStackTrace();
-      log.error("FileQueue openRead IOException", e);
-    }
-  }
-
-  /** 打开放入队列 */
-  public void openWrite() {
-    try {
-      // 文件写入流
-      writeOutput = new FileOutputStream(PRECESS_FILE, true);
-      // 文件输出通道
-      writeChannel = writeOutput.getChannel();
-      writeChannel.position(writeOffset);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      log.error("FileQueue openWrite FileNotFoundException", e);
-    } catch (IOException e) {
-      e.printStackTrace();
-      log.error("FileQueue openWrite IOException", e);
-    }
-  }
-
   /** 进行文件队列的清理操作 */
   public void clean() {
     // 进行关闭操作
@@ -198,20 +161,6 @@ public class FileQueue {
   public void closeAll() {
     this.closeWrite();
     this.closeRead();
-  }
-
-  /** 关闭写入通道 */
-  public void closeWrite() {
-    // 关闭写入
-    IOUtils.close(writeChannel);
-    IOUtils.close(writeOutput);
-  }
-
-  /** 关闭读取 */
-  public void closeRead() {
-    // 再关闭读取
-    IOUtils.close(readChannel);
-    IOUtils.close(readInput);
   }
 
   /**
@@ -254,16 +203,22 @@ public class FileQueue {
     try {
       int curOffset = 0;
       for (String address : addressList) {
-        writeBuffer.put(address.getBytes(StandardCharsets.UTF_8));
-        writeBuffer.flip();
+        // 地址的转换后的buffer信息
+        byte[] addressBytes = address.getBytes(StandardCharsets.UTF_8);
 
-        int offset = writeChannel.write(writeBuffer);
-
-        // 数据写入完成后需要clean
-        if (offset == writeBuffer.position()) {
-          writeBuffer.clear();
+        writeBuffer.put(addressBytes);
+        // 如果当前数据加待写入的数据未超过缓冲区，则写入缓冲区，待数据满了再写入文件中
+        if (writeBuffer.position() + addressBytes.length < MAX_BYTEBUFFERSIZE) {
+          continue;
+        } else {
+          // 将文件写入到通道中
+          this.writeFileChannel(curOffset);
         }
-        curOffset += offset;
+      }
+
+      // 当遍历完成后还有数据未写入需要进行写入操作
+      if (writeBuffer.position() != 0) {
+        this.writeFileChannel(curOffset);
       }
 
       // 将数据进行一次刷盘操作
@@ -279,24 +234,11 @@ public class FileQueue {
     return false;
   }
 
+  /** 从文件队列中获取一个数据 */
   public String get() {
-    return get(DEFAULT_GET_OFFSET);
-  }
-
-  /**
-   * 获取一个变量按指定的偏移
-   *
-   * @param offset 指定偏移位置
-   */
-  public String get(long offset) {
-
     String readData = null;
 
     try {
-      if (offset != -1) {
-        this.readChannel.position(offset);
-      }
-
       long fileStartPostion = this.readChannel.position();
 
       long tmpReadOffset = 0;
@@ -318,9 +260,6 @@ public class FileQueue {
           readBuffer.get(buffCode, startPostion, buffCode.length);
           readData = new String(buffCode);
 
-          // 读取完成清空队列
-          readBuffer.clear();
-
           // 偏移加上缓冲区大小
           tmpReadOffset = tmpReadOffset + buffCode.length;
 
@@ -337,9 +276,161 @@ public class FileQueue {
       this.readChannel.position(fileStartPostion + tmpReadOffset);
     } catch (IOException e) {
       e.printStackTrace();
-      log.error("FileQueue get list offset IOException ,offset " + offset, e);
+      log.error("FileQueue get list offset IOException  ", e);
     }
 
     return readData;
+  }
+
+  /**
+   * 通过指定的偏移位置，读取指定的行数
+   *
+   * @param offsetParam 起始始偏移位置
+   * @param readNum 指定的读取行数
+   * @return 读取到的数据集合
+   */
+  public List<String> readData(int offsetParam, int readNum) {
+
+    List<String> result = new ArrayList<>();
+
+    int startOffset = offsetParam;
+
+    if (startOffset < 0) {
+      startOffset = 0;
+    }
+
+    FileInputStream inputStream = null;
+    FileChannel channel = null;
+    ByteBuffer inputBuffer = ByteBuffer.allocate(2048);
+
+    try {
+      // 当前读取的文件路径
+      inputStream = new FileInputStream(PRECESS_FILE);
+      // 获取文件通道
+      channel = inputStream.getChannel();
+      // 设置起始位置
+      channel.position(startOffset);
+
+      int startPostion = 0;
+      int endPostion = 0;
+
+      // 声明读取的变量信息
+      while ((channel.read(inputBuffer, startOffset)) > 0) {
+        inputBuffer.flip();
+        for (int i = startPostion; i < inputBuffer.limit(); i++) {
+          // 如果当前找到了换行符，就添加到集合中
+          if (inputBuffer.get(i) == SymbolMsg.LINE_INT) {
+            endPostion = i;
+            byte[] buffCode = new byte[endPostion - startPostion + 1];
+            inputBuffer.get(buffCode, 0, buffCode.length);
+            result.add(new String(buffCode));
+
+            // 偏移加上缓冲区大小
+            startOffset = startOffset + buffCode.length;
+            startPostion = i+1;
+            buffCode = null;
+
+            if (result.size() >= readNum) {
+              break;
+            }
+          }
+        }
+        if (result.size() >= readNum) {
+          break;
+        }
+
+        // 如果当前缓冲级使用完成，则更新缓冲区为0
+        if (inputBuffer.position() == inputBuffer.limit()) {
+          inputBuffer.clear();
+        } else {
+          inputBuffer.compact();
+        }
+        // 重新更新起始顶点为0
+        startPostion = 0;
+      }
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      log.error("FileQueue openRead FileNotFoundException", e);
+    } catch (IOException e) {
+      e.printStackTrace();
+      log.error("FileQueue openRead IOException", e);
+    } finally {
+      IOUtils.close(channel);
+      IOUtils.close(inputStream);
+    }
+
+    return result;
+  }
+
+  /**
+   * 将数据写入到文件通道中
+   *
+   * @param offsetParm 指定起始偏移位置
+   * @return 写入数据的长度
+   * @throws IOException 异常
+   */
+  private int writeFileChannel(int offsetParm) throws IOException {
+    int curOffset = offsetParm;
+
+    writeBuffer.flip();
+    int offset = writeChannel.write(writeBuffer);
+
+    // 数据写入完成后需要clean
+    if (offset == writeBuffer.position()) {
+      writeBuffer.clear();
+    }
+    curOffset += offset;
+
+    return curOffset;
+  }
+
+  /** 打开读取队列 */
+  private void openRead() {
+    try {
+      // 当前读取的文件路径
+      readInput = new FileInputStream(PRECESS_FILE);
+      // 获取文件通道
+      readChannel = readInput.getChannel();
+      // 设置当前默认的offset
+      readChannel.position(readOffset);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      log.error("FileQueue openRead FileNotFoundException", e);
+    } catch (IOException e) {
+      e.printStackTrace();
+      log.error("FileQueue openRead IOException", e);
+    }
+  }
+
+  /** 打开放入队列 */
+  private void openWrite() {
+    try {
+      // 文件写入流
+      writeOutput = new FileOutputStream(PRECESS_FILE, true);
+      // 文件输出通道
+      writeChannel = writeOutput.getChannel();
+      writeChannel.position(writeOffset);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      log.error("FileQueue openWrite FileNotFoundException", e);
+    } catch (IOException e) {
+      e.printStackTrace();
+      log.error("FileQueue openWrite IOException", e);
+    }
+  }
+
+  /** 关闭写入通道 */
+  private void closeWrite() {
+    // 关闭写入
+    IOUtils.close(writeChannel);
+    IOUtils.close(writeOutput);
+  }
+
+  /** 关闭读取 */
+  private void closeRead() {
+    // 再关闭读取
+    IOUtils.close(readChannel);
+    IOUtils.close(readInput);
   }
 }

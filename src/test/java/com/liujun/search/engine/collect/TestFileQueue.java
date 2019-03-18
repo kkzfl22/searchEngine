@@ -138,4 +138,20 @@ public class TestFileQueue {
 
     Assert.assertEquals(result, compResult);
   }
+
+  /** 从队列的指定位置，获取指定的行数 */
+  @Test
+  public void test08FileQueueReadNum() {
+
+    // 先写入数据;
+    int maxFileQueue = 100;
+    List<String> result = new ArrayList<>(maxFileQueue);
+    for (int i = 0; i < maxFileQueue; i++) {
+      result.add("http://www.sohu.com/" + i + SymbolMsg.LINE);
+    }
+    FileQueue.INSTANCE.put(result);
+
+    List<String> list = FileQueue.INSTANCE.readData(88, 10);
+    Assert.assertEquals(10, list.size());
+  }
 }
