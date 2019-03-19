@@ -24,11 +24,12 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestFileQueue {
 
+  private static final String FLAG = "suhu";
+
   /** 仅操作一次 */
   @BeforeClass
   public static void testClean() {
-    FileQueue.INSTANCE.clean();
-    FileQueue.INSTANCE.openFileQueue();
+    FileQueue.GetQueue(FLAG).clean();
   }
 
   /** 从队列中获取一个数据 */
@@ -37,13 +38,17 @@ public class TestFileQueue {
 
     String lineData = "http://www.sohu.com/" + SymbolMsg.LINE;
 
-    boolean result = FileQueue.INSTANCE.put(lineData);
+    FileQueue instance = FileQueue.GetQueue(FLAG);
+
+    boolean result = instance.put(lineData);
 
     Assert.assertEquals(true, result);
 
-    String getData = FileQueue.INSTANCE.get();
+    String getData = instance.get();
 
     Assert.assertEquals(lineData, getData);
+
+    instance.clean();
   }
 
   @Test
@@ -59,13 +64,17 @@ public class TestFileQueue {
     String line4 = "http://www.sohu.com4/" + SymbolMsg.LINE;
     list.add(line4);
 
-    boolean result = FileQueue.INSTANCE.put(list);
+    FileQueue instance = FileQueue.GetQueue(FLAG);
+
+    boolean result = instance.put(list);
     Assert.assertEquals(true, result);
 
-    Assert.assertEquals(line1, FileQueue.INSTANCE.get());
-    Assert.assertEquals(line2, FileQueue.INSTANCE.get());
-    Assert.assertEquals(line3, FileQueue.INSTANCE.get());
-    Assert.assertEquals(line4, FileQueue.INSTANCE.get());
+    Assert.assertEquals(line1, instance.get());
+    Assert.assertEquals(line2, instance.get());
+    Assert.assertEquals(line3, instance.get());
+    Assert.assertEquals(line4, instance.get());
+
+    instance.clean();
   }
 
   /** 测试队列的功能，超过一个buffer大小的情况时 */
@@ -78,28 +87,33 @@ public class TestFileQueue {
       result.add("http://www.sohu.com/" + i + SymbolMsg.LINE);
     }
 
+    FileQueue instance = FileQueue.GetQueue(FLAG);
+
     // 将数据放入
-    FileQueue.INSTANCE.put(result);
+    instance.put(result);
 
     List<String> getList = new ArrayList<>(maxFileQueue);
 
     String getBuffList = null;
 
-    while ((getBuffList = FileQueue.INSTANCE.get()) != null) {
+    while ((getBuffList = instance.get()) != null) {
       getList.add(getBuffList);
     }
 
     Assert.assertEquals(result, getList);
+
+    instance.clean();
   }
 
   /** 进行关闭后再次读取操作 */
   @Test
   public void test07FileQueue() {
 
+    FileQueue instance = FileQueue.GetQueue(FLAG);
+
     // 先执行下清理操作,再开户操作
-    FileQueue.INSTANCE.closeAll();
-    FileQueue.INSTANCE.clean();
-    FileQueue.INSTANCE.openFileQueue();
+    instance.clean();
+    instance.openFileQueue();
 
     // 1,写入100
     int maxFileQueue = 500;
@@ -109,12 +123,12 @@ public class TestFileQueue {
     }
 
     // 将数据放入
-    FileQueue.INSTANCE.put(result);
+    instance.put(result);
 
     List<String> compResult = new ArrayList<>(maxFileQueue);
 
     // 首次需要从0开始读取
-    String data = FileQueue.INSTANCE.get();
+    String data = instance.get();
 
     Assert.assertNotNull(data);
 
@@ -122,21 +136,23 @@ public class TestFileQueue {
     compResult.add(data);
 
     // 保存offset
-    FileQueue.INSTANCE.writeOffset();
+    instance.writeOffset();
     // 再次读取offset
-    FileQueue.INSTANCE.readOffset();
+    instance.readOffset();
 
     // 再进行读取操作
     String getBuffList = null;
 
-    while ((getBuffList = FileQueue.INSTANCE.get()) != null) {
+    while ((getBuffList = instance.get()) != null) {
       compResult.add(getBuffList);
     }
 
     // 再保存一次
-    FileQueue.INSTANCE.writeOffset();
+    instance.writeOffset();
 
     Assert.assertEquals(result, compResult);
+
+    instance.clean();
   }
 
   /** 从队列的指定位置，获取指定的行数 */
@@ -149,9 +165,13 @@ public class TestFileQueue {
     for (int i = 0; i < maxFileQueue; i++) {
       result.add("http://www.sohu.com/" + i + SymbolMsg.LINE);
     }
-    FileQueue.INSTANCE.put(result);
+    FileQueue instance = FileQueue.GetQueue(FLAG);
 
-    List<String> list = FileQueue.INSTANCE.readData(88, 10);
+    instance.put(result);
+
+    List<String> list = instance.readData(88, 10);
     Assert.assertEquals(10, list.size());
+
+    instance.clean();
   }
 }

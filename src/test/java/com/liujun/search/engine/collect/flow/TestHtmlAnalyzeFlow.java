@@ -1,9 +1,9 @@
 package com.liujun.search.engine.collect.flow;
 
-import com.liujun.search.engine.collect.FileQueue;
+import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import org.junit.Assert;
+import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,23 +13,20 @@ import java.util.List;
  */
 public class TestHtmlAnalyzeFlow {
 
+  /** 测试网页分析 */
+  @Test
   public void testHtmlAnalyze() {
     int readNum = 100;
-    // 1,在有向图中放入一个顶点
-    FileQueue.INSTANCE.put("http://www.sohu.com/");
+
     // 2，执行下载
-    boolean result = HtmlAnalyzeFLow.INSTANCE.htmlAnalyze(readNum);
+    boolean result = HtmlAnalyzeFLow.INSTANCE.htmlAnalyze(readNum, WebEntryEnum.SOHO);
 
     // 进行结果的验证
     Assert.assertEquals(result, true);
 
-    // 检查队列中的数字是否为读取到的指定数量
-    List<String> downUrlList = new ArrayList<>();
+    // 读取100条记录
+    List<String> readList = HtmlAnalyzeFLow.INSTANCE.getTopUrl(100, WebEntryEnum.SOHO);
 
-    String data = null;
-
-    while ((data = FileQueue.INSTANCE.get()) != null) {
-      downUrlList.add(data);
-    }
+    Assert.assertEquals(readNum, readList.size());
   }
 }

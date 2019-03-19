@@ -22,7 +22,8 @@ public class DownLoadHtml implements FlowServiceInf {
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
     // 1,从文件队列中获取地址信息
-    String urlAddress = FileQueue.INSTANCE.get();
+    String urlAddress = null;
+    // FileQueue.INSTANCE.get();
 
     String htmlContext = DownLoad.INSTANCE.downloadHtml(urlAddress);
 

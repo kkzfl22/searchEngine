@@ -22,18 +22,20 @@ import java.util.List;
  */
 public class FileQueue {
 
-  /** 待爬取网页链接文件 */
-  private static final String LINKS_FILE = "links.bin";
+  /** 文件队列名称的前缀信息 */
+  private static final String LINKS_PREFIX_NAME = "links_";
 
-  /** 记录下的读取与写入的偏移的位置 */
-  private static final String LINKS_FILE_OFFSET = "links_offset.bin";
+  /** 文件队列的偏移前缀信息 */
+  private static final String LINKS_OFFSET_PREFIX_NAME = "links_offset";
+
+  /** 文件的后缀信息 */
+  private static final String SUFFIX_NAME = ".bin";
+
+  /** 网页链接文件夹信息 */
+  private static final String LINKED_PATH = "links";
 
   /** 偏移的文件 */
-  private static final String PROCESS_LINK_FILEOFFSET =
-      PathCfg.BASEPATH + PathCfg.COLLEC_PATH + LINKS_FILE_OFFSET;
-
-  /** 操作的文件路径 */
-  private static final String PRECESS_FILE = PathCfg.BASEPATH + PathCfg.COLLEC_PATH + LINKS_FILE;
+  private static final String PROCESS_LINK_BASE_PATH = PathCfg.BASEPATH + PathCfg.COLLEC_PATH;
 
   /** 最大buffer的大小 */
   private static final int MAX_BYTEBUFFERSIZE = 4096;
@@ -43,9 +45,6 @@ public class FileQueue {
 
   /** 日志 */
   private Logger log = LoggerFactory.getLogger(FileQueue.class);
-
-  /** 实例对象 */
-  public static final FileQueue INSTANCE = new FileQueue();
 
   /** 当前读取的偏移量 */
   private long readOffset = 0;
@@ -71,6 +70,33 @@ public class FileQueue {
   /** buffer用于缓存数据 */
   private ByteBuffer writeBuffer = ByteBuffer.allocateDirect(MAX_BYTEBUFFERSIZE);
 
+  /** 用来存储链接的文件，按网站来进行 */
+  private final String linksFile;
+
+  /** 网站链接文件偏移信息 */
+  private final String linkedOffsetFile;
+
+  public FileQueue(String linksFile) {
+    this.linksFile = LINKS_PREFIX_NAME + linksFile + SUFFIX_NAME;
+    this.linkedOffsetFile = LINKS_OFFSET_PREFIX_NAME + linksFile + SUFFIX_NAME;
+  }
+
+  /**
+   * 获取文件队列，
+   *
+   * @param fileName 队列名称
+   * @return
+   */
+  public static FileQueue GetQueue(String fileName) {
+    FileQueue instance = new FileQueue(fileName);
+    // 检查并创建基础文件夹
+    instance.checkAndCreateDir();
+    // 默认将文件通道打开
+    instance.openFileQueue();
+
+    return instance;
+  }
+
   /** 打开文件队列 */
   public void openFileQueue() {
     // 读取偏移量信息
@@ -82,8 +108,10 @@ public class FileQueue {
   /** 从本地文件中读取偏移量信息 */
   public void readOffset() {
 
+    String linkOffset = this.getLinksOffsetFile();
+
     // 1,check file exists
-    File offsetFile = new File(PROCESS_LINK_FILEOFFSET);
+    File offsetFile = new File(linkOffset);
 
     if (!offsetFile.exists()) {
       this.readOffset = 0;
@@ -93,7 +121,7 @@ public class FileQueue {
       byte[] buffer = new byte[32];
 
       try {
-        input = new FileInputStream(PROCESS_LINK_FILEOFFSET);
+        input = new FileInputStream(linkOffset);
         int size = input.read(buffer);
 
         String value = new String(buffer, 0, size);
@@ -126,13 +154,15 @@ public class FileQueue {
     byte[] outbyte = outOffset.toString().getBytes();
 
     try {
-      File outFile = new File(PROCESS_LINK_FILEOFFSET);
+      String linkOffset = this.getLinksOffsetFile();
+
+      File outFile = new File(linkOffset);
 
       if (!outFile.exists()) {
         outFile.createNewFile();
       }
 
-      outputStream = new FileOutputStream(PROCESS_LINK_FILEOFFSET, false);
+      outputStream = new FileOutputStream(linkOffset, false);
       outputStream.write(outbyte);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -150,15 +180,20 @@ public class FileQueue {
     // 进行关闭操作
     this.closeAll();
 
+    // 文件队列信息
+    String linksFile = this.getLinksFile();
+    // 偏移文件信息
+    String linkOffset = this.getLinksOffsetFile();
+
     // 进行文件的清理操作
-    new File(PRECESS_FILE).delete();
+    new File(linksFile).delete();
 
     // 删除offset文件
-    new File(PROCESS_LINK_FILEOFFSET).delete();
+    new File(linkOffset).delete();
   }
 
   /** 关闭操作 */
-  public void closeAll() {
+  private void closeAll() {
     this.closeWrite();
     this.closeRead();
   }
@@ -304,8 +339,11 @@ public class FileQueue {
     ByteBuffer inputBuffer = ByteBuffer.allocate(2048);
 
     try {
+      // 文件队列信息
+      String linksFile = this.getLinksFile();
+
       // 当前读取的文件路径
-      inputStream = new FileInputStream(PRECESS_FILE);
+      inputStream = new FileInputStream(linksFile);
       // 获取文件通道
       channel = inputStream.getChannel();
       // 设置起始位置
@@ -327,7 +365,7 @@ public class FileQueue {
 
             // 偏移加上缓冲区大小
             startOffset = startOffset + buffCode.length;
-            startPostion = i+1;
+            startPostion = i + 1;
             buffCode = null;
 
             if (result.size() >= readNum) {
@@ -388,8 +426,10 @@ public class FileQueue {
   /** 打开读取队列 */
   private void openRead() {
     try {
+      // 文件队列信息
+      String linksFile = this.getLinksFile();
       // 当前读取的文件路径
-      readInput = new FileInputStream(PRECESS_FILE);
+      readInput = new FileInputStream(linksFile);
       // 获取文件通道
       readChannel = readInput.getChannel();
       // 设置当前默认的offset
@@ -406,8 +446,11 @@ public class FileQueue {
   /** 打开放入队列 */
   private void openWrite() {
     try {
+      // 文件队列信息
+      String linksFile = this.getLinksFile();
+
       // 文件写入流
-      writeOutput = new FileOutputStream(PRECESS_FILE, true);
+      writeOutput = new FileOutputStream(linksFile, true);
       // 文件输出通道
       writeChannel = writeOutput.getChannel();
       writeChannel.position(writeOffset);
@@ -432,5 +475,38 @@ public class FileQueue {
     // 再关闭读取
     IOUtils.close(readChannel);
     IOUtils.close(readInput);
+  }
+
+  /**
+   * 获取存储链接的网页文件路径信息
+   *
+   * @return 链接文件信息
+   */
+  private String getLinksFile() {
+    return PROCESS_LINK_BASE_PATH + File.separator + LINKED_PATH + File.separator + this.linksFile;
+  }
+
+  /**
+   * 获取存储链接的偏移量文件路径信息
+   *
+   * @return
+   */
+  private String getLinksOffsetFile() {
+    return PROCESS_LINK_BASE_PATH
+        + File.separator
+        + LINKED_PATH
+        + File.separator
+        + this.linkedOffsetFile;
+  }
+
+  /** 进行文件夹的创建操作 */
+  private void checkAndCreateDir() {
+    String baseDir = PROCESS_LINK_BASE_PATH + File.separator + LINKED_PATH + File.separator;
+
+    // 检查并创建文件夹
+    File outDir = new File(baseDir);
+    if (!outDir.exists()) {
+      outDir.mkdirs();
+    }
   }
 }
