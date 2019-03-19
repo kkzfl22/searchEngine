@@ -1,5 +1,6 @@
 package com.liujun.search.engine.collect.flow;
 
+import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.FileQueue;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 
@@ -16,6 +17,15 @@ public class HtmlAnalyzeFLow {
 
   /** 网页分析流程 */
   public static final HtmlAnalyzeFLow INSTANCE = new HtmlAnalyzeFLow();
+
+  public static final FlowServiceInf[] FLOW = new FlowServiceInf[4];
+
+  static {
+    // 2，下载网页信息
+    FLOW[0] = DownLoadHtml.INSTANCE;
+    // 3,进行网页分析，抽取出链接地址信息
+    FLOW[1] = HtmlContextAnalyze.INSTANCE;
+  }
 
   /**
    * 网页分析流程

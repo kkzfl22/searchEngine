@@ -16,7 +16,7 @@ public class TestCharMatcherBMGoodSuffix {
   @Test
   public void test01GoogSuffixCharMatcher() {
     String matchers = "abd";
-    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getInstance(matchers);
+    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
 
     String src = "abcacabdc";
 
@@ -34,7 +34,7 @@ public class TestCharMatcherBMGoodSuffix {
     String matchers = "cbacabc";
     int index = 0;
 
-    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getInstance(matchers);
+    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
 
     int findIndex = instance.matcherIndex(src.toCharArray(), index);
     Assert.assertEquals(7, findIndex);

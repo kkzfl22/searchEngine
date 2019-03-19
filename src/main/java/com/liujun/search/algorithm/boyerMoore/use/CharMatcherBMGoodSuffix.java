@@ -60,15 +60,7 @@ public class CharMatcherBMGoodSuffix extends CharMatcherBMBadChars {
     }
   }
 
-  /**
-   * 用来实现好后缀规则的代码实现
-   *
-   * @param patterChar 模式串
-   * @return 返回好后缀规则的实例对象
-   */
-  public static CharMatcherBMBadChars getInstance(String patterChar) {
-    return new CharMatcherBMGoodSuffix(patterChar);
-  }
+
 
   @Override
   public int countMoveGoodSuffix(int badIndex) {

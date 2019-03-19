@@ -12,8 +12,13 @@ import com.liujun.search.common.flow.FlowServiceInf;
  */
 public class HtmlContextAnalyze implements FlowServiceInf {
 
-    @Override
-    public boolean runFlow(FlowServiceContext context) throws Exception {
-        return false;
-    }
+  public static final HtmlContextAnalyze INSTANCE = new HtmlContextAnalyze();
+
+  @Override
+  public boolean runFlow(FlowServiceContext context) throws Exception {
+
+
+
+    return false;
+  }
 }

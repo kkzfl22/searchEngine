@@ -39,14 +39,26 @@ public class CharMatcherBMBadChars {
    * @param patterChar 模式串
    * @return 实例对象信息
    */
-  public static CharMatcherBMBadChars getInstance(String patterChar) {
+  public static CharMatcherBMBadChars getBadInstance(String patterChar) {
     return new CharMatcherBMBadChars(patterChar);
   }
 
-
+  /**
+   * 用来实现好后缀规则的代码实现
+   *
+   * <p>止方法比较节省内存，但速率比带好后缀规则的速度慢一点
+   *
+   * @param patterChar 模式串
+   * @return 返回好后缀规则的实例对象
+   */
+  public static CharMatcherBMBadChars getGoodSuffixInstance(String patterChar) {
+    return new CharMatcherBMGoodSuffix(patterChar);
+  }
 
   /**
    * 将模式串进行预处理，使用hash来存储，计算每个字符最后出现的位置
+   *
+   * <p>速度最快，但需要额外的占用内存，对于速度要求高，采用此
    *
    * @param matchers
    * @return

@@ -17,7 +17,7 @@ public class TestCharMatcherBMBadChars {
   @Test
   public void test01BadCharMatcher() {
     String matchers = "abd";
-    CharMatcherBMBadChars instance = CharMatcherBMBadChars.getInstance(matchers);
+    CharMatcherBMBadChars instance = CharMatcherBMBadChars.getBadInstance(matchers);
 
     String src = "abcacabdc";
 
@@ -35,7 +35,7 @@ public class TestCharMatcherBMBadChars {
     String matchers = "cbacabc";
     int index = 0;
 
-    CharMatcherBMBadChars instance = CharMatcherBMBadChars.getInstance(matchers);
+    CharMatcherBMBadChars instance = CharMatcherBMBadChars.getBadInstance(matchers);
 
     int findIndex = instance.matcherIndex(src.toCharArray(), index);
     Assert.assertEquals(7, findIndex);
