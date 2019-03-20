@@ -19,6 +19,9 @@ public enum CommonPatternEnum {
   /** 链接结束 */
   LINK_HREF_END("</a>"),
 
+  /** 链的地址的锚的处理 */
+  LINK_HREF_ANCHOR("#"),
+
   /** email的标识检查 */
   HREF_EMAIL_FLAG("@"),
 

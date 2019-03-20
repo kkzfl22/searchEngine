@@ -43,7 +43,12 @@ public class HtmlHrefAnalyze {
       boolean filter = HtmlHrefFilter.INSTANCE.filterCheck(busi.getHref());
       // 如果不被过滤，则加入当前集合中
       if (!filter) {
-        result.add(busi.getHref());
+        String hrefContex = busi.getHref();
+
+        // 进行链接内容的处理
+        hrefContex = HrefContentOperation.INSTANCE.hrefContext(hrefContex);
+
+        result.add(hrefContex);
       }
       starPos = busi.getEndPostion();
     }
