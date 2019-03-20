@@ -4,6 +4,8 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.element.download.DownLoad;
 import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.WebEntryEnum;
+import com.liujun.search.engine.collect.operation.FileQueue;
 
 /**
  * 下载html网页
@@ -21,8 +23,7 @@ public class DownLoadHtml implements FlowServiceInf {
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
     // 1,从文件队列中获取地址信息
-    String urlAddress = null;
-    // FileQueue.INSTANCE.get();
+    String urlAddress = FileQueue.GetQueue(WebEntryEnum.SOHO.getFlag()).get();
 
     String htmlContext = DownLoad.INSTANCE.downloadHtml(urlAddress);
 

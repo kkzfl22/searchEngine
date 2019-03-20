@@ -2,6 +2,10 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
+import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
+
+import java.util.Set;
 
 /**
  * 对网页内容进行分析操作
@@ -17,8 +21,12 @@ public class HtmlContextAnalyze implements FlowServiceInf {
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
+    String value = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
 
+    Set<String> hrefValue = HtmlHrefAnalyze.INSTANCE.getHref(value);
 
-    return false;
+    context.put(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey(), hrefValue);
+
+    return true;
   }
 }

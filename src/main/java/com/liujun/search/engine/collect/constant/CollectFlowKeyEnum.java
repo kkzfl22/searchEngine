@@ -14,6 +14,9 @@ public enum CollectFlowKeyEnum {
 
   /** 下载的网页内容信息 */
   FLOW_DOWNLOAD_CONTEXT("flow_download_context"),
+
+  /** 链接集合对象信息 */
+  FLOW_CONTEXT_HREF_LIST("flow_context_href_list"),
   ;
 
   private String key;
