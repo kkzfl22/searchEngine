@@ -3,7 +3,6 @@ package com.liujun.search.engine.collect.flow;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.element.download.DownLoad;
-import com.liujun.search.engine.collect.FileQueue;
 import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 
 /**

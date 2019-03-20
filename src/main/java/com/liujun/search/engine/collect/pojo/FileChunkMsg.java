@@ -1,4 +1,4 @@
-package com.liujun.search.engine.collect.html;
+package com.liujun.search.engine.collect.pojo;
 
 /**
  * 文件块的信息

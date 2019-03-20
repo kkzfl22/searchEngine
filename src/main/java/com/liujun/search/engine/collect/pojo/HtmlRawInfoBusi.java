@@ -1,4 +1,4 @@
-package com.liujun.search.engine.collect.html;
+package com.liujun.search.engine.collect.pojo;
 
 import com.liujun.search.common.constant.SymbolMsg;
 

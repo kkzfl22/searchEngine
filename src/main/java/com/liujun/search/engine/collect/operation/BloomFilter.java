@@ -1,4 +1,4 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;

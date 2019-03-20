@@ -1,6 +1,7 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.common.constant.SymbolMsg;
+import com.liujun.search.engine.collect.operation.FileQueue;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 

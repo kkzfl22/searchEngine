@@ -1,5 +1,6 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
+import com.liujun.search.engine.collect.operation.DocIdproc;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

@@ -110,16 +110,25 @@ public class CharMatcherBMBadChars {
         return startIndex;
       }
 
-      // 如果出现坏字符，找到坏字符出现在模式串中的位置
-      int badIndex = badChar[str[startIndex + matchIndex]];
-      // 计算械串可跳过的位数
-      int jumpBits = matchIndex - badIndex;
+      int jumpBits = 0;
+
+      int badCharCode = str[startIndex + matchIndex];
+
+      // 检查是否超过了字符集的大小
+      if (badCharCode > BUFFER_SIZE) {
+        jumpBits = matcherLength - 1;
+      } else {
+        // 如果出现坏字符，找到坏字符出现在模式串中的位置
+        int badIndex = badChar[badCharCode];
+        // 计算械串可跳过的位数
+        jumpBits = matchIndex - badIndex;
+      }
 
       int moveGoodSuffix = 0;
 
       // 使用好后缀的规则来进行计算滑动的位数
       // 在仅使用坏字符的规则下，此返回1
-      if (jumpBits < matcherLength - 1) {
+      if (matchIndex < matcherLength - 1) {
         moveGoodSuffix = this.countMoveGoodSuffix(matchIndex);
       }
 

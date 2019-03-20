@@ -11,10 +11,22 @@ public enum CommonPatternEnum {
   LINK_HREF_START("<a"),
 
   /** 链接的位置 */
-  LINK_HREF_URL("href=\""),
+  LINK_HREF_URL_START("href=\""),
+
+  /** 链接位置结束 */
+  LINK_HREF_URL_END("\""),
 
   /** 链接结束 */
   LINK_HREF_END("</a>"),
+
+  /** email的标识检查 */
+  HREF_EMAIL_FLAG("@"),
+
+  /** 结束标识 */
+  HREF_EMAIL_COM(".com"),
+
+  /** 结束标识 */
+  HREF_EMAIL_CN(".cn"),
   ;
 
   CommonPatternEnum(String pattern) {

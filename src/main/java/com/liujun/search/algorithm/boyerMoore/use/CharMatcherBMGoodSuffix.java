@@ -28,24 +28,24 @@ public class CharMatcherBMGoodSuffix extends CharMatcherBMBadChars {
    * @param matchers 模式串
    */
   public void generateGs(char[] matchers) {
-    int macherLength = matchers.length;
+    int matcherLength = matchers.length;
 
     // 进行初始化
-    for (int i = 0; i < macherLength; i++) {
+    for (int i = 0; i < matcherLength; i++) {
       suffix[i] = -1;
       prefix[i] = false;
     }
 
     // 从向前向后遍历前缀子串
-    for (int i = 0; i < macherLength - 1; i++) {
+    for (int i = 0; i < matcherLength - 1; i++) {
       int suffixIndex = i;
 
       // 公共后缀子串长度s
       int commSuffixLenght = 0;
 
       // 检查前缀子串与后缀子串是否匹配，如果匹配继续检查，不匹配，则结束
-      while (suffixIndex > 0
-          && matchers[suffixIndex] == matchers[macherLength - i - commSuffixLenght]) {
+      while (suffixIndex >= 0
+          && matchers[suffixIndex] == matchers[matcherLength - 1 - commSuffixLenght]) {
         suffixIndex--;
         commSuffixLenght++;
       }

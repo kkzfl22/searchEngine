@@ -1,7 +1,7 @@
 package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.FileQueue;
+import com.liujun.search.engine.collect.operation.FileQueue;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 
 import java.util.List;

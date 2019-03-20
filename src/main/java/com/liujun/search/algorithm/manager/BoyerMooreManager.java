@@ -15,6 +15,9 @@ import java.util.Map;
  */
 public class BoyerMooreManager {
 
+  /** 实例对象 */
+  public static final BoyerMooreManager INSTANCE = new BoyerMooreManager();
+
   /** 模式串 */
   private static final Map<CommonPatternEnum, CharMatcherBMBadChars> PATTERN_MAP = new HashMap<>();
 
@@ -35,5 +38,21 @@ public class BoyerMooreManager {
    */
   public CharMatcherBMBadChars getCharMatchar(CommonPatternEnum pattern) {
     return PATTERN_MAP.get(pattern);
+  }
+
+  /**
+   * 通过bm算法进行模式串的匹配操作
+   *
+   * @param parrern 当前的模式串
+   * @param htmlContext 当前网页容信息
+   * @param startPostion 开始位置
+   * @return
+   */
+  public int getHrefIndex(CommonPatternEnum parrern, char[] htmlContext, int startPostion) {
+    // 通过模式串查找索引位置
+    CharMatcherBMBadChars hrefAstart = getCharMatchar(parrern);
+    int hrefIndex = hrefAstart.matcherIndex(htmlContext, startPostion);
+
+    return hrefIndex;
   }
 }

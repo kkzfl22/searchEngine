@@ -1,6 +1,7 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.common.number.NumberSeq;
+import com.liujun.search.engine.collect.operation.DocRawProc;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

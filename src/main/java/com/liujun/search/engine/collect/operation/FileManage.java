@@ -1,11 +1,11 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.common.constant.PathCfg;
 import com.liujun.search.common.constant.PropertiesEnum;
 import com.liujun.search.common.io.IOUtils;
 import com.liujun.search.common.properties.PropertiesUtilProcess;
-import com.liujun.search.engine.collect.html.FileChunkMsg;
-import com.liujun.search.engine.collect.html.HtmlRawInfoBusi;
+import com.liujun.search.engine.collect.pojo.FileChunkMsg;
+import com.liujun.search.engine.collect.pojo.HtmlRawInfoBusi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

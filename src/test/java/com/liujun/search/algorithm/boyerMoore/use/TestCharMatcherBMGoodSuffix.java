@@ -39,4 +39,20 @@ public class TestCharMatcherBMGoodSuffix {
     int findIndex = instance.matcherIndex(src.toCharArray(), index);
     Assert.assertEquals(7, findIndex);
   }
+
+
+  /** 字符串的查找操作,加入好后缀规则 */
+  @Test
+  public void test03GoodSuffixCharMatcher() {
+
+    String src =
+        "<a href=\"http://news.sohu.com/s2018/guoqing69/index.shtml\" target=\"_blank\"></a>";
+    String matchers = "href=\"";
+    int index = 0;
+
+    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
+
+    int findIndex = instance.matcherIndex(src.toCharArray(), index);
+    Assert.assertEquals(3, findIndex);
+  }
 }

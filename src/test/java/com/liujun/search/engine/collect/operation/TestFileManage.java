@@ -1,6 +1,7 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
-import com.liujun.search.engine.collect.html.FileChunkMsg;
+import com.liujun.search.engine.collect.operation.FileManage;
+import com.liujun.search.engine.collect.pojo.FileChunkMsg;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

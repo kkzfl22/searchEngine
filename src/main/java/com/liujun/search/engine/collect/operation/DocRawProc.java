@@ -1,4 +1,4 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
 /**
  * html原始网页的处理

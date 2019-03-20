@@ -1,4 +1,4 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.common.constant.PathCfg;
 import com.liujun.search.common.constant.SymbolMsg;
