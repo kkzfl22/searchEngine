@@ -7,28 +7,34 @@ import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
+import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
+
+import java.util.Set;
 
 /**
- * 下载html网页
+ * 将网页中的链接存入文件队列中
  *
  * @author liujun
  * @version 0.0.1
  * @date 2019/03/17
  */
-public class DownLoadHtml implements FlowServiceInf {
+public class FileQueueAddAddress implements FlowServiceInf {
 
   /** 实例对象 */
-  public static final DownLoadHtml INSTANCE = new DownLoadHtml();
+  public static final FileQueueAddAddress INSTANCE = new FileQueueAddAddress();
 
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
-    String urlAddress = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey());
+    WebEntryEnum entry = context.getObject(CollectFlowKeyEnum.WEB_ENTRY.getKey());
 
-    // 进行下载文件的操作
-    String htmlContext = DownLoad.INSTANCE.downloadHtml(urlAddress);
+    FileQueue fileQueue = FileQueueManager.INSTANCE.getFileQueue(entry);
 
-    context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey(), htmlContext);
+    // 进行网页链接的集合操作
+    Set<String> hrefValue = context.getObject(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey());
+
+    // 将数据入入到队列中
+    fileQueue.put(hrefValue);
 
     return true;
   }

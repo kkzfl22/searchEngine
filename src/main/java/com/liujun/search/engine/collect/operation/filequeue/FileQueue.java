@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -176,7 +177,7 @@ public class FileQueue {
    *
    * @param addressList 地址集合信息
    */
-  public boolean put(List<String> addressList) {
+  public boolean put(Collection<String> addressList) {
     try {
       int curOffset = 0;
       for (String address : addressList) {
