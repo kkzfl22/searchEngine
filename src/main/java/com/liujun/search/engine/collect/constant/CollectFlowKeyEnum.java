@@ -9,6 +9,9 @@ package com.liujun.search.engine.collect.constant;
  */
 public enum CollectFlowKeyEnum {
 
+  /** 网页入口参数 */
+  WEB_ENTRY("web_entry_url"),
+
   /** 下载的地址 */
   FLOW_DOWNLOAD_ADDRESS("flow_download_url"),
 

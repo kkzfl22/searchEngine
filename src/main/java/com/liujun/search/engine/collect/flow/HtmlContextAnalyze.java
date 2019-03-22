@@ -23,6 +23,7 @@ public class HtmlContextAnalyze implements FlowServiceInf {
 
     String value = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
 
+    // 进行网页链接的获取操作
     Set<String> hrefValue = HtmlHrefAnalyze.INSTANCE.getHref(value);
 
     context.put(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey(), hrefValue);

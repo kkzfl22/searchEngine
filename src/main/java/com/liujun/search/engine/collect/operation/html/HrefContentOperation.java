@@ -22,6 +22,9 @@ public class HrefContentOperation {
     // 进行锚的删除
     outValue = this.anchor(outValue);
 
+    // 进行链接首尾字符去掉
+    outValue = outValue.trim();
+
     return outValue;
   }
 

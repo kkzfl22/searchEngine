@@ -1,10 +1,13 @@
 package com.liujun.search.engine.collect.flow;
 
+import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.operation.FileQueue;
+import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 网页分析流程
@@ -15,10 +18,13 @@ import java.util.List;
  */
 public class HtmlAnalyzeFLow {
 
+  /** 日志 */
+  private Logger logger = LoggerFactory.getLogger(HtmlAnalyzeFLow.class);
+
   /** 网页分析流程 */
   public static final HtmlAnalyzeFLow INSTANCE = new HtmlAnalyzeFLow();
 
-  public static final FlowServiceInf[] FLOW = new FlowServiceInf[4];
+  public static final FlowServiceInf[] FLOW = new FlowServiceInf[2];
 
   static {
     // 2，下载网页信息
@@ -28,26 +34,28 @@ public class HtmlAnalyzeFLow {
   }
 
   /**
-   * 网页分析流程
+   * 网页下载分析流程,每调用一次进行一个网页链接的下载操作
    *
-   * @param readNum 读取的网页下载数量
    * @param entry 网页搜索入口信息
-   * @return true 运行成功
+   * @return 返回下载的网页链接地址信息
    */
-  public boolean htmlAnalyze(int readNum, WebEntryEnum entry) {
+  public Set<String> downloadAndAnalyzeHtml(WebEntryEnum entry) {
 
-    return true;
-  }
+    FlowServiceContext context = new FlowServiceContext();
 
-  /**
-   * 获取网页的链接信息
-   *
-   * @param readNum
-   * @return
-   */
-  public List<String> getTopUrl(int readNum, WebEntryEnum entry) {
-    FileQueue filQueue = FileQueue.GetQueue(entry.getFlag());
+    // 封装入口
+    context.put(CollectFlowKeyEnum.WEB_ENTRY.getKey(), entry);
 
-    return filQueue.readData(0, readNum);
+    try {
+      for (FlowServiceInf flowService : FLOW) {
+        flowService.runFlow(context);
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error("HtmlAnalyzeFLow downloadAndAnalyzeHtml Exception", e);
+    }
+
+    return context.getObject(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey());
   }
 }

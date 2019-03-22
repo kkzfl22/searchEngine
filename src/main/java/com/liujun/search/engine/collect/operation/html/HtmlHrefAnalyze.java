@@ -1,6 +1,7 @@
 package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,10 +27,15 @@ public class HtmlHrefAnalyze {
    */
   public Set<String> getHref(String htmlContext) {
 
+    Set<String> result;
+    if (StringUtils.isEmpty(htmlContext)) {
+      result = new HashSet<>();
+    } else {
+      result = new HashSet<>(32);
+    }
+
     int starPos = 0;
     char[] context = htmlContext.toCharArray();
-
-    Set<String> result = new HashSet<>(64);
 
     while (starPos < context.length) {
       AnalyzeBusi busi = HtmlHrefGet.INSTANCE.getHref(context, starPos);
@@ -47,6 +53,8 @@ public class HtmlHrefAnalyze {
 
         // 进行链接内容的处理
         hrefContex = HrefContentOperation.INSTANCE.hrefContext(hrefContex);
+
+        
 
         result.add(hrefContex);
       }

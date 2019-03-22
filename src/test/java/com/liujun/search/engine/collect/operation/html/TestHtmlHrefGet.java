@@ -58,23 +58,4 @@ public class TestHtmlHrefGet {
         HtmlHrefGet.INSTANCE.getHref(contextArray, analyzeRsp4.getEndPostion());
     Assert.assertEquals("https://www.sogou.com", analyzeRsp5.getHref());
   }
-
-  @Test
-  public void printAllHref() throws IOException {
-    String fileSoho = "soho.html";
-    File sohoFile = new File(BASE_PATH, fileSoho);
-    String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
-
-    char[] contextArray = htmlContext.toCharArray();
-
-    int startIndex = 0;
-
-    while (startIndex < contextArray.length) {
-      // 进行网页分析
-      AnalyzeBusi analyzeRspOne = HtmlHrefGet.INSTANCE.getHref(contextArray, startIndex);
-
-      System.out.println(analyzeRspOne.getHref());
-      startIndex = analyzeRspOne.getEndPostion();
-    }
-  }
 }

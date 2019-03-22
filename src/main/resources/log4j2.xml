@@ -30,7 +30,7 @@
     <loggers>
 
 
-        <root level="DEBUG"> <!-- 全局配置 -->
+        <root level="INFO"> <!-- 全局配置 -->
             <appenderRef ref="consoleLog"/>
             <appenderRef ref="searchEngineLog"/>
         </root>
