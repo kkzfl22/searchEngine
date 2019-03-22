@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Log4j 2.x 配置文件。每30秒自动检查和应用配置文件的更新； -->
+<configuration status="warn" monitorInterval="300" strict="true" schema="Log4J-V2.2.xsd">
+
+    <!-- 控制台输出 -->
+    <appenders>
+        <!-- 控制台输出 -->
+        <Console name="consoleLog" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="[%p] %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!-- 配置日志输出文件名字 追加读写 -->
+        <!-- 配制授权控制的日志 -->
+        <RollingFile name="searchEngineLog" fileName="log/searchEngine.log"
+                     filePattern="log/$${date:yyyy-MM}/searchEngine-%d{yyyy-MM-dd}-%i.log" append="true">
+            <!-- 输出格式 -->
+            <PatternLayout
+                    pattern="[%p] [%d{yyyy-MM-dd HH:mm:ss,SSS}] [%l] [%t] [%-4r]   \: %m%n"/>
+            <!-- 设置策略 -->
+            <Policies>
+                <!--此参数用于在每次启动后执行对日志的备份操作-->
+                <!--<OnStartupTriggeringPolicy/>-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </appenders>
+
+    <loggers>
+
+
+        <root level="DEBUG"> <!-- 全局配置 -->
+            <appenderRef ref="consoleLog"/>
+            <appenderRef ref="searchEngineLog"/>
+        </root>
+    </loggers>
+
+</configuration>

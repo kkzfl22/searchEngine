@@ -34,6 +34,8 @@ public class TestFileQueue {
   public void testClean() {
     instance = FileQueue.GetQueue(FLAG);
     instance.clean();
+    // 放入网页入口
+    instance.firstWriteEntry(FLAG);
     instance.openFileQueue();
   }
 
@@ -87,11 +89,11 @@ public class TestFileQueue {
 
     String getBuffList = null;
 
-    while ((getBuffList = instance.get()) != null) {
+    while (!(getBuffList = instance.get()).isEmpty()) {
       getList.add(getBuffList);
     }
 
-    // result.add(0, FLAG.getUrlAddress());
+    result.add(0, FLAG.getUrlAddress());
 
     Assert.assertEquals(result, getList);
   }
@@ -132,7 +134,7 @@ public class TestFileQueue {
     // 再进行读取操作
     String getBuffList = null;
 
-    while ((getBuffList = instance.get()) != null) {
+    while (!(getBuffList = instance.get()).isEmpty()) {
       compResult.add(getBuffList);
     }
 
@@ -140,23 +142,6 @@ public class TestFileQueue {
     instance.writeOffset();
 
     Assert.assertEquals(result, compResult);
-  }
-
-  /** 从队列的指定位置，获取指定的行数 */
-  @Test
-  public void test08FileQueueReadNum() {
-
-    // 先写入数据;
-    int maxFileQueue = 100;
-    List<String> result = new ArrayList<>(maxFileQueue);
-    for (int i = 0; i < maxFileQueue; i++) {
-      result.add("http://www.sohu.com/" + i);
-    }
-
-    instance.put(result);
-
-    List<String> list = instance.readData(88, 10);
-    Assert.assertEquals(10, list.size());
   }
 
   /** 测试数据 */
@@ -204,9 +189,11 @@ public class TestFileQueue {
 
     String getBuffList = null;
 
-    while ((getBuffList = instance.get()) != null) {
+    while (!(getBuffList = instance.get()).isEmpty()) {
       getList.add(getBuffList);
     }
+
+    data.add(0, FLAG.getUrlAddress());
 
     Assert.assertEquals(data.size(), getList.size());
   }
@@ -238,6 +225,18 @@ public class TestFileQueue {
 
     // 放入大集合数据
     instance.put(data);
+
+    List<String> getList = new ArrayList<>(8);
+
+    String getBuffList = null;
+
+    while (!(getBuffList = instance.get()).isEmpty()) {
+      getList.add(getBuffList);
+    }
+
+    data.add(0, FLAG.getUrlAddress());
+
+    Assert.assertEquals(data.size(), getList.size());
   }
 
   /** 执行清理操作 */

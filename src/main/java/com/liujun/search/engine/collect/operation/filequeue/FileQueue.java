@@ -177,7 +177,6 @@ public class FileQueue {
    * @param addressList 地址集合信息
    */
   public boolean put(List<String> addressList) {
-
     try {
       int curOffset = 0;
       for (String address : addressList) {
@@ -219,44 +218,55 @@ public class FileQueue {
   public String get() {
     String readData = null;
 
+    StringBuilder msg = new StringBuilder();
+
     try {
-      long fileStartPostion = this.readChannel.position();
 
-      long tmpReadOffset = 0;
+      boolean readFinish = false;
 
-      // 将数据读取到缓冲区中
-      readChannel.read(readBuffer, fileStartPostion);
+      while (!readFinish && readChannel.read(readBuffer, this.fileOffset.getReadOffset()) > 0) {
+        long tmpReadOffset = 0;
 
-      readBuffer.flip();
+        readBuffer.flip();
 
-      int startPostion = 0;
-      int endPostion;
+        int startPostion = 0;
+        int endPostion;
 
-      for (int i = startPostion; i < readBuffer.limit(); i++) {
-        // 如果当前找到了换行符，就添加到集合中
-        if (readBuffer.get(i) == SymbolMsg.LINE_INT) {
-          endPostion = i;
-          byte[] buffCode = new byte[endPostion - startPostion + 1];
+        for (int i = startPostion; i < readBuffer.limit(); i++) {
+          // 如果当前找到了换行符，就添加到集合中
+          if (readBuffer.get(i) == SymbolMsg.LINE_INT) {
+            endPostion = i;
 
-          readBuffer.get(buffCode, startPostion, buffCode.length);
-          readData = new String(buffCode);
+            // 进行数据的获取，不包括换行符
+            readData = this.getData(endPostion, startPostion);
 
-          // 去除符号信息
-          readData = dataCleanLine(readData);
+            msg.append(readData);
+            // 偏移加上缓冲区大小,再加缓冲区的时间需要再加1位，加上换行符号
+            tmpReadOffset = tmpReadOffset + (endPostion - startPostion + 1);
 
-          // 偏移加上缓冲区大小
-          tmpReadOffset = tmpReadOffset + buffCode.length;
+            // 标识当前完成
+            readFinish = true;
 
-          buffCode = null;
-          break;
+            break;
+          }
         }
+
+        // 当前遍历结束了，未找到结束符，需要将当前数据加入到集合中
+        if (!readFinish) {
+          // 获取数据
+          readData = this.getData(readBuffer.limit(), 0);
+          msg.append(readData);
+          // 偏移加上缓冲区大小
+          tmpReadOffset = tmpReadOffset + readBuffer.limit();
+          readBuffer.clear();
+        }
+
+        // 更新偏移位置
+        this.fileOffset.setReadOffset(this.fileOffset.getReadOffset() + tmpReadOffset);
       }
 
-      // 更新偏移位置
-      this.fileOffset.setReadOffset(this.fileOffset.getReadOffset() + tmpReadOffset);
       // 将位置写入到postion中
-      this.readChannel.position(fileStartPostion + tmpReadOffset);
-
+      this.readChannel.position(this.fileOffset.getReadOffset());
     } catch (IOException e) {
       e.printStackTrace();
       log.error("FileQueue get list offset IOException  ", e);
@@ -265,119 +275,7 @@ public class FileQueue {
       readBuffer.clear();
     }
 
-    return readData;
-  }
-
-  /**
-   * 通过指定的偏移位置，读取指定的行数
-   *
-   * @param offsetParam 起始始偏移位置
-   * @param readNum 指定的读取行数
-   * @return 读取到的数据集合
-   */
-  public List<String> readData(int offsetParam, int readNum) {
-
-    List<String> result = new ArrayList<>();
-
-    int startOffset = offsetParam;
-
-    if (startOffset < 0) {
-      startOffset = 0;
-    }
-
-    FileInputStream inputStream = null;
-    FileChannel channel = null;
-    ByteBuffer inputBuffer = ByteBuffer.allocate(2048);
-
-    try {
-      // 文件队列信息
-      String linksFile = this.getLinksFile();
-
-      // 当前读取的文件路径
-      inputStream = new FileInputStream(linksFile);
-      // 获取文件通道
-      channel = inputStream.getChannel();
-      // 设置起始位置
-      channel.position(startOffset);
-
-      int startPostion = 0;
-      int endPostion = 0;
-
-      // 声明读取的变量信息
-      while ((channel.read(inputBuffer, startOffset)) > 0) {
-        inputBuffer.flip();
-        for (int i = startPostion; i < inputBuffer.limit(); i++) {
-          // 如果当前找到了换行符，就添加到集合中
-          if (inputBuffer.get(i) == SymbolMsg.LINE_INT) {
-            endPostion = i;
-            byte[] buffCode = new byte[endPostion - startPostion + 1];
-            inputBuffer.get(buffCode, 0, buffCode.length);
-
-            String dataValue = new String(buffCode);
-            // 进行换行符号处理
-            dataValue = this.dataCleanLine(dataValue);
-            result.add(dataValue);
-
-            // 偏移加上缓冲区大小
-            startOffset = startOffset + buffCode.length;
-            startPostion = i + 1;
-            buffCode = null;
-
-            if (result.size() >= readNum && readNum != -1) {
-              break;
-            }
-          }
-        }
-
-        // 如果当前缓冲级使用完成，则更新缓冲区为0
-        if (inputBuffer.position() == inputBuffer.limit()) {
-          inputBuffer.clear();
-        } else {
-          inputBuffer.compact();
-        }
-        // 重新更新起始顶点为0
-        startPostion = 0;
-
-        if (result.size() >= readNum && readNum != -1) {
-          break;
-        }
-      }
-
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      log.error("FileQueue openRead FileNotFoundException", e);
-    } catch (IOException e) {
-      e.printStackTrace();
-      log.error("FileQueue openRead IOException", e);
-    } finally {
-      IOUtils.close(channel);
-      IOUtils.close(inputStream);
-      inputBuffer.clear();
-    }
-
-    return result;
-  }
-
-  /**
-   * 将数据写入到文件通道中
-   *
-   * @param offsetParm 指定起始偏移位置
-   * @return 写入数据的长度
-   * @throws IOException 异常
-   */
-  private int writeOneDataToFileChannel(int offsetParm) throws IOException {
-    int curOffset = offsetParm;
-
-    writeBuffer.flip();
-    int offset = writeChannel.write(writeBuffer);
-
-    // 数据写入完成后需要clean
-    if (offset == writeBuffer.position()) {
-      writeBuffer.clear();
-    }
-    curOffset += offset;
-
-    return curOffset;
+    return msg.toString();
   }
 
   /** 打开读取队列 */
@@ -622,5 +520,18 @@ public class FileQueue {
     }
 
     return buffLength;
+  }
+
+  /**
+   * 进行当前结束字符的数据获取
+   *
+   * @param endPostion
+   * @param startPostion
+   * @return
+   */
+  private String getData(int endPostion, int startPostion) {
+    byte[] buffCode = new byte[endPostion - startPostion];
+    readBuffer.get(buffCode, startPostion, buffCode.length);
+    return new String(buffCode);
   }
 }
