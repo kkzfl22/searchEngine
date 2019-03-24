@@ -1,5 +1,9 @@
 package com.liujun.search.algorithm.boyerMoore.use;
 
+import com.liujun.search.common.utils.ByteCode;
+
+import java.nio.charset.StandardCharsets;
+
 /**
  * 高效的字符串匹配算法bm算法,使用坏字符的规则
  *
@@ -19,12 +23,12 @@ public class CharMatcherBMBadChars {
   private final int matcherLength;
 
   /** 模式串信息 */
-  private final char[] matcherChars;
+  private final byte[] matcherChars;
 
   public CharMatcherBMBadChars(String patterChar) {
     assert patterChar != null : "patterChar is not char";
 
-    char[] matcherChars = patterChar.toCharArray();
+    byte[] matcherChars = ByteCode.GetBytes(patterChar);
     // 模式串信息
     this.matcherChars = matcherChars;
     // 设置模式串的长度
@@ -63,7 +67,7 @@ public class CharMatcherBMBadChars {
    * @param matchers
    * @return
    */
-  private int[] generateBc(char[] matchers) {
+  private int[] generateBc(byte[] matchers) {
     int[] bc = new int[BUFFER_SIZE];
 
     for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -88,7 +92,18 @@ public class CharMatcherBMBadChars {
    * @param inputStart 起始索引位置
    * @return 查找到的位置
    */
-  public int matcherIndex(char[] str, int inputStart) {
+  public int matcherIndex(String str, int inputStart) {
+    return this.matcherIndex(ByteCode.GetBytes(str), inputStart);
+  }
+
+  /**
+   * 使用bm算法进行字符串的匹配操作
+   *
+   * @param str 原始字符信息
+   * @param inputStart 起始索引位置
+   * @return 查找到的位置
+   */
+  public int matcherIndex(byte[] str, int inputStart) {
 
     // 起始搜索位置
     int startIndex = inputStart;
@@ -115,7 +130,7 @@ public class CharMatcherBMBadChars {
       int badCharCode = str[startIndex + matchIndex];
 
       // 检查是否超过了字符集的大小
-      if (badCharCode > BUFFER_SIZE) {
+      if (badCharCode > BUFFER_SIZE || badCharCode < 0) {
         jumpBits = matcherLength - 1;
       } else {
         // 如果出现坏字符，找到坏字符出现在模式串中的位置
@@ -156,7 +171,7 @@ public class CharMatcherBMBadChars {
     return matcherLength;
   }
 
-  public char[] getMatcherChars() {
+  public byte[] getMatcherChars() {
     return matcherChars;
   }
 }

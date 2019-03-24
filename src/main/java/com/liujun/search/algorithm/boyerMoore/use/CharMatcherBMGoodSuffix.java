@@ -27,7 +27,7 @@ public class CharMatcherBMGoodSuffix extends CharMatcherBMBadChars {
    *
    * @param matchers 模式串
    */
-  public void generateGs(char[] matchers) {
+  public void generateGs(byte[] matchers) {
     int matcherLength = matchers.length;
 
     // 进行初始化
@@ -59,8 +59,6 @@ public class CharMatcherBMGoodSuffix extends CharMatcherBMBadChars {
       }
     }
   }
-
-
 
   @Override
   public int countMoveGoodSuffix(int badIndex) {

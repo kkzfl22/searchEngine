@@ -22,7 +22,7 @@ public class HtmlHrefGet {
    * @param startPostion 网页地址
    * @return
    */
-  public AnalyzeBusi getHref(char[] htmlContext, int startPostion) {
+  public AnalyzeBusi getHref(byte[] htmlContext, int startPostion) {
 
     // 1,以a标签为起始点，开始查找
     int hrefAstartIndex =

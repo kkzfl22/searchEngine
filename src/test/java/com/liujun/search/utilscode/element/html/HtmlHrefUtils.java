@@ -1,5 +1,6 @@
 package com.liujun.search.utilscode.element.html;
 
+import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
 import com.liujun.search.utilscode.element.constant.HtmlHrefFileEnum;
 import org.apache.commons.io.FileUtils;
@@ -39,18 +40,32 @@ public class HtmlHrefUtils {
    */
   public Set<String> getHrefUrl(HtmlHrefFileEnum file) {
 
+    // 获取网页内容
+    String htmlContext = this.getHtmlContext(file);
+
+    // 进行网页分析
+    Set<String> hrefSet = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+
+    return hrefSet;
+  }
+
+  /**
+   * 获取网页内容信息
+   *
+   * @param file 网页文件信息
+   * @return 网页内容
+   */
+  public String getHtmlContext(HtmlHrefFileEnum file) {
+
     String htmlContext = null;
     try {
       File sohoFile = new File(BASE_PATH, file.getFile());
       htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
     } catch (IOException e) {
       e.printStackTrace();
-      logger.error("HtmlHrefUtils getHrefUrl IOException", e);
+      logger.error("HtmlHrefUtils getHtmlContext IOException", e);
     }
 
-    // 进行网页分析
-    Set<String> hrefSet = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
-
-    return hrefSet;
+    return htmlContext;
   }
 }

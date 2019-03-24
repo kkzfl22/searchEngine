@@ -1,5 +1,6 @@
 package com.liujun.search.engine.collect.operation.html;
 
+import com.liujun.search.common.utils.ByteCode;
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -30,7 +31,7 @@ public class TestHtmlHrefGet {
     File sohoFile = new File(BASE_PATH, fileSoho);
     String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
 
-    char[] contextArray = htmlContext.toCharArray();
+    byte[] contextArray = ByteCode.GetBytes(htmlContext);
 
     // 进行网页分析
     AnalyzeBusi analyzeRspOne = HtmlHrefGet.INSTANCE.getHref(contextArray, 0);

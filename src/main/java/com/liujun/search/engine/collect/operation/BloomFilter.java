@@ -29,13 +29,12 @@ public class BloomFilter implements Serializable {
   private static final String BASEPATH =
       SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
 
-
-
   /** 待爬取网页链接文件 */
   private static final String BLOOM_FILTER_FILE = "bloom_filter.bin";
 
   /** 布隆过滤器文件 */
-  private static final String PROCESS_BLOOM_FILTER = BASEPATH + PathCfg.COLLEC_PATH + BLOOM_FILTER_FILE;
+  private static final String PROCESS_BLOOM_FILTER =
+      BASEPATH + PathCfg.COLLEC_PATH + BLOOM_FILTER_FILE;
 
   /** 日志对象 */
   private Logger logger = LoggerFactory.getLogger(BloomFilter.class);
@@ -43,13 +42,13 @@ public class BloomFilter implements Serializable {
   /** bitmap对象信息 */
   private BitMap bloomFilter;
 
-  /** 默认的大小,2亿 */
-  private static final int DEFAULT_BITES = 200000000;
+  /** 默认的大小,使用10亿大小 */
+  private static final int DEFAULT_BITES = 1000000000;
 
   /** 默认的布隆过滤器实例 */
   public static final BloomFilter INSTANCE = new BloomFilter(DEFAULT_BITES);
 
-  public BloomFilter(int nbits) {
+  private BloomFilter(int nbits) {
     bloomFilter = new BitMap(nbits);
   }
 

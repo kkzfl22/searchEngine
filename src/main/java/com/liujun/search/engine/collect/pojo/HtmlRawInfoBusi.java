@@ -1,9 +1,5 @@
 package com.liujun.search.engine.collect.pojo;
 
-import com.liujun.search.common.constant.SymbolMsg;
-
-import java.nio.charset.StandardCharsets;
-
 /**
  * html的原始网页存储
  *
@@ -27,24 +23,6 @@ public class HtmlRawInfoBusi {
     // 网页大小通过计算得到
     this.htmlLength = htmlDocument.length();
     this.htmlDocument = htmlDocument;
-  }
-
-  /**
-   * 获取行数据的byte字符信息
-   *
-   * @return
-   */
-  public byte[] getLineData() {
-    StringBuilder outData = new StringBuilder();
-
-    outData.append(this.htmlId);
-    outData.append(SymbolMsg.DATA_COLUMN);
-    outData.append(this.htmlLength);
-    outData.append(SymbolMsg.DATA_COLUMN);
-    outData.append(this.htmlDocument);
-    outData.append(SymbolMsg.LINE_OVER);
-
-    return outData.toString().getBytes(StandardCharsets.UTF_8);
   }
 
   public long getHtmlId() {

@@ -37,6 +37,15 @@ public class FlowServiceContext {
   }
 
   /**
+   * 进行对象的移除操作
+   *
+   * @param key
+   */
+  public void remove(String key) {
+    this.commonParam.remove(key);
+  }
+
+  /**
    * 当值不存在时需要返回返回值的类型
    *
    * @param key 存入的key信息

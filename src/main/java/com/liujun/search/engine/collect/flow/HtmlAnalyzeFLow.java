@@ -26,14 +26,18 @@ public class HtmlAnalyzeFLow {
   /** 网页分析流程 */
   public static final HtmlAnalyzeFLow INSTANCE = new HtmlAnalyzeFLow();
 
-  public static final FlowServiceInf[] FLOW = new FlowServiceInf[2];
+  public static final FlowServiceInf[] FLOW = new FlowServiceInf[3];
 
   static {
-    // 2，下载网页信息
+    // 1，下载网页信息
     FLOW[0] = DownLoadHtml.INSTANCE;
-    // 3,进行网页分析，抽取出链接地址信息
+    // 2,进行网页判重操作
+    // 3,分配网页的id操作
+    // 4,将网页与网页id存储到doc_id.bin文件中
+    // 5，将网页存储到doc_raw.bin文件中
+    // 6,进行网页分析，抽取出链接地址信息
     FLOW[1] = HtmlContextAnalyze.INSTANCE;
-    // 4,将网页链接加入文件队列中
+    // 7,将网页链接加入文件队列中
     FLOW[2] = FileQueueAddAddress.INSTANCE;
   }
 

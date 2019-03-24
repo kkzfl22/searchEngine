@@ -1,11 +1,10 @@
 package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.engine.collect.operation.DocIdproc;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runners.MethodSorters;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,12 @@ import java.util.Map;
 //    按JVM返回的方法名的顺序执行，此种方式下测试方法的执行顺序是不可预测的，即每次运行的顺序可能
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestDocIdProc {
+
+  /** 进行开始前的的打开文件操作 */
+  @Before
+  public void before() {
+    DocIdproc.INSTANCE.openFile();
+  }
 
   /** 测试数据放入操作 */
   @Test
@@ -69,5 +74,11 @@ public class TestDocIdProc {
     System.out.println(machMap);
 
     Assert.assertNotNull(machMap);
+  }
+
+  /** 执行清理操作 */
+  @After
+  public void finish() {
+    DocIdproc.INSTANCE.close();
   }
 }

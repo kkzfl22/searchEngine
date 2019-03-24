@@ -22,7 +22,7 @@ public class TestCharMatcherBMGoodSuffix {
 
     int startIndex = 0;
 
-    int findIndex = instance.matcherIndex(src.toCharArray(), startIndex);
+    int findIndex = instance.matcherIndex(src, startIndex);
     Assert.assertEquals(5, findIndex);
   }
 
@@ -36,10 +36,9 @@ public class TestCharMatcherBMGoodSuffix {
 
     CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
 
-    int findIndex = instance.matcherIndex(src.toCharArray(), index);
+    int findIndex = instance.matcherIndex(src, index);
     Assert.assertEquals(7, findIndex);
   }
-
 
   /** 字符串的查找操作,加入好后缀规则 */
   @Test
@@ -52,7 +51,39 @@ public class TestCharMatcherBMGoodSuffix {
 
     CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
 
-    int findIndex = instance.matcherIndex(src.toCharArray(), index);
+    int findIndex = instance.matcherIndex(src, index);
     Assert.assertEquals(3, findIndex);
+  }
+
+  /** 字符串的查找操作,加入好后缀规则 */
+  @Test
+  public void test05GoodSuffixChina() {
+
+    String src = "中国人民解放军1231adb";
+    String matchers = "adb";
+    int index = 0;
+
+    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
+
+    int findIndex = instance.matcherIndex(src, index);
+    Assert.assertEquals(11, findIndex);
+
+    String src2 = "3333333333333";
+    int findIndex2 = instance.matcherIndex(src2, index);
+    Assert.assertEquals(-1, findIndex2);
+  }
+
+  /** 字符串的查找操作,加入好后缀规则 */
+  @Test
+  public void test06GoodSuffixChina() {
+
+    String src = "中国人民解放军12adbsc\r\n\r\n人民";
+    String matchers = "\r\n\r\n";
+    int index = 0;
+
+    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
+
+    int findIndex = instance.matcherIndex(src, index);
+    Assert.assertEquals(14, findIndex);
   }
 }

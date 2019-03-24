@@ -48,7 +48,7 @@ public class BoyerMooreManager {
    * @param startPostion 开始位置
    * @return
    */
-  public int getHrefIndex(CommonPatternEnum parrern, char[] htmlContext, int startPostion) {
+  public int getHrefIndex(CommonPatternEnum parrern, byte[] htmlContext, int startPostion) {
     // 通过模式串查找索引位置
     CharMatcherBMBadChars hrefAstart = getCharMatchar(parrern);
     int hrefIndex = hrefAstart.matcherIndex(htmlContext, startPostion);

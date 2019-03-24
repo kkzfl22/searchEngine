@@ -4,6 +4,7 @@ import com.liujun.search.algorithm.manager.BoyerMooreManager;
 import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
+import com.liujun.search.common.utils.ByteCode;
 import com.liujun.search.engine.collect.constant.FilterChainEnum;
 
 /**
@@ -22,32 +23,32 @@ public class FilterHrefEmail implements FlowServiceInf {
 
     String src = context.getObject(FilterChainEnum.FILTER_SRC.getKey());
 
-    char[] hrefArray = src.toCharArray();
+    byte[] anchorBytes = ByteCode.GetBytes(src);
 
     int startPostion = 0;
 
     // 1,查找email的标识符
     int hrefEmailFlagIndex =
         BoyerMooreManager.INSTANCE.getHrefIndex(
-            CommonPatternEnum.HREF_EMAIL_FLAG, hrefArray, startPostion);
+            CommonPatternEnum.HREF_EMAIL_FLAG, anchorBytes, startPostion);
 
     if (hrefEmailFlagIndex == -1) {
       return false;
     }
 
     hrefEmailFlagIndex =
-            hrefEmailFlagIndex + CommonPatternEnum.HREF_EMAIL_FLAG.getPattern().length();
+        hrefEmailFlagIndex + CommonPatternEnum.HREF_EMAIL_FLAG.getPattern().length();
 
     // 2,然后查找.com的信息
     int hrefComIndex =
         BoyerMooreManager.INSTANCE.getHrefIndex(
-            CommonPatternEnum.HREF_EMAIL_COM, hrefArray, hrefEmailFlagIndex);
+            CommonPatternEnum.HREF_EMAIL_COM, anchorBytes, hrefEmailFlagIndex);
     hrefComIndex = hrefComIndex + CommonPatternEnum.HREF_EMAIL_COM.getPattern().length();
 
     // 2,然后查找.com的信息
     int hrefCnIndex =
         BoyerMooreManager.INSTANCE.getHrefIndex(
-            CommonPatternEnum.HREF_EMAIL_CN, hrefArray, hrefEmailFlagIndex);
+            CommonPatternEnum.HREF_EMAIL_CN, anchorBytes, hrefEmailFlagIndex);
     hrefComIndex = hrefComIndex + CommonPatternEnum.HREF_EMAIL_CN.getPattern().length();
 
     // 检查规则出现@符号，并且出现.com或者.cn

@@ -13,6 +13,8 @@ public enum HtmlHrefFileEnum {
   SINA("sina.html"),
 
   SOHO("soho.html"),
+
+  SMALL("small.html"),
   ;
 
   /** 网页链接信息 */

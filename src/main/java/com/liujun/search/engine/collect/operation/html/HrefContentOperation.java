@@ -2,6 +2,7 @@ package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.algorithm.manager.BoyerMooreManager;
 import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
+import com.liujun.search.common.utils.ByteCode;
 
 /**
  * 网页的内容操作
@@ -37,11 +38,11 @@ public class HrefContentOperation {
   public String anchor(String src) {
 
     String srcTmp = src;
-    char[] hrefArray = srcTmp.toCharArray();
+    byte[] anchorBytes = ByteCode.GetBytes(src);
 
     // 1,查找email的标识符
     int hrefEmailFlagIndex =
-        BoyerMooreManager.INSTANCE.getHrefIndex(CommonPatternEnum.LINK_HREF_ANCHOR, hrefArray, 0);
+        BoyerMooreManager.INSTANCE.getHrefIndex(CommonPatternEnum.LINK_HREF_ANCHOR, anchorBytes, 0);
     if (hrefEmailFlagIndex == -1) {
       return src;
     } else {

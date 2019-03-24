@@ -23,7 +23,7 @@ public class TestCharMatcherBMBadChars {
 
     int startIndex = 0;
 
-    int findIndex = instance.matcherIndex(src.toCharArray(), startIndex);
+    int findIndex = instance.matcherIndex(src, startIndex);
     Assert.assertEquals(5, findIndex);
   }
 
@@ -37,7 +37,11 @@ public class TestCharMatcherBMBadChars {
 
     CharMatcherBMBadChars instance = CharMatcherBMBadChars.getBadInstance(matchers);
 
-    int findIndex = instance.matcherIndex(src.toCharArray(), index);
+    int findIndex = instance.matcherIndex(src, index);
     Assert.assertEquals(7, findIndex);
   }
+
+  /** 字符串的查找操作,使用坏字符规则 */
+  @Test
+  public void test03BadCharMatcherBytes() {}
 }
