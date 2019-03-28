@@ -1,6 +1,6 @@
 package com.liujun.search.common.properties;
 
-import com.liujun.search.common.io.IOUtils;
+import com.liujun.search.common.io.LocalIOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class PropertiesUtilProcess {
       logger.error("PropertiesUtilProcess loadProperties IOException", e);
       throw new RuntimeException(e);
     } finally {
-      IOUtils.close(in);
+      LocalIOUtils.close(in);
     }
   }
 
@@ -66,7 +66,7 @@ public class PropertiesUtilProcess {
       e.printStackTrace();
       logger.error("PropertiesUtilProcess saveProperties IOException", e);
     } finally {
-      IOUtils.close(outputStream);
+      LocalIOUtils.close(outputStream);
     }
   }
 

@@ -1,4 +1,4 @@
-package com.liujun.search.common.constant;
+package com.liujun.search.utilscode.io.constant;
 
 /**
  * 系统符号信息

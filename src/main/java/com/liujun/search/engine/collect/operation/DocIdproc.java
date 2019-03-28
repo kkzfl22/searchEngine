@@ -1,9 +1,9 @@
 package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.algorithm.ahoCorasick.AhoCorasick;
-import com.liujun.search.common.constant.PathCfg;
-import com.liujun.search.common.constant.SymbolMsg;
-import com.liujun.search.common.io.IOUtils;
+import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.utilscode.io.constant.PathCfg;
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +58,8 @@ public class DocIdproc {
 
   /** 关闭文件 */
   public void close() {
-    IOUtils.close(bufferWriter);
-    IOUtils.close(write);
+    LocalIOUtils.close(bufferWriter);
+    LocalIOUtils.close(write);
   }
 
   /**
@@ -160,8 +160,8 @@ public class DocIdproc {
       e.printStackTrace();
       logger.error("DocIdproc getDoc IOException", e);
     } finally {
-      IOUtils.close(bufferReader);
-      IOUtils.close(reader);
+      LocalIOUtils.close(bufferReader);
+      LocalIOUtils.close(reader);
     }
 
     return findMap;

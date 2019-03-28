@@ -2,9 +2,9 @@ package com.liujun.search.engine.collect.operation;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-import com.liujun.search.common.constant.PathCfg;
-import com.liujun.search.common.constant.SysPropertyEnum;
-import com.liujun.search.common.io.IOUtils;
+import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.utilscode.io.constant.PathCfg;
+import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import com.liujun.search.common.properties.SysPropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,9 +179,9 @@ public class BloomFilter implements Serializable {
       e.printStackTrace();
       logger.error("BloomFilter save IOException", e);
     } finally {
-      IOUtils.close(oos);
-      IOUtils.close(bufferedOutput);
-      IOUtils.close(fileObjOutput);
+      LocalIOUtils.close(oos);
+      LocalIOUtils.close(bufferedOutput);
+      LocalIOUtils.close(fileObjOutput);
     }
   }
 
@@ -210,9 +210,9 @@ public class BloomFilter implements Serializable {
       e.printStackTrace();
       logger.error("BloomFilter loader ClassNotFoundException", e);
     } finally {
-      IOUtils.close(objInputStream);
-      IOUtils.close(bufferInput);
-      IOUtils.close(inputStream);
+      LocalIOUtils.close(objInputStream);
+      LocalIOUtils.close(bufferInput);
+      LocalIOUtils.close(inputStream);
     }
   }
 }

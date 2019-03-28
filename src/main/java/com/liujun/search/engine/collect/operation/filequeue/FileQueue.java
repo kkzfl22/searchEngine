@@ -1,8 +1,8 @@
 package com.liujun.search.engine.collect.operation.filequeue;
 
-import com.liujun.search.common.constant.PathCfg;
-import com.liujun.search.common.constant.SymbolMsg;
-import com.liujun.search.common.io.IOUtils;
+import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.utilscode.io.constant.PathCfg;
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +11,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * 文件队列的实现
@@ -323,15 +321,15 @@ public class FileQueue {
   /** 关闭写入通道 */
   private void closeWrite() {
     // 关闭写入
-    IOUtils.close(writeChannel);
-    IOUtils.close(writeOutput);
+    LocalIOUtils.close(writeChannel);
+    LocalIOUtils.close(writeOutput);
   }
 
   /** 关闭读取 */
   private void closeRead() {
     // 再关闭读取
-    IOUtils.close(readChannel);
-    IOUtils.close(readInput);
+    LocalIOUtils.close(readChannel);
+    LocalIOUtils.close(readInput);
   }
 
   /**

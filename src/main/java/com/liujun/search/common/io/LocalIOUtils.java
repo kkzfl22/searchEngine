@@ -11,10 +11,10 @@ import java.io.IOException;
  * @version 0.0.1
  * @date 2019/03/03
  */
-public class IOUtils {
+public class LocalIOUtils {
 
   /** 日志 */
-  private static final Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocalIOUtils.class);
 
   public static void close(Closeable close) {
     if (close != null) {
@@ -22,7 +22,7 @@ public class IOUtils {
         close.close();
       } catch (IOException e) {
         e.printStackTrace();
-        LOGGER.error("IOUtils close IOException", e);
+        LOGGER.error("LocalIOUtils close IOException", e);
       }
     }
   }

@@ -1,5 +1,7 @@
 package com.liujun.search.engine.collect.operation.html;
 
+import com.liujun.search.utilscode.io.code.PathUtils;
+import com.liujun.search.utilscode.io.constant.PathEnum;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -17,11 +19,7 @@ import java.util.Set;
  */
 public class TestHtmlHrefAnalyze {
 
-  /** 分析的网页路径 */
-  private static final String ANALLYZE_PATH = "html/analyze";
-
-  private static final String BASE_PATH =
-      TestHtmlHrefGet.class.getClassLoader().getResource(ANALLYZE_PATH).getPath();
+  private static final String BASE_PATH = PathUtils.GetClassPath(PathEnum.FILE_ANALYZE_HTML_PATH);
 
   @Test
   public void testHtmlHref() throws IOException {

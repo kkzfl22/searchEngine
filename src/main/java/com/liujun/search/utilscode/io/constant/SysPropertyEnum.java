@@ -1,4 +1,4 @@
-package com.liujun.search.common.constant;
+package com.liujun.search.utilscode.io.constant;
 
 /**
  * 属性文件的枚举对象
@@ -10,7 +10,10 @@ package com.liujun.search.common.constant;
 public enum SysPropertyEnum {
 
   /** 文件操作的基础路径 */
-  FILE_PROCESS_PATH("file.process.path");
+  FILE_PROCESS_PATH("file.process.path"),
+
+  /** 用于限制存储网页的单文件大小 */
+  FILE_MAX_SIZE("file.max.size");
 
   private String key;
 

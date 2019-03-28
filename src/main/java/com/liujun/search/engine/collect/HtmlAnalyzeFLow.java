@@ -1,9 +1,13 @@
-package com.liujun.search.engine.collect.flow;
+package com.liujun.search.engine.collect;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
+import com.liujun.search.engine.collect.flow.DownLoadHtml;
+import com.liujun.search.engine.collect.flow.FileQueueAddAddress;
+import com.liujun.search.engine.collect.flow.HtmlBoomFilter;
+import com.liujun.search.engine.collect.flow.HtmlContextAnalyze;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
 import org.slf4j.Logger;
@@ -29,10 +33,12 @@ public class HtmlAnalyzeFLow {
   public static final FlowServiceInf[] FLOW = new FlowServiceInf[3];
 
   static {
-    // 1，下载网页信息
+    // 1，下载网页操作
     FLOW[0] = DownLoadHtml.INSTANCE;
     // 2,进行网页判重操作
+    FLOW[1] = HtmlBoomFilter.INSTANCE;
     // 3,分配网页的id操作
+
     // 4,将网页与网页id存储到doc_id.bin文件中
     // 5，将网页存储到doc_raw.bin文件中
     // 6,进行网页分析，抽取出链接地址信息

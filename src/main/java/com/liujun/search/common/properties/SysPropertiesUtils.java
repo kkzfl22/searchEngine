@@ -1,6 +1,6 @@
 package com.liujun.search.common.properties;
 
-import com.liujun.search.common.constant.SysPropertyEnum;
+import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- *  只读属性文件，
+ * 只读属性文件，
  *
  * @author liujun
  * @date 2014年6月10日
@@ -72,6 +72,23 @@ public class SysPropertiesUtils {
   }
 
   /**
+   * 获取对象类型的数据
+   *
+   * @param key key信息
+   * @return
+   */
+  public int getIntValue(SysPropertyEnum key) {
+
+    String value = prop.getProperty(key.getKey());
+
+    if (null != value) {
+      return Integer.parseInt(value);
+    }
+
+    return 0;
+  }
+
+  /**
    * 获取值带默认的方法
    *
    * @param key key信息
@@ -91,6 +108,4 @@ public class SysPropertiesUtils {
       return defValue;
     }
   }
-
-
 }
