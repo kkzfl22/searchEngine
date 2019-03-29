@@ -8,9 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 文件网页链接及其编号所对应的文件
@@ -39,7 +44,9 @@ public class DocIdproc {
   /** 字符读取操作 */
   private BufferedWriter bufferWriter;
 
-  public DocIdproc() {}
+  public DocIdproc() {
+    openFile();
+  }
 
   /** 打开文件 */
   public void openFile() {
@@ -70,9 +77,10 @@ public class DocIdproc {
    */
   public boolean putDoc(String url, long id) {
 
+    String data = this.srcToFileData(url, id);
     try {
       // 进行写数据操作
-      bufferWriter.write(this.srcToFileData(url, id));
+      bufferWriter.write(data);
       // 换行操作
       bufferWriter.newLine();
     } catch (IOException e) {
@@ -81,33 +89,6 @@ public class DocIdproc {
     }
 
     return true;
-  }
-
-  /**
-   * 将原始数据转换为输出至文件行中的数据
-   *
-   * @param url url地址信息
-   * @param id 文件的编号信息
-   * @return 转换后的行信息
-   */
-  private String srcToFileData(String url, long id) {
-    StringBuilder outMsg = new StringBuilder();
-
-    outMsg.append(url);
-    outMsg.append(SymbolMsg.DATA_COLUMN);
-    outMsg.append(id);
-
-    return outMsg.toString();
-  }
-
-  /**
-   * 将文件中的数据行转换为数据行信息
-   *
-   * @param fileData 文件行信息
-   * @return 数据信息 [0]url地址,[1]id信息
-   */
-  private String[] fileDataToSrc(String fileData) {
-    return fileData.split(SymbolMsg.DATA_COLUMN);
   }
 
   /**
@@ -165,5 +146,126 @@ public class DocIdproc {
     }
 
     return findMap;
+  }
+
+  /**
+   * 获取最后一个链接的id操作
+   *
+   * @return
+   */
+  public long getLastHrefId() {
+    // 找到当前文件
+    FileInputStream input = null;
+    FileChannel channel = null;
+
+    int lastReadSize = 512;
+
+    // 查找最后一个链接,即查找最后一个换行符与另外一个换行符号之间的数据
+    ByteBuffer buffer = ByteBuffer.allocate(lastReadSize);
+
+    try {
+      input = new FileInputStream(DOC_FILEPATH);
+      channel = input.getChannel();
+
+      // 读取文件的大小
+      long channelSize = channel.size();
+
+      // 读取最后一个buffer的大小
+      long startPos = channelSize - lastReadSize;
+
+      // 读取最后一个buffer的数据
+      channel.read(buffer, startPos);
+
+      // 提取出最后一行记录
+      String lastData = this.getLastData(buffer);
+
+      return getLastId(lastData);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      logger.error("DocIdproc getLastHrefId FileNotFoundException:", e);
+    } catch (IOException e) {
+      e.printStackTrace();
+      logger.error("DocIdproc getLastHrefId IOExceptio                                          n:", e);
+    }
+
+    return -1;
+  }
+
+  /**
+   * 将原始数据转换为输出至文件行中的数据
+   *
+   * @param url url地址信息
+   * @param id 文件的编号信息
+   * @return 转换后的行信息
+   */
+  private String srcToFileData(String url, long id) {
+    StringBuilder outMsg = new StringBuilder();
+
+    outMsg.append(url);
+    outMsg.append(SymbolMsg.DATA_COLUMN);
+    outMsg.append(id);
+
+    return outMsg.toString();
+  }
+
+  /**
+   * 提取出文件中id信息
+   *
+   * @param lastData
+   * @return
+   */
+  private long getLastId(String lastData) {
+    String[] spitDataArrays = this.fileDataToSrc(lastData);
+
+    return Long.parseLong(spitDataArrays[0]);
+  }
+
+  /**
+   * 将文件中的数据行转换为数据行信息
+   *
+   * @param fileData 文件行信息
+   * @return 数据信息 [0]url地址,[1]id信息
+   */
+  private String[] fileDataToSrc(String fileData) {
+    return fileData.split(SymbolMsg.DATA_COLUMN);
+  }
+
+  /**
+   * 先需要获取最后一行的数据
+   *
+   * @param buffer 缓冲区的信息
+   * @return 数据信息
+   */
+  private String getLastData(ByteBuffer buffer) {
+    // 1，查找结束的位置
+    int endIndex = this.lastLineIndex(buffer, buffer.position());
+
+    // 2,查找倒数第二个换行符
+    int startIndex = this.lastLineIndex(buffer, endIndex - 1);
+
+    // 获取数据
+    int dataLength = endIndex - startIndex;
+    byte[] lastLineBytes = new byte[dataLength];
+
+    buffer.get(lastLineBytes, startIndex, dataLength);
+
+    return new String(lastLineBytes, StandardCharsets.UTF_8);
+  }
+
+  /**
+   * 查找换行号的位置
+   *
+   * @param buffer
+   * @param lastPostion
+   * @return
+   */
+  private int lastLineIndex(ByteBuffer buffer, int lastPostion) {
+    for (int i = lastPostion; i >= 0; i--) {
+      if (buffer.get(i) == SymbolMsg.LINE_INT) {
+        return i;
+      }
+    }
+
+    throw new RuntimeException("data is error ,not find switch line flag");
   }
 }

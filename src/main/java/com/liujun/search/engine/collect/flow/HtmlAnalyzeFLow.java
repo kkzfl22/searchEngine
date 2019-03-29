@@ -1,19 +1,14 @@
-package com.liujun.search.engine.collect;
+package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
-import com.liujun.search.engine.collect.flow.DownLoadHtml;
-import com.liujun.search.engine.collect.flow.FileQueueAddAddress;
-import com.liujun.search.engine.collect.flow.HtmlBoomFilter;
-import com.liujun.search.engine.collect.flow.HtmlContextAnalyze;
+import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Set;
 
 /**
  * 网页分析流程
@@ -30,7 +25,8 @@ public class HtmlAnalyzeFLow {
   /** 网页分析流程 */
   public static final HtmlAnalyzeFLow INSTANCE = new HtmlAnalyzeFLow();
 
-  public static final FlowServiceInf[] FLOW = new FlowServiceInf[3];
+  /** 流程操作 */
+  private static final FlowServiceInf[] FLOW = new FlowServiceInf[7];
 
   static {
     // 1，下载网页操作
@@ -38,13 +34,15 @@ public class HtmlAnalyzeFLow {
     // 2,进行网页判重操作
     FLOW[1] = HtmlBoomFilter.INSTANCE;
     // 3,分配网页的id操作
-
+    FLOW[2] = HtmlNumberId.INSTANCE;
     // 4,将网页与网页id存储到doc_id.bin文件中
+    FLOW[3] = HtmlDocIdToFile.INSTANCE;
     // 5，将网页存储到doc_raw.bin文件中
+    FLOW[4] = HtmlDowrawToFile.INSTANCE;
     // 6,进行网页分析，抽取出链接地址信息
-    FLOW[1] = HtmlContextAnalyze.INSTANCE;
+    FLOW[5] = HtmlContextAnalyze.INSTANCE;
     // 7,将网页链接加入文件队列中
-    FLOW[2] = FileQueueAddAddress.INSTANCE;
+    FLOW[6] = FileQueueAddAddress.INSTANCE;
   }
 
   /**
@@ -53,7 +51,7 @@ public class HtmlAnalyzeFLow {
    * @param entry 网页搜索入口信息
    * @return 返回下载的网页链接地址信息
    */
-  public Set<String> downloadAndAnalyzeHtml(WebEntryEnum entry) {
+  public void downloadAndAnalyzeHtml(WebEntryEnum entry) {
 
     FlowServiceContext context = new FlowServiceContext();
 
@@ -70,12 +68,19 @@ public class HtmlAnalyzeFLow {
 
       while ((urlAddress = queue.get()) != null) {
 
+        System.out.println("get 地址:" + urlAddress);
+
         // 放入地址信息
         context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey(), urlAddress);
 
         // 进行任务流程执行
         for (FlowServiceInf flowService : FLOW) {
-          flowService.runFlow(context);
+          boolean runFlag = flowService.runFlow(context);
+
+          // 如果返回false说明当前流程需要停止，进行下一个
+          if (!runFlag) {
+            break;
+          }
         }
       }
 
@@ -83,8 +88,6 @@ public class HtmlAnalyzeFLow {
       e.printStackTrace();
       logger.error("HtmlAnalyzeFLow downloadAndAnalyzeHtml Exception", e);
     }
-
-    return context.getObject(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey());
   }
 
   /**
@@ -95,5 +98,10 @@ public class HtmlAnalyzeFLow {
   private void init(WebEntryEnum entry) {
     // 进行首个根地址的放入操作
     FileQueueManager.INSTANCE.getFileQueue(entry).firstWriteEntry(entry);
+    // 找开文件通道操作
+    FileQueueManager.INSTANCE.getFileQueue(entry).openFileQueue();
+
+    // 进行当前线程相关的初始化操作
+    DocRawProc.INSTANCE.threadInit();
   }
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * bytebuffer的操作
@@ -62,21 +64,32 @@ public class ByteBufferUtils {
     // 计算数据长度信息
     int byteSpaceLength = CountLenth(buffer, dataByte.length, startPos);
 
-    // 检查待写入的数据长度是否大于0
-    while (byteSpaceLength > 0) {
+    // 针对单次写入来说，需确保完整性
+    Lock lock = new ReentrantLock();
 
-      // 数据拷贝操作
-      buffer.put(dataByte, startPos, byteSpaceLength);
-      buffer.flip();
-      // 将缓冲区中的数据写入文件中
-      int length = channel.write(buffer);
-      // 进行压缩操作
-      buffer.compact();
-      // 重新计算开始度度
-      startPos += length;
+    try {
+      lock.lock();
 
-      // 再进行一次计算
-      byteSpaceLength = CountLenth(buffer, dataByte.length, startPos);
+      // 检查待写入的数据长度是否大于0
+      while (byteSpaceLength > 0) {
+        // 数据拷贝操作
+        buffer.put(dataByte, startPos, byteSpaceLength);
+        buffer.flip();
+        // 将缓冲区中的数据写入文件中
+        int length = channel.write(buffer);
+        // 进行压缩操作
+        buffer.compact();
+        // 重新计算开始度度
+        startPos += length;
+
+        // 再进行一次计算
+        byteSpaceLength = CountLenth(buffer, dataByte.length, startPos);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      lock.unlock();
     }
   }
 

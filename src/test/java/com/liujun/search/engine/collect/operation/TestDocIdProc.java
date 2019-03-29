@@ -76,6 +76,22 @@ public class TestDocIdProc {
     Assert.assertNotNull(machMap);
   }
 
+  /** 查找最后一个seqid */
+  @Test
+  public void findlasturl() {
+    int maxNum = 10000;
+
+    for (int i = 100; i < maxNum; i++) {
+      // 1,插入1000个序列号
+      String address = "http://" + String.valueOf(i);
+      DocIdproc.INSTANCE.putDoc(address,i);
+    }
+
+    //提取最一个序列值
+    long lastId = DocIdproc.INSTANCE.getLastHrefId();
+    Assert.assertEquals(maxNum-1,lastId);
+
+  }
   /** 执行清理操作 */
   @After
   public void finish() {

@@ -50,11 +50,16 @@ public class DocRawProc extends DocRawFileStreamManager {
   private ThreadLocal<ByteBuffer> threadLocal = new ThreadLocal<>();
 
   public DocRawProc() {
+    // 进行首次的初始化操作
+    this.initReadIndex();
+  }
+
+  public void threadInit() {
     // 检查并放入缓冲区
     threadLocal.set(ByteBuffer.allocate(BUFFER_SIZE));
 
-    // 进行首次的初始化操作
-    this.initReadIndex();
+    // 进行文件打开操作
+    this.fileOpen();
   }
 
   /** 清理所有文件 */

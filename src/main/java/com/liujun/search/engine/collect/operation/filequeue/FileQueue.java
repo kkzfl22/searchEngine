@@ -153,8 +153,6 @@ public class FileQueue {
       // 将单个数据写入到文件通道中
       int offset = this.writeOneDataToFileChannel(address);
 
-      // 将数据进行一次刷盘操作
-      writeChannel.force(true);
       // 更新postion的位置信息
       this.fileOffset.setWriteOffset(this.fileOffset.getWriteOffset() + offset);
 
@@ -197,8 +195,6 @@ public class FileQueue {
         curOffset += this.bufferwriteChannel();
       }
 
-      // 将数据进行一次刷盘操作
-      writeChannel.force(false);
       // 写入新的位置
       this.fileOffset.setWriteOffset(fileOffset.getWriteOffset() + curOffset);
 
@@ -224,6 +220,8 @@ public class FileQueue {
       boolean readFinish = false;
 
       while (!readFinish && readChannel.read(readBuffer, this.fileOffset.getReadOffset()) > 0) {
+
+        System.out.println("out rsp:....");
         long tmpReadOffset = 0;
 
         readBuffer.flip();
@@ -363,17 +361,6 @@ public class FileQueue {
     return result;
   }
 
-  /**
-   * 数据进行清除换行符号信息
-   *
-   * @param data
-   * @return
-   */
-  private String dataCleanLine(String data) {
-    String address = data.trim();
-    return address;
-  }
-
   /** 关闭操作 */
   private void closeAll() {
     this.closeWrite();
@@ -391,7 +378,7 @@ public class FileQueue {
    * @return 写入数据的长度
    * @throws IOException
    */
-  private int writeBufferOrChannel(String data) throws IOException {
+  private synchronized int writeBufferOrChannel(String data) throws IOException {
 
     int dataOffset = 0;
 
@@ -407,7 +394,7 @@ public class FileQueue {
     while (startPos < dataLength) {
       // 计算写入数据的总长度
       int oldPos = writeBuffer.position();
-      // 计算写入数据的长度
+      // 计算可写入数据的长度
       int buffLength = this.countWriteLength(startPos, dataLength);
 
       writeBuffer.put(valueBytes, startPos, buffLength);
@@ -418,12 +405,15 @@ public class FileQueue {
       // 如果通道满了，则写入文件中
       if (writeBuffer.position() == writeBuffer.limit()) {
         writeBuffer.flip();
+        // 写入文件通道中
         offset = writeChannel.write(writeBuffer);
         dataOffset += offset;
         // 进行压缩操作
         writeBuffer.compact();
       }
     }
+    // 将数据进行一次刷盘操作
+    writeChannel.force(false);
 
     // 返回整个偏移的位置
     return dataOffset;
@@ -465,7 +455,7 @@ public class FileQueue {
    * @return 写入数据的长度
    * @throws IOException
    */
-  private int writeOneDataToFileChannel(String data) throws IOException {
+  private synchronized int writeOneDataToFileChannel(String data) throws IOException {
 
     int dataOffset = 0;
 
@@ -495,6 +485,9 @@ public class FileQueue {
       // 进行压缩操作
       writeBuffer.compact();
     }
+
+    // 将数据进行一次刷盘操作
+    writeChannel.force(true);
 
     // 返回整个偏移的位置
     return dataOffset;

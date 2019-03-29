@@ -16,7 +16,7 @@ public class TestHrefContentOperation {
   @Test
   public void anchorOperation() {
     String context = "http://auto.sohu.com/#utab_model";
-    String value = HrefContentOperation.INSTANCE.anchor(context);
+    String value = HrefContentOperation.INSTANCE.hrefContext(context);
     String comp1 = "http://auto.sohu.com/";
     Assert.assertEquals(value, comp1);
   }
@@ -25,7 +25,7 @@ public class TestHrefContentOperation {
   @Test
   public void anchorOperation2() {
     String context = "https://www.sohu.com/a/302080106_430526";
-    String value = HrefContentOperation.INSTANCE.anchor(context);
+    String value = HrefContentOperation.INSTANCE.hrefContext(context);
 
     Assert.assertEquals(value, context);
   }
@@ -46,5 +46,13 @@ public class TestHrefContentOperation {
     String value = HrefContentOperation.INSTANCE.hrefContext(context);
 
     Assert.assertEquals(value, context);
+  }
+
+  @Test
+  public void contextAddHttp() {
+    String context = "www.sohu.com/a/302080106_430526";
+    String value = HrefContentOperation.INSTANCE.hrefContext(context);
+
+    Assert.assertEquals(value, "http://" + context);
   }
 }

@@ -7,6 +7,7 @@ import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 下载html网页
@@ -28,8 +29,12 @@ public class DownLoadHtml implements FlowServiceInf {
     // 进行下载文件的操作
     String htmlContext = DownLoad.INSTANCE.downloadHtml(urlAddress);
 
-    context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey(), htmlContext);
+    if (StringUtils.isNotEmpty(htmlContext)) {
+      context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey(), htmlContext);
 
-    return true;
+      return true;
+    }
+
+    return false;
   }
 }

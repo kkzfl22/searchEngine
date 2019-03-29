@@ -20,6 +20,9 @@ public enum CollectFlowKeyEnum {
 
   /** 链接集合对象信息 */
   FLOW_CONTEXT_HREF_LIST("flow_context_href_list"),
+
+  /** 序列号值标识 */
+  FLOW_CONTEXT_NUMBER_SEQID("flow_context_number_seqid"),
   ;
 
   private String key;

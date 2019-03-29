@@ -2,7 +2,16 @@ package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.algorithm.manager.BoyerMooreManager;
 import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
+import com.liujun.search.common.flow.FlowServiceContext;
+import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.common.utils.ByteCode;
+import com.liujun.search.engine.collect.constant.HrefContextEnum;
+import com.liujun.search.engine.collect.operation.html.hrefContext.HrefDeleteAnchor;
+import com.liujun.search.engine.collect.operation.html.hrefContext.HrefPrefix;
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 网页的内容操作
@@ -16,37 +25,37 @@ public class HrefContentOperation {
   /** 实例信息 */
   public static final HrefContentOperation INSTANCE = new HrefContentOperation();
 
-  public String hrefContext(String src) {
+  /** 链接处理 */
+  public static final FlowServiceInf[] RUNFLOW = new FlowServiceInf[2];
 
-    String outValue = src;
-
-    // 进行锚的删除
-    outValue = this.anchor(outValue);
-
-    // 进行链接首尾字符去掉
-    outValue = outValue.trim();
-
-    return outValue;
+  static {
+    RUNFLOW[0] = HrefDeleteAnchor.INSTANCE;
+    RUNFLOW[1] = HrefPrefix.INSTANCE;
   }
 
-  /**
-   * 网页链拉中锚的处理
-   *
-   * @param src 原始链接
-   * @return 字符串
-   */
-  public String anchor(String src) {
+  private Logger logger = LoggerFactory.getLogger(HrefContentOperation.class);
 
-    String srcTmp = src;
-    byte[] anchorBytes = ByteCode.GetBytes(src);
+  public String hrefContext(String src) {
 
-    // 1,查找email的标识符
-    int hrefEmailFlagIndex =
-        BoyerMooreManager.INSTANCE.getHrefIndex(CommonPatternEnum.LINK_HREF_ANCHOR, anchorBytes, 0);
-    if (hrefEmailFlagIndex == -1) {
+    if (StringUtils.isEmpty(src)) {
       return src;
-    } else {
-      return srcTmp.substring(0, hrefEmailFlagIndex);
     }
+
+    // 进行链接首尾字符去掉
+    src = src.trim();
+
+    FlowServiceContext context = new FlowServiceContext();
+    // 将网页放入到流程中
+    context.put(HrefContextEnum.HREF_OUT.getKey(), src);
+
+    try {
+      for (FlowServiceInf runFlow : RUNFLOW) {
+        runFlow.runFlow(context);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return context.getObject(HrefContextEnum.HREF_OUT.getKey());
   }
 }
