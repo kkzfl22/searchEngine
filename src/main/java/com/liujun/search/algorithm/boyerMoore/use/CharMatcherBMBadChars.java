@@ -129,9 +129,9 @@ public class CharMatcherBMBadChars {
 
       int badCharCode = str[startIndex + matchIndex];
 
-      // 检查是否超过了字符集的大小
+      // 检查是否超过了字符集的大小，则跳过一个
       if (badCharCode > BUFFER_SIZE || badCharCode < 0) {
-        jumpBits = matcherLength - 1;
+        jumpBits = 1;
       } else {
         // 如果出现坏字符，找到坏字符出现在模式串中的位置
         int badIndex = badChar[badCharCode];

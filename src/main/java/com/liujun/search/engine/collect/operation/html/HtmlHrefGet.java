@@ -4,6 +4,8 @@ import com.liujun.search.algorithm.manager.BoyerMooreManager;
 import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * 进行网页的链接读取
  *
@@ -49,7 +51,9 @@ public class HtmlHrefGet {
         BoyerMooreManager.INSTANCE.getHrefIndex(
             CommonPatternEnum.LINK_HREF_URL_END, htmlContext, hrefUrlIndex);
 
-    String hrefContext = new String(htmlContext, hrefUrlIndex, hrefUrlEndIndex - hrefUrlIndex);
+    String hrefContext =
+        new String(
+            htmlContext, hrefUrlIndex, hrefUrlEndIndex - hrefUrlIndex, StandardCharsets.UTF_8);
 
     // 4,查找结束标签
     int hrefEndIndex =

@@ -13,7 +13,9 @@ public enum PathEnum {
 
   /** 网页文件分析的路径 */
   FILE_ANALYZE_HTML_PATH("html/analyze"),
-  ;
+
+  /** 网页错误路径分析 */
+  FILE_ANALYZE_ERROR_HTML_PATH("html/analyzeerror");
 
   /** 路径信息 */
   private String path;

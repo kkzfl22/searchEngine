@@ -8,6 +8,8 @@ import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
 import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
@@ -23,8 +25,12 @@ public class FileQueueAddAddress implements FlowServiceInf {
   /** 实例对象 */
   public static final FileQueueAddAddress INSTANCE = new FileQueueAddAddress();
 
+  private Logger logger = LoggerFactory.getLogger(FileQueueAddAddress.class);
+
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
+
+    logger.info("collect file queue add start");
 
     WebEntryEnum entry = context.getObject(CollectFlowKeyEnum.WEB_ENTRY.getKey());
 
@@ -35,6 +41,8 @@ public class FileQueueAddAddress implements FlowServiceInf {
 
     // 将数据入入到队列中
     fileQueue.put(hrefValue);
+
+    logger.info("collect file queue add finish");
 
     return true;
   }

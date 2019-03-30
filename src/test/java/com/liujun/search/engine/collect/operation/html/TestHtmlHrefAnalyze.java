@@ -21,6 +21,9 @@ public class TestHtmlHrefAnalyze {
 
   private static final String BASE_PATH = PathUtils.GetClassPath(PathEnum.FILE_ANALYZE_HTML_PATH);
 
+  private static final String BASE_ERROR_PATH =
+      PathUtils.GetClassPath(PathEnum.FILE_ANALYZE_ERROR_HTML_PATH);
+
   @Test
   public void testHtmlHref() throws IOException {
     String fileSoho = "soho.html";
@@ -31,5 +34,17 @@ public class TestHtmlHrefAnalyze {
 
     Assert.assertNotNull(list);
     Assert.assertThat(list, Matchers.not("/"));
+  }
+
+  @Test
+  public void htmlErrorHref() throws IOException {
+
+    String fileSoho = "soho_error.html";
+    File sohoFile = new File(BASE_ERROR_PATH, fileSoho);
+    String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
+
+    Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+
+    Assert.assertNotNull(list);
   }
 }

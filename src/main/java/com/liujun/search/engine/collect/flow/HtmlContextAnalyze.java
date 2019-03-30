@@ -4,6 +4,8 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
@@ -18,8 +20,12 @@ public class HtmlContextAnalyze implements FlowServiceInf {
 
   public static final HtmlContextAnalyze INSTANCE = new HtmlContextAnalyze();
 
+  private Logger logger = LoggerFactory.getLogger(HtmlContextAnalyze.class);
+
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
+
+    logger.info("collect html context analyze start");
 
     String value = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
 
@@ -27,6 +33,8 @@ public class HtmlContextAnalyze implements FlowServiceInf {
     Set<String> hrefValue = HtmlHrefAnalyze.INSTANCE.getHref(value);
 
     context.put(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey(), hrefValue);
+
+    logger.info("collect html context analyze finish,href size:{}", hrefValue.size());
 
     return true;
   }

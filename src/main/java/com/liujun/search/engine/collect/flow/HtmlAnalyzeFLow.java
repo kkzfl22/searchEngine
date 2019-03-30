@@ -38,7 +38,7 @@ public class HtmlAnalyzeFLow {
     // 4,将网页与网页id存储到doc_id.bin文件中
     FLOW[3] = HtmlDocIdToFile.INSTANCE;
     // 5，将网页存储到doc_raw.bin文件中
-    FLOW[4] = HtmlDowrawToFile.INSTANCE;
+    FLOW[4] = HtmlDocrawToFile.INSTANCE;
     // 6,进行网页分析，抽取出链接地址信息
     FLOW[5] = HtmlContextAnalyze.INSTANCE;
     // 7,将网页链接加入文件队列中
@@ -68,7 +68,7 @@ public class HtmlAnalyzeFLow {
 
       while ((urlAddress = queue.get()) != null) {
 
-        System.out.println("get 地址:" + urlAddress);
+        logger.info("collect url start :" + urlAddress);
 
         // 放入地址信息
         context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey(), urlAddress);

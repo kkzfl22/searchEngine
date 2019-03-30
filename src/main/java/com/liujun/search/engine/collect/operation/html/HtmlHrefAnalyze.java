@@ -42,6 +42,9 @@ public class HtmlHrefAnalyze {
     while (starPos < anchorBytes.length) {
       AnalyzeBusi busi = HtmlHrefGet.INSTANCE.getHref(anchorBytes, starPos);
 
+      System.out.println(busi);
+
+
       // 当发生-1说明搜索结束
       if (busi.getEndPostion() == -1) {
         break;
@@ -52,6 +55,7 @@ public class HtmlHrefAnalyze {
       // 如果不被过滤，则加入当前集合中
       if (!filter) {
         String hrefContex = busi.getHref();
+
 
         // 进行链接内容的处理
         hrefContex = HrefContentOperation.INSTANCE.hrefContext(hrefContex);
