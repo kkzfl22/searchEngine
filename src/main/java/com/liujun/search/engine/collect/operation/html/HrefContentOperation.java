@@ -1,14 +1,10 @@
 package com.liujun.search.engine.collect.operation.html;
 
-import com.liujun.search.algorithm.manager.BoyerMooreManager;
-import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.common.utils.ByteCode;
 import com.liujun.search.engine.collect.constant.HrefContextEnum;
 import com.liujun.search.engine.collect.operation.html.hrefContext.HrefDeleteAnchor;
 import com.liujun.search.engine.collect.operation.html.hrefContext.HrefPrefix;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

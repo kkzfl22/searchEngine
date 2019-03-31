@@ -1,10 +1,11 @@
 package com.liujun.search.algorithm.manager;
 
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
-import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
+import com.liujun.search.algorithm.manager.constant.BMHtmlTagContextEnum;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 使用bm算法进行字符串匹配的算法管理
@@ -18,26 +19,44 @@ public class BoyerMooreManager {
   /** 实例对象 */
   public static final BoyerMooreManager INSTANCE = new BoyerMooreManager();
 
-  /** 模式串 */
-  private static final Map<CommonPatternEnum, CharMatcherBMBadChars> PATTERN_MAP = new HashMap<>();
+  /** 模式串,模式匹配的对象的对应关系 */
+  private static final Map<String, CharMatcherBMBadChars> PATTERN_MAP = new HashMap<>();
 
   static {
-    CommonPatternEnum[] values = CommonPatternEnum.values();
+    Set<String> parrernChars = InitParrern.INSTANCE.getInitParrertChars();
 
-    /** 构建坏字符与好后缀的规则，进行单模式串的匹配操作 */
-    for (CommonPatternEnum parrern : values) {
-      PATTERN_MAP.put(parrern, CharMatcherBMBadChars.getGoodSuffixInstance(parrern.getPattern()));
+    // 初始化械串
+    for (String patterns : parrernChars) {
+      PATTERN_MAP.put(patterns, CharMatcherBMBadChars.getGoodSuffixInstance(patterns));
     }
+  }
+
+  /**
+   * 添加好后缀模式串
+   *
+   * @param patternKey 模式串信息
+   */
+  public static void putPmGoodSuffix(String patternKey) {
+    PATTERN_MAP.put(patternKey, CharMatcherBMBadChars.getGoodSuffixInstance(patternKey));
+  }
+
+  /**
+   * 添加坏字符的规则
+   *
+   * @param patternKey 模式串信息
+   */
+  public static void putPmBadChar(String patternKey) {
+    PATTERN_MAP.put(patternKey, CharMatcherBMBadChars.getGoodSuffixInstance(patternKey));
   }
 
   /**
    * 获取单模式串匹配的实例对象
    *
-   * @param pattern 公共模式串信息
+   * @param patternKey 公共模式串信息
    * @return 模式串实例对象
    */
-  public CharMatcherBMBadChars getCharMatchar(CommonPatternEnum pattern) {
-    return PATTERN_MAP.get(pattern);
+  public CharMatcherBMBadChars getCharMatchar(String patternKey) {
+    return PATTERN_MAP.get(patternKey);
   }
 
   /**
@@ -48,7 +67,7 @@ public class BoyerMooreManager {
    * @param startPostion 开始位置
    * @return
    */
-  public int getHrefIndex(CommonPatternEnum parrern, byte[] htmlContext, int startPostion) {
+  public int getHrefIndex(String parrern, char[] htmlContext, int startPostion) {
     // 通过模式串查找索引位置
     CharMatcherBMBadChars hrefAstart = getCharMatchar(parrern);
     int hrefIndex = hrefAstart.matcherIndex(htmlContext, startPostion);

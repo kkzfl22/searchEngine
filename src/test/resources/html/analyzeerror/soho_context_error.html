@@ -1,0 +1,96 @@
+<div id="sohu-mod" class="sohu-mod">
+    <div class="area sohu-frag">
+        <div class="left sohu-news">
+            <div class="title">今日搜狐热点</div>
+            <div class="list">
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <div class="left auto-sohu">
+            <div class="count-down"><span>6</span>秒后</div>
+            <div class="go-sohu"><a href="http://www.sohu.com?strategyid=00004">进入搜狐首页</a></div>
+            <a href="#" target="_blank" class="close-sohu"></a>
+        </div>
+    </div>
+</div>
+<div id="sohu-remend" class="sohu-remend">
+    <div class="area sohu-remend-box">
+        <div class="remend-tt left">今日推荐</div>
+        <div class="left sohu-pp">
+            <ul>
+            </ul>
+        </div>
+        <div class="right sohu-do">
+            <a data-clev="10220279" href="http://www.sohu.com?strategyid=00004"><div class="go-sohu">进入搜狐首页</div></a>
+            <a data-clev="10220280" href="//shang.qq.com/wpa/qunwpa?idkey=04e47b9e7004c967962f52532465719ae8a30cf05413c11934ec121fb7e2dd62" target="_blank" class="feedback-link">意见反馈</a>
+            <a data-clev="10220281" href="javascript:void(0)" target="_blank" class="close-remend"></a>
+        </div>
+    </div>
+    <div class="sohu-remend-layer"></div>
+</div>
+
+<script src="//statics.itc.cn/web/static/js/lib-61587d9fb8.js"></script>
+<script src="//39d0825d09f05.cdn.sohucs.com/sdk/passport-4.0.3.js"></script>
+<!--<script src="//statics.itc.cn/web/static/js/ie8hack-07e05e83f1.js"></script>-->
+<script src="//txt.go.sohu.com/ip/soip"></script>
+<script src="//statics.itc.cn/spm/prod/js/1.0.1/index.js"></script>
+<script src="//statics.itc.cn/web/static/js/main-a70cf5d988.js"></script>
+<script src="//js.sohu.com/pv.js"></script>
+<script>
+    try{console.log("执行成功")
+        window.sohu_mp.article({
+            channel_id: "12",
+            news_id: "304562234",
+            cms_id: "$mpNews.cmsId",
+            media_id: "119350",
+            passport: "1047467705@sina.sohu.com",
+            weboUrl: "https://mp.sohu.com/profile?xpt=MTA0NzQ2NzcwNUBzaW5hLnNvaHUuY29t",
+            title: "“我有病？但是我也有才啊！”｜大作家们的小怪癖",
+            channel_url:"//cul.sohu.com",
+            categoryId:"1350",
+            //adData_fd用于abtest
+            abData:"",
+            abData_fd:"",
+            abData_tw:"",
+            originalId:"$mpNews.originalId",
+            originalStatus:"0",
+            mpNewsExt:{
+                "modelId":""
+            }});
+    }
+    catch(e){
+        var html = '<div class="err-js">' +
+            '<span><em class="icon err-js-icon"></em>JS加载错误，请重新加载。</span>' +
+            '<a href="javascript:window.location.reload()" target="_blank" class="cached-btn"' +
+            '><em class="icon-cached"></em>刷新</a></div>';
+        $(document.body).prepend(html);
+        // Raven.captureException(e);
+        console.error("发生错误",e);
+    }
+</script>
+<!--[if lt IE 8]>
+<script type="text/javascript">
+    (function(){
+        var ua = navigator.userAgent;
+        var version;
+        var html = '<div class="area clear">' +
+                '<div class="ie-low">' +
+                '<p>您的浏览器版本过低<br>为了更好的体验，请升级你的浏览器。</p>' +
+                '<h5><a href="https://ie.sogou.com" target="_blank" class="upgrade-btn">马上升级</a></h5>' +
+                '</div></div>';
+        if (/MSIE ([^;]+)/.test(ua)) {
+            version = parseInt(RegExp["$1"]);
+            if (version<8) {
+                document.body.innerHTML=html;
+                var reg = new RegExp("(^| )SUV=([^;]*)(;|$)");
+                var suvs = unescape(document.cookie.match(reg)[2]);
+                var spv_server_src = "http://pv.sohu.com/action.gif?actionId=10078&SUV="+suvs;
+                var scripts = document.createElement('script');
+                scripts.src = spv_server_src;
+                document.body.appendChild(scripts);
+                Raven.captureException(new Error('ie'+version));
+            }
+        }
+    })()
+</script>

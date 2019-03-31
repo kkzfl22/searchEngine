@@ -46,5 +46,22 @@ public class TestHtmlHrefAnalyze {
     Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
 
     Assert.assertNotNull(list);
+    System.out.println();
+
+    //    for (String context : list) {
+    //      System.out.println(context);
+    //    }
+  }
+
+  @Test
+  public void htmlErrorHrefGetError() throws IOException {
+
+    String fileSoho = "soho_context_error.html";
+    File sohoFile = new File(BASE_ERROR_PATH, fileSoho);
+    String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
+
+    Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+
+    Assert.assertNotNull(list);
   }
 }

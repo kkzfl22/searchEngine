@@ -1,7 +1,7 @@
 package com.liujun.search.engine.collect.operation.html.hrefContext;
 
 import com.liujun.search.algorithm.manager.BoyerMooreManager;
-import com.liujun.search.algorithm.manager.constant.CommonPatternEnum;
+import com.liujun.search.algorithm.manager.constant.BMHtmlTagContextEnum;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.common.utils.ByteCode;
@@ -44,7 +44,8 @@ public class HrefDeleteAnchor implements FlowServiceInf {
 
     // 1,查找email的标识符
     int hrefEmailFlagIndex =
-        BoyerMooreManager.INSTANCE.getHrefIndex(CommonPatternEnum.LINK_HREF_ANCHOR, anchorBytes, 0);
+        BoyerMooreManager.INSTANCE.getHrefIndex(
+            BMHtmlTagContextEnum.HTML_HREF_FILTER_ANCHOR.getPattern(), anchorBytes, 0);
     if (hrefEmailFlagIndex == -1) {
       return src;
     } else {

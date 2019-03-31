@@ -15,6 +15,7 @@ public class AnalyzeBusi {
   /** 网页的结束位置 */
   private int EndPostion;
 
+
   public AnalyzeBusi(String href) {
     this.href = href;
   }

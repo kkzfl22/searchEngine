@@ -23,6 +23,7 @@ public class FilterHrefPrefix implements FlowServiceInf {
 
   static {
     FILTER_PREFIX.add("javascript:");
+    FILTER_PREFIX.add("#");
   }
 
   @Override

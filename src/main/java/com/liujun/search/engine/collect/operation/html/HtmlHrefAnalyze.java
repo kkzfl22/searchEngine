@@ -1,6 +1,10 @@
 package com.liujun.search.engine.collect.operation.html;
 
+import com.liujun.search.common.flow.FlowServiceContext;
+import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.common.utils.ByteCode;
+import com.liujun.search.engine.collect.constant.HrefGetEnum;
+import com.liujun.search.engine.collect.operation.html.hrefget.*;
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,6 +24,22 @@ public class HtmlHrefAnalyze {
 
   public static final HtmlHrefAnalyze INSTANCE = new HtmlHrefAnalyze();
 
+  /** 业务运行的流程 */
+  private static final FlowServiceInf[] FLOW = new FlowServiceInf[5];
+
+  static {
+    // 进行开始的<a标签的查找
+    FLOW[0] = HrefASstartSearch.INSTANCE;
+    // 网页中script标签位置查找
+    FLOW[1] = HrefScriptSearch.INSTANCE;
+    // 当处于script中间的a标签需要被过滤
+    FLOW[2] = HrefFilterScript.INSTANCE;
+    // 进行最后的网页内容处理
+    FLOW[3] = HrefContextGet.INSTANCE;
+    // 将验证通过的数据添加到集合中
+    FLOW[4] = HrefCheckAndAddList.INSTANCE;
+  }
+
   /**
    * 获取网页链接信息
    *
@@ -37,32 +57,39 @@ public class HtmlHrefAnalyze {
 
     int starPos = 0;
 
-    byte[] anchorBytes = ByteCode.GetBytes(htmlContext);
+    char[] anchorBytes = htmlContext.toCharArray();
 
-    while (starPos < anchorBytes.length) {
-      AnalyzeBusi busi = HtmlHrefGet.INSTANCE.getHref(anchorBytes, starPos);
+    FlowServiceContext context = new FlowServiceContext();
 
-      System.out.println(busi);
+    // 存储集合的数据
+    context.put(HrefGetEnum.HREF_RESULT_SET_OBJECT.getHrefKey(), result);
+    context.put(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey(), anchorBytes);
 
+    try {
+      while (starPos < anchorBytes.length) {
+        // 遍历进行链接的提取操作
+        context.put(HrefGetEnum.HREFA_START_POSITION.getHrefKey(), starPos);
 
-      // 当发生-1说明搜索结束
-      if (busi.getEndPostion() == -1) {
-        break;
+        for (FlowServiceInf analyze : FLOW) {
+          boolean flowRsp = analyze.runFlow(context);
+
+          // 如果当前执行失败，则继续退出处理
+          if (!flowRsp) {
+            break;
+          }
+        }
+
+        AnalyzeBusi busi = context.getObject(HrefGetEnum.HREF_RESULT_OBJECT.getHrefKey());
+
+        // 当发生-1说明搜索结束
+        if (busi.getEndPostion() == -1) {
+          break;
+        }
+
+        starPos = busi.getEndPostion();
       }
-
-      // 进行过滤操作
-      boolean filter = HtmlHrefFilter.INSTANCE.filterCheck(busi.getHref());
-      // 如果不被过滤，则加入当前集合中
-      if (!filter) {
-        String hrefContex = busi.getHref();
-
-
-        // 进行链接内容的处理
-        hrefContex = HrefContentOperation.INSTANCE.hrefContext(hrefContex);
-
-        result.add(hrefContex);
-      }
-      starPos = busi.getEndPostion();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
     return result;
