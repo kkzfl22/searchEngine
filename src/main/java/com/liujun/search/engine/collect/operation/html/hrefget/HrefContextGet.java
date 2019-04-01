@@ -25,7 +25,7 @@ public class HrefContextGet implements FlowServiceInf {
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
-    byte[] htmlContext = context.getObject(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey());
+    char[] htmlContext = context.getObject(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey());
     int hrefAstartIndex = context.getObject(HrefGetEnum.HREF_CON_ASTART_POSITION.getHrefKey());
 
     // 2,然后以A标签为起始点，查找href属性
@@ -40,14 +40,7 @@ public class HrefContextGet implements FlowServiceInf {
             BMHtmlTagContextEnum.HTML_HREF_URL_END.getPattern(), htmlContext, hrefUrlIndex);
 
     // 封装网页内容
-    String hrefContext =
-        new String(
-            htmlContext, hrefUrlIndex, hrefUrlEndIndex - hrefUrlIndex, StandardCharsets.UTF_8);
-
-    if(hrefContext.indexOf("search.sohu.com/?keyword=") != -1 )
-    {
-      System.out.println("");
-    }
+    String hrefContext = new String(htmlContext, hrefUrlIndex, hrefUrlEndIndex - hrefUrlIndex);
 
     hrefContext = hrefContext.trim();
     if (StringUtils.isEmpty(hrefContext)) {

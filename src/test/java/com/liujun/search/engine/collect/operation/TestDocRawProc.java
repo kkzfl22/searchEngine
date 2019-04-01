@@ -37,6 +37,9 @@ public class TestDocRawProc {
     String sinaHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SINA);
     // 将数据保存到文件中
     DocRawProc.INSTANCE.fileOpen();
+    // 进行线程的初始化操作
+    DocRawProc.INSTANCE.threadInit();
+
     DocRawProc.INSTANCE.putHtml(seqId, sinaHtml);
     DocRawProc.INSTANCE.close();
     String getData = DocRawProc.INSTANCE.getHtml(seqId);

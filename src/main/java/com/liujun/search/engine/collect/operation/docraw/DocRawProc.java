@@ -54,6 +54,7 @@ public class DocRawProc extends DocRawFileStreamManager {
     this.initReadIndex();
   }
 
+  /** 进行线程的初始化操作 */
   public void threadInit() {
     // 检查并放入缓冲区
     threadLocal.set(ByteBuffer.allocate(BUFFER_SIZE));

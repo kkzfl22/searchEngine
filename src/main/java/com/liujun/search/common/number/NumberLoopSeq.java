@@ -39,6 +39,11 @@ public class NumberLoopSeq {
     SEQ_LONG.compareAndSet(0, value);
   }
 
+  /** 将序列进行归零操作 */
+  public void reset() {
+    SEQ_LONG.set(0);
+  }
+
   /**
    * 以原子方式进行加1 ，得到序列值
    *

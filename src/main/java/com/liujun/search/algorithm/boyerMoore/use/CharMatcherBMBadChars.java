@@ -2,8 +2,6 @@ package com.liujun.search.algorithm.boyerMoore.use;
 
 import com.liujun.search.common.utils.ByteCode;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * 高效的字符串匹配算法bm算法,使用坏字符的规则
  *
@@ -23,12 +21,12 @@ public class CharMatcherBMBadChars {
   private final int matcherLength;
 
   /** 模式串信息 */
-  private final byte[] matcherChars;
+  private final char[] matcherChars;
 
   public CharMatcherBMBadChars(String patterChar) {
     assert patterChar != null : "patterChar is not char";
 
-    byte[] matcherChars = ByteCode.GetBytes(patterChar);
+    char[] matcherChars = patterChar.toCharArray();
     // 模式串信息
     this.matcherChars = matcherChars;
     // 设置模式串的长度
@@ -67,7 +65,7 @@ public class CharMatcherBMBadChars {
    * @param matchers
    * @return
    */
-  private int[] generateBc(byte[] matchers) {
+  private int[] generateBc(char[] matchers) {
     int[] bc = new int[BUFFER_SIZE];
 
     for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -93,7 +91,7 @@ public class CharMatcherBMBadChars {
    * @return 查找到的位置
    */
   public int matcherIndex(String str, int inputStart) {
-    return this.matcherIndex(ByteCode.GetBytes(str), inputStart);
+    return this.matcherIndex(str.toCharArray(), inputStart);
   }
 
   /**
@@ -104,6 +102,25 @@ public class CharMatcherBMBadChars {
    * @return 查找到的位置
    */
   public int matcherIndex(byte[] str, int inputStart) {
+    char[] dataCharArrays = new char[str.length];
+
+    // 进行数据从字节byte转换到byte上
+    for (int i = 0; i < str.length; i++) {
+      dataCharArrays[i] = (char) str[i];
+    }
+
+    // 将调用char字符匹配方法
+    return this.matcherIndex(dataCharArrays, inputStart);
+  }
+
+  /**
+   * 使用bm算法进行字符串的匹配操作
+   *
+   * @param str 原始字符信息
+   * @param inputStart 起始索引位置
+   * @return 查找到的位置
+   */
+  public int matcherIndex(char[] str, int inputStart) {
 
     // 起始搜索位置
     int startIndex = inputStart;
@@ -129,9 +146,10 @@ public class CharMatcherBMBadChars {
 
       int badCharCode = str[startIndex + matchIndex];
 
-      // 检查是否超过了字符集的大小，则跳过一个
+      // 检查是否超过了字符集的大小
+      // 如果超过了当前字符集的大小，则将到当前坏字符的位置全部跳过
       if (badCharCode > BUFFER_SIZE || badCharCode < 0) {
-        jumpBits = 1;
+        jumpBits = matchIndex + 1;
       } else {
         // 如果出现坏字符，找到坏字符出现在模式串中的位置
         int badIndex = badChar[badCharCode];
@@ -171,7 +189,7 @@ public class CharMatcherBMBadChars {
     return matcherLength;
   }
 
-  public byte[] getMatcherChars() {
+  public char[] getMatcherChars() {
     return matcherChars;
   }
 }

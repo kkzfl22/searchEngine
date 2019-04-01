@@ -23,6 +23,7 @@ public class TestHtmlDownLoad {
     String html = DownLoad.INSTANCE.downloadHtml(url);
     System.out.println("length:" + html.length());
     Assert.assertNotNull(html);
+    Assert.assertNotEquals(0, html.length());
   }
 
   /** 测试下载https的网页信息 */
@@ -34,6 +35,7 @@ public class TestHtmlDownLoad {
     String html = DownLoad.INSTANCE.downloadHtml(httpsUrl);
     System.out.println("length:" + html.length());
     Assert.assertNotNull(html);
+    Assert.assertNotEquals(0, html.length());
   }
 
   /** 测评下载长地址 */
@@ -44,6 +46,6 @@ public class TestHtmlDownLoad {
     String html = DownLoad.INSTANCE.downloadHtml(httpsUrl);
 
     System.out.println("length:" + html.length());
-    Assert.assertNotNull(html);
+    Assert.assertNotEquals(0, html.length());
   }
 }

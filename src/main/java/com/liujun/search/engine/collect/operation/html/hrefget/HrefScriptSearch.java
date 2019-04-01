@@ -20,7 +20,7 @@ public class HrefScriptSearch implements FlowServiceInf {
 
     // 搜索script标签需要查找script标签对
 
-    byte[] htmlContext = context.getObject(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey());
+    char[] htmlContext = context.getObject(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey());
     int startPostion = context.getObject(HrefGetEnum.HREFA_START_POSITION.getHrefKey());
 
     // 如果为首次，则进行查找

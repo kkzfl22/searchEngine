@@ -27,7 +27,7 @@ public class CharMatcherBMGoodSuffix extends CharMatcherBMBadChars {
    *
    * @param matchers 模式串
    */
-  public void generateGs(byte[] matchers) {
+  public void generateGs(char[] matchers) {
     int matcherLength = matchers.length;
 
     // 进行初始化

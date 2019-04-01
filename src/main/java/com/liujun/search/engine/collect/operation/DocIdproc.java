@@ -91,6 +91,16 @@ public class DocIdproc {
     return true;
   }
 
+  /** 将缓冲区中的数据写入磁盘中 */
+  public void writeDisk() {
+    try {
+      bufferWriter.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+      logger.error("DocIdproc writeDisk IOException", e);
+    }
+  }
+
   /**
    * 通过一组id来获取查询的数据
    *
@@ -175,6 +185,7 @@ public class DocIdproc {
 
       // 读取最后一个buffer的数据
       channel.read(buffer, startPos);
+      // buffer.flip();
 
       // 提取出最后一行记录
       String lastData = this.getLastData(buffer);
@@ -185,7 +196,8 @@ public class DocIdproc {
       logger.error("DocIdproc getLastHrefId FileNotFoundException:", e);
     } catch (IOException e) {
       e.printStackTrace();
-      logger.error("DocIdproc getLastHrefId IOExceptio                                          n:", e);
+      logger.error(
+          "DocIdproc getLastHrefId IOExceptio                                          n:", e);
     }
 
     return -1;
@@ -200,10 +212,9 @@ public class DocIdproc {
    */
   private String srcToFileData(String url, long id) {
     StringBuilder outMsg = new StringBuilder();
-
-    outMsg.append(url);
-    outMsg.append(SymbolMsg.DATA_COLUMN);
     outMsg.append(id);
+    outMsg.append(SymbolMsg.DATA_COLUMN);
+    outMsg.append(url);
 
     return outMsg.toString();
   }
@@ -238,16 +249,17 @@ public class DocIdproc {
    */
   private String getLastData(ByteBuffer buffer) {
     // 1，查找结束的位置
-    int endIndex = this.lastLineIndex(buffer, buffer.position());
+    int endIndex = this.lastLineIndex(buffer, buffer.position() - 1);
 
     // 2,查找倒数第二个换行符
-    int startIndex = this.lastLineIndex(buffer, endIndex - 1);
+    int startIndex = this.lastLineIndex(buffer, endIndex - 1) + 1;
 
     // 获取数据
     int dataLength = endIndex - startIndex;
     byte[] lastLineBytes = new byte[dataLength];
 
-    buffer.get(lastLineBytes, startIndex, dataLength);
+    buffer.position(startIndex);
+    buffer.get(lastLineBytes, 0, dataLength);
 
     return new String(lastLineBytes, StandardCharsets.UTF_8);
   }

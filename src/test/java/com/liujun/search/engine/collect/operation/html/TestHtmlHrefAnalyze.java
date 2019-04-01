@@ -2,6 +2,7 @@ package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.utilscode.io.code.PathUtils;
 import com.liujun.search.utilscode.io.constant.PathEnum;
+import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -48,9 +49,17 @@ public class TestHtmlHrefAnalyze {
     Assert.assertNotNull(list);
     System.out.println();
 
-    //    for (String context : list) {
-    //      System.out.println(context);
-    //    }
+    for (String context : list) {
+      System.out.println(context);
+    }
+
+    Assert.assertThat(list, Matchers.hasItem("http://www.sohu.com?strategyid=00004"));
+    Assert.assertThat(
+        list, Matchers.hasItem("http://search.sohu.com/?keyword=拜伦&queryType=outside"));
+    Assert.assertThat(
+        list,
+        Matchers.hasItem(
+            "https://passport.zhan.sohu.com/passport/sohu/login-jumpto?callback=https://yonghufankui.kuaizhan.com/clubpc/topics/WhOlhDSItmL75kIf"));
   }
 
   @Test

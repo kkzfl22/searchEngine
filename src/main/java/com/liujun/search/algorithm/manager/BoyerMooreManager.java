@@ -63,7 +63,23 @@ public class BoyerMooreManager {
    * 通过bm算法进行模式串的匹配操作
    *
    * @param parrern 当前的模式串
-   * @param htmlContext 当前网页容信息
+   * @param htmlContext 当前网页容信息byte数组，仅限小字符集即byte以内
+   * @param startPostion 开始位置
+   * @return
+   */
+  public int getHrefIndex(String parrern, byte[] htmlContext, int startPostion) {
+    // 通过模式串查找索引位置
+    CharMatcherBMBadChars hrefAstart = getCharMatchar(parrern);
+    int hrefIndex = hrefAstart.matcherIndex(htmlContext, startPostion);
+
+    return hrefIndex;
+  }
+
+  /**
+   * 通过bm算法进行模式串的匹配操作
+   *
+   * @param parrern 当前的模式串
+   * @param htmlContext 当前网页容字符数据
    * @param startPostion 开始位置
    * @return
    */

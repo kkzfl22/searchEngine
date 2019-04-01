@@ -84,13 +84,15 @@ public class TestDocIdProc {
     for (int i = 100; i < maxNum; i++) {
       // 1,插入1000个序列号
       String address = "http://" + String.valueOf(i);
-      DocIdproc.INSTANCE.putDoc(address,i);
+      DocIdproc.INSTANCE.putDoc(address, i);
     }
 
-    //提取最一个序列值
-    long lastId = DocIdproc.INSTANCE.getLastHrefId();
-    Assert.assertEquals(maxNum-1,lastId);
+    // 进行落盘操作
+    DocIdproc.INSTANCE.writeDisk();
 
+    // 提取最一个序列值
+    long lastId = DocIdproc.INSTANCE.getLastHrefId();
+    Assert.assertEquals(maxNum - 1, lastId);
   }
   /** 执行清理操作 */
   @After

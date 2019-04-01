@@ -1,6 +1,7 @@
 package com.liujun.search.engine.collect;
 
 import com.google.common.hash.Hashing;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,8 @@ public class TestHashCode {
     String url = "http://www.baidu.com";
 
     int murmurcode = Hashing.murmur3_32().hashString(url, StandardCharsets.UTF_8).asInt();
-    System.out.println("使用murmur3得到的hashCode:" + murmurcode);
+    // System.out.println("使用murmur3得到的hashCode:" + murmurcode);
+
+    Assert.assertNotEquals(0, murmurcode);
   }
 }

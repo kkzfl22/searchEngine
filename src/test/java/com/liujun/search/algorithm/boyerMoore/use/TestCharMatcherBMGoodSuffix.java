@@ -86,4 +86,18 @@ public class TestCharMatcherBMGoodSuffix {
     int findIndex = instance.matcherIndex(src, index);
     Assert.assertEquals(14, findIndex);
   }
+
+  /** 字符串的查找操作,加入好后缀规则 */
+  @Test
+  public void test06GoodSuffixChina2() {
+
+    String src = "中国12adbsc\r\n\r\n人民";
+    String matchers = "人";
+    int index = 0;
+
+    CharMatcherBMBadChars instance = CharMatcherBMGoodSuffix.getGoodSuffixInstance(matchers);
+
+    int findIndex = instance.matcherIndex(src, index);
+    Assert.assertEquals(13, findIndex);
+  }
 }

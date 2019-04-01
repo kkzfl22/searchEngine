@@ -1,6 +1,8 @@
 package com.liujun.search.common.number;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -17,12 +19,20 @@ import java.util.concurrent.Executors;
 public class TestSeqManager {
 
   /** 测试获取并创建序列号管理器 */
+  @Before
+  public void testStart() {
+    NumberLoopSeq seq = SeqManager.INSTANCE.getOrCreateSeqNum(SeqNameEnum.SEQ_HTML_DOC_ID);
+    // 进行重置操作
+    seq.reset();
+  }
+
+  /** 测试获取并创建序列号管理器 */
   @Test
   public void testSeqMnager() {
     NumberLoopSeq seq = SeqManager.INSTANCE.getOrCreateSeqNum(SeqNameEnum.SEQ_HTML_DOC_ID);
 
     // 设置起始值
-    int start = 891;
+    int start = 899;
     seq.start(start);
 
     int addNum = 1000;
@@ -37,6 +47,7 @@ public class TestSeqManager {
   @Test
   public void testThreadsSeqManager() throws InterruptedException {
     int threadNum = 4;
+    SeqManager.INSTANCE.getOrCreateSeqNum(SeqNameEnum.SEQ_HTML_DOC_ID).start(0);
 
     ExecutorService exec = Executors.newFixedThreadPool(threadNum);
 
@@ -69,10 +80,20 @@ public class TestSeqManager {
 
     downLatchOver.await();
 
-    NumberLoopSeq seqManagerObj = SeqManager.INSTANCE.getOrCreateSeqNum(SeqNameEnum.SEQ_HTML_DOC_ID);
+    NumberLoopSeq seqManagerObj =
+        SeqManager.INSTANCE.getOrCreateSeqNum(SeqNameEnum.SEQ_HTML_DOC_ID);
 
     long value = seqManagerObj.getCurrSeqValue();
 
     Assert.assertEquals(4000, value);
+  }
+
+  /** 测试获取并创建序列号管理器 */
+  @After
+  public void testClean() {
+    NumberLoopSeq seq = SeqManager.INSTANCE.getOrCreateSeqNum(SeqNameEnum.SEQ_HTML_DOC_ID);
+
+    // 进行重置操作
+    seq.reset();
   }
 }
