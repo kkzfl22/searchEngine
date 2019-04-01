@@ -2,8 +2,10 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
+import com.liujun.search.common.number.NumberLoopSeq;
 import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
+import com.liujun.search.engine.collect.operation.DocIdproc;
 import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
@@ -103,5 +105,10 @@ public class HtmlAnalyzeFLow {
 
     // 进行当前线程相关的初始化操作
     DocRawProc.INSTANCE.threadInit();
+
+    //读取上一次的最后一个id
+    long lastId  = DocIdproc.INSTANCE.getLastHrefId();
+    //设置序列号的开始值为上一次的
+    NumberLoopSeq.getNewInstance().start(lastId);
   }
 }

@@ -35,8 +35,6 @@ public class HrefCheckAndAddList implements FlowServiceInf {
       // 进行链接内容的处理
       hrefContex = HrefContentOperation.INSTANCE.hrefContext(hrefContex);
 
-      System.out.println("src:" + busi.getHref() + "<-->targer:" + hrefContex);
-
       hrefList.add(hrefContex);
     }
 

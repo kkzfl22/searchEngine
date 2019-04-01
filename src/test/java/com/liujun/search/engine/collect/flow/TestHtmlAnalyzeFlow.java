@@ -21,7 +21,7 @@ public class TestHtmlAnalyzeFlow {
   public void testHtmlAnalyze() {
 
     // 2，执行下载
-    //HtmlAnalyzeFLow.INSTANCE.downloadAndAnalyzeHtml(WebEntryEnum.SOHO);
+    HtmlAnalyzeFLow.INSTANCE.downloadAndAnalyzeHtml(WebEntryEnum.SOHO);
 
     //    // 进行结果的验证
     //    Assert.assertNotNull(downloadSet);

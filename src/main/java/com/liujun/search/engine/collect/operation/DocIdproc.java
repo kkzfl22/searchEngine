@@ -164,6 +164,18 @@ public class DocIdproc {
    * @return
    */
   public long getLastHrefId() {
+
+    File existsFiles = new File(DOC_FILEPATH);
+
+    // 如果文件不存在，说明为首次直接返回0
+    if (!existsFiles.exists()) {
+      return 0;
+    }
+
+    if (existsFiles.length() == 0) {
+      return 0;
+    }
+
     // 找到当前文件
     FileInputStream input = null;
     FileChannel channel = null;
@@ -180,8 +192,11 @@ public class DocIdproc {
       // 读取文件的大小
       long channelSize = channel.size();
 
-      // 读取最后一个buffer的大小
-      long startPos = channelSize - lastReadSize;
+      long startPos = 0;
+      if (channelSize > lastReadSize) {
+        // 读取最后一个buffer的大小
+        startPos = channelSize - lastReadSize;
+      }
 
       // 读取最后一个buffer的数据
       channel.read(buffer, startPos);

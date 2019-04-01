@@ -66,11 +66,31 @@ public class TestHtmlHrefAnalyze {
   public void htmlErrorHrefGetError() throws IOException {
 
     String fileSoho = "soho_context_error.html";
+
+    Set<String> list = this.getHref(fileSoho);
+
+    Assert.assertNotNull(list);
+  }
+
+  /**
+   * 解决bug的问题
+   *
+   * @param fileSoho 错误文件
+   * @return 文件信息
+   * @throws IOException 异常
+   */
+  private Set<String> getHref(String fileSoho) throws IOException {
     File sohoFile = new File(BASE_ERROR_PATH, fileSoho);
     String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
 
-    Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+    return HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+  }
 
+  @Test
+  public void htmlErrorHrefGetError3() throws IOException {
+
+    String fileSoho = "soho_error_2.html";
+    Set<String> list = this.getHref(fileSoho);
     Assert.assertNotNull(list);
   }
 }
