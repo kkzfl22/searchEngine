@@ -23,6 +23,12 @@ public enum HrefGetEnum {
   /** 网页内容看script结束位置 */
   HREF_GET_SCRIPTEND_INDEX("href_get_scriptend_index"),
 
+  /** 网页内容看annotation开始位置 */
+  HREF_GET_ANNOTATION_START_INDEX("href_get_annotationstart_index"),
+
+  /** 网页内容看annotation结束位置 */
+  HREF_GET_ANNOTATION_END_INDEX("href_get_annotationend_index"),
+
   /** 数据返回对象信息 */
   HREF_RESULT_OBJECT("href_result_object"),
 

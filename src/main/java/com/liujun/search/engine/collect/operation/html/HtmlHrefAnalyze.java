@@ -7,6 +7,8 @@ import com.liujun.search.engine.collect.constant.HrefGetEnum;
 import com.liujun.search.engine.collect.operation.html.hrefget.*;
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,20 +27,24 @@ public class HtmlHrefAnalyze {
   public static final HtmlHrefAnalyze INSTANCE = new HtmlHrefAnalyze();
 
   /** 业务运行的流程 */
-  private static final FlowServiceInf[] FLOW = new FlowServiceInf[5];
+  private static final List<FlowServiceInf> FLOW = new ArrayList<>(6);
 
   static {
     // 进行开始的<a标签的查找
-    FLOW[0] = HrefASstartSearch.INSTANCE;
+    FLOW.add(HrefASstartSearch.INSTANCE);
     // 网页中script标签位置查找
-    FLOW[1] = HrefScriptSearch.INSTANCE;
+    FLOW.add(HrefScriptSearch.INSTANCE);
+    // 网页中<!---->标签位置查找
+    FLOW.add(HrefAnnotationSearch.INSTANCE);
     // 当处于script中间的a标签需要被过滤
-    FLOW[2] = HrefFilterScript.INSTANCE;
+    FLOW.add(HrefFilterScript.INSTANCE);
     // 进行最后的网页内容处理
-    FLOW[3] = HrefContextGet.INSTANCE;
+    FLOW.add(HrefContextGet.INSTANCE);
     // 将验证通过的数据添加到集合中
-    FLOW[4] = HrefCheckAndAddList.INSTANCE;
+    FLOW.add(HrefCheckAndAddList.INSTANCE);
   }
+
+  private Logger logger = LoggerFactory.getLogger(HtmlHrefAnalyze.class);
 
   /**
    * 获取网页链接信息
@@ -65,8 +71,19 @@ public class HtmlHrefAnalyze {
     context.put(HrefGetEnum.HREF_RESULT_SET_OBJECT.getHrefKey(), result);
     context.put(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey(), anchorBytes);
 
+    int lastPos = 0;
+    int topPostion = 0;
     try {
       while (starPos < anchorBytes.length) {
+
+        if (starPos == lastPos && starPos != 0) {
+          throw new RuntimeException(
+              "html analyze is error , position:" + starPos + ",top postion:" + topPostion);
+        }
+        // 进行错误位置的记录
+        topPostion = lastPos;
+        lastPos = starPos;
+
         // 遍历进行链接的提取操作
         context.put(HrefGetEnum.HREFA_START_POSITION.getHrefKey(), starPos);
 
@@ -90,6 +107,9 @@ public class HtmlHrefAnalyze {
       }
     } catch (Exception e) {
       e.printStackTrace();
+      // 当发生异常时，清空已经解析的数据，确保数据完整
+      result.clear();
+      logger.error("HtmlHrefAnalyze exception", e);
     }
 
     return result;

@@ -13,7 +13,11 @@ public enum BMHtmlTagEnum {
   HTML_HREF("<a", "</a>"),
 
   /** 网页标签javascript的内容处理 */
-  HTML_SCRIPT("<script", "</script>");
+  HTML_SCRIPT("<script", "</script>"),
+
+  /** 网页注释标签对 */
+  HTML_ANNOTATION("<!--", "-->"),
+  ;
 
   /** 开始 */
   private String begin;

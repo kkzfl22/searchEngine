@@ -43,9 +43,6 @@ public class HrefContextGet implements FlowServiceInf {
     String hrefContext = new String(htmlContext, hrefUrlIndex, hrefUrlEndIndex - hrefUrlIndex);
 
     hrefContext = hrefContext.trim();
-    if (StringUtils.isEmpty(hrefContext)) {
-      return false;
-    }
 
     // 4,查找结束标签
     int hrefEndIndex =
@@ -58,6 +55,10 @@ public class HrefContextGet implements FlowServiceInf {
     hrefBusi.setEndPostion(hrefEndIndex);
 
     context.put(HrefGetEnum.HREF_RESULT_OBJECT.getHrefKey(), hrefBusi);
+
+    if (StringUtils.isEmpty(hrefContext)) {
+      return false;
+    }
 
     return true;
   }

@@ -2,7 +2,6 @@ package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.utilscode.io.code.PathUtils;
 import com.liujun.search.utilscode.io.constant.PathEnum;
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -91,6 +90,11 @@ public class TestHtmlHrefAnalyze {
 
     String fileSoho = "soho_error_2.html";
     Set<String> list = this.getHref(fileSoho);
-    Assert.assertNotNull(list);
+    Assert.assertNotEquals(0, list.size());
+    Assert.assertThat(
+        list,
+        Matchers.not(Matchers.hasItem("http://search.sohu.com/?keyword=小米&queryType=outside123")));
+    Assert.assertThat(
+        list, Matchers.hasItem("http://search.sohu.com/?keyword=科技&queryType=outside"));
   }
 }
