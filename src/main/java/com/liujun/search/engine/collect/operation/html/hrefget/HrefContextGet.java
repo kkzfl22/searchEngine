@@ -32,6 +32,12 @@ public class HrefContextGet implements FlowServiceInf {
     int hrefUrlIndex =
         BoyerMooreManager.INSTANCE.getHrefIndex(
             BMHtmlTagContextEnum.HTML_HREF_URL_START.getPattern(), htmlContext, hrefAstartIndex);
+
+    if (hrefAstartIndex == -1) {
+      throw new RuntimeException(
+          "href process error, start postion:" + hrefAstartIndex + " find index -1");
+    }
+
     hrefUrlIndex = hrefUrlIndex + BMHtmlTagContextEnum.HTML_HREF_URL_START.getPattern().length();
 
     // 3,再以href的结束点为起点查找链接的结束

@@ -2,7 +2,6 @@ package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.common.utils.ByteCode;
 import com.liujun.search.engine.collect.constant.HrefGetEnum;
 import com.liujun.search.engine.collect.operation.html.hrefget.*;
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
@@ -32,16 +31,18 @@ public class HtmlHrefAnalyze {
   static {
     // 进行开始的<a标签的查找
     FLOW.add(HrefASstartSearch.INSTANCE);
-    // 网页中script标签位置查找
-    FLOW.add(HrefScriptSearch.INSTANCE);
-    // 网页中<!---->标签位置查找
-    FLOW.add(HrefAnnotationSearch.INSTANCE);
-    // 当处于script中间的a标签需要被过滤
+    // 网页中过滤的标签查找
+    FLOW.add(HrefFilterTagSearch.INSTANCE);
+    // 进行过滤操作
     FLOW.add(HrefFilterScript.INSTANCE);
     // 进行最后的网页内容处理
     FLOW.add(HrefContextGet.INSTANCE);
     // 将验证通过的数据添加到集合中
-    FLOW.add(HrefCheckAndAddList.INSTANCE);
+    FLOW.add(HrefCheckFilter.INSTANCE);
+    // 进行网页链接编码
+    FLOW.add(HrefEncoder.INSTANCE);
+    // 添加到集合中
+    FLOW.add(HrefAddList.INSTANCE);
   }
 
   private Logger logger = LoggerFactory.getLogger(HtmlHrefAnalyze.class);
@@ -76,10 +77,16 @@ public class HtmlHrefAnalyze {
     try {
       while (starPos < anchorBytes.length) {
 
-        if (starPos == lastPos && starPos != 0) {
+        if (starPos <= lastPos && starPos != 0) {
           throw new RuntimeException(
               "html analyze is error , position:" + starPos + ",top postion:" + topPostion);
         }
+
+       if(starPos == 11179)
+       {
+          System.out.println("找到点");
+       }
+
         // 进行错误位置的记录
         topPostion = lastPos;
         lastPos = starPos;

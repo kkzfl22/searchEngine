@@ -180,12 +180,12 @@ public class FileQueue {
         // 添加换行符
         address = dataAddLine(address);
 
+        // 如果文件还未超过缓冲区，则写入缓冲区
+        byte[] valueBytes = address.getBytes(StandardCharsets.UTF_8);
         // 如果长度大于缓冲区,则写入文件
-        if (address.length() + writeBuffer.position() >= MAX_BYTEBUFFERSIZE) {
+        if (valueBytes.length + writeBuffer.position() >= MAX_BYTEBUFFERSIZE) {
           curOffset += this.writeBufferOrChannel(address);
         } else {
-          // 如果文件还未超过缓冲区，则写入缓冲区
-          byte[] valueBytes = address.getBytes(StandardCharsets.UTF_8);
           writeBuffer.put(valueBytes);
         }
       }

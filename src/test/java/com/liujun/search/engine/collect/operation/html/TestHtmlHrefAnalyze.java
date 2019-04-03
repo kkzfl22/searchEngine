@@ -97,4 +97,24 @@ public class TestHtmlHrefAnalyze {
     Assert.assertThat(
         list, Matchers.hasItem("http://search.sohu.com/?keyword=科技&queryType=outside"));
   }
+
+  @Test
+  public void htmlErrorHrefGetError4() throws IOException {
+
+    String fileSoho = "soho_error_3.html";
+    Set<String> list = this.getHref(fileSoho);
+    Assert.assertNotEquals(0, list.size());
+    Assert.assertThat(
+        list, Matchers.hasItem("http://servlet/enp.web.Publish"));
+  }
+
+  @Test
+  public void htmlErrorAnalyze4() throws IOException {
+
+    String fileSoho = "soho_error_4.html";
+    Set<String> list = this.getHref(fileSoho);
+    Assert.assertNotEquals(0, list.size());
+    Assert.assertThat(
+            list, Matchers.hasItem("http://www.baom.com.cn/2019-03/26/content_42036.html"));
+  }
 }

@@ -20,6 +20,9 @@ public class HrefPrefix implements FlowServiceInf {
   /** 特殊的网页链接开始头 */
   public static final String HREF_START = "//";
 
+  /** 特殊的网页链接开始头 */
+  public static final String HREF_START_ONE = "/";
+
   /** 普通网页的前缀 */
   private static final String PREFIX__HTTP = "http://";
 
@@ -34,6 +37,11 @@ public class HrefPrefix implements FlowServiceInf {
     // 进行前缀//的删除操作
     if (hrefContext.startsWith(HREF_START)) {
       hrefContext = hrefContext.substring(HREF_START.length());
+    }
+
+    // 进行前缀/的删除操作
+    if (hrefContext.startsWith(HREF_START_ONE)) {
+      hrefContext = hrefContext.substring(HREF_START_ONE.length());
     }
 
     // 如果不包括http也不包括https则加上前缀,http

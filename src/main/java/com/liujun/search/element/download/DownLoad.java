@@ -5,6 +5,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -31,6 +32,19 @@ public class DownLoad {
   /** 下载网页的实例对象信息 */
   public static final DownLoad INSTANCE = new DownLoad();
 
+  /** 才毫秒为单位的超时时间 */
+  private static final int SOCKER_TIMEOUT = 5000;
+
+  /** 连接超时时间 */
+  private static final int CONNECT_TIMEOUT = 2000;
+
+  /** 超时时间设置 */
+  private static final RequestConfig TIMEOUT_CFG =
+      RequestConfig.custom()
+          .setSocketTimeout(SOCKER_TIMEOUT)
+          .setConnectTimeout(CONNECT_TIMEOUT)
+          .build();
+
   /**
    * 根据网页地址下载网页信息
    *
@@ -42,6 +56,8 @@ public class DownLoad {
     CloseableHttpClient client = HttpClients.createDefault();
 
     HttpGet get = new HttpGet(url);
+
+    get.setConfig(TIMEOUT_CFG);
 
     get.addHeader(
         "User-Agent",
