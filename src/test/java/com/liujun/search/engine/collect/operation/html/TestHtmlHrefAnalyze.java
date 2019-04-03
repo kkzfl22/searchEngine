@@ -46,11 +46,6 @@ public class TestHtmlHrefAnalyze {
     Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
 
     Assert.assertNotNull(list);
-    System.out.println();
-
-    for (String context : list) {
-      System.out.println(context);
-    }
 
     Assert.assertThat(list, Matchers.hasItem("http://www.sohu.com?strategyid=00004"));
     Assert.assertThat(
@@ -104,8 +99,7 @@ public class TestHtmlHrefAnalyze {
     String fileSoho = "soho_error_3.html";
     Set<String> list = this.getHref(fileSoho);
     Assert.assertNotEquals(0, list.size());
-    Assert.assertThat(
-        list, Matchers.hasItem("http://servlet/enp.web.Publish"));
+    Assert.assertThat(list, Matchers.hasItem("http://servlet/enp.web.Publish"));
   }
 
   @Test
@@ -115,6 +109,6 @@ public class TestHtmlHrefAnalyze {
     Set<String> list = this.getHref(fileSoho);
     Assert.assertNotEquals(0, list.size());
     Assert.assertThat(
-            list, Matchers.hasItem("http://www.baom.com.cn/2019-03/26/content_42036.html"));
+        list, Matchers.hasItem("http://www.baom.com.cn/2019-03/26/content_42036.html"));
   }
 }

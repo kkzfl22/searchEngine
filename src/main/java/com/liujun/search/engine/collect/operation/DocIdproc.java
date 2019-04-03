@@ -1,6 +1,6 @@
 package com.liujun.search.engine.collect.operation;
 
-import com.liujun.search.algorithm.ahoCorasick.AhoCorasick;
+import com.liujun.search.algorithm.ahoCorasick.AhoCorasickNum;
 import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
@@ -14,8 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 文件网页链接及其编号所对应的文件
@@ -120,7 +118,7 @@ public class DocIdproc {
 
     try {
       // 构建多模式串匹配的ad自动机实例对象
-      AhoCorasick ahoCorasick = AhoCorasick.GetAhoCorasickInstance(ids);
+      AhoCorasickNum ahoCorasick = AhoCorasickNum.GetAhoCorasickInstance(ids);
 
       reader = new FileReader(DOC_FILEPATH);
       bufferReader = new BufferedReader(reader);

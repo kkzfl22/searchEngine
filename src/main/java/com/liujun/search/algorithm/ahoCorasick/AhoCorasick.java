@@ -3,39 +3,38 @@ package com.liujun.search.algorithm.ahoCorasick;
 import java.util.*;
 
 /**
- * trie树，只用于数字的匹配操作
+ * ac自动机算法，只用于数字的匹配操作
  *
  * @author liujun
  * @version 0.0.1
  * @date 2019/03/08
  */
-public class AhoCorasick {
-
-  /** 特殊处理的字符 */
-  private static final Map<Character, Integer> SPECIAL_MAP = new HashMap<>();
+public abstract class AhoCorasick {
 
   /** ac自动机的大小 */
-  private static final int AC_SIZE = 12;
-
-  static {
-    SPECIAL_MAP.put('\t', 11);
-  }
+  private final int AC_SIZE = getAcSize();
 
   /**
-   * 获取ac自动机的实例对象，通过传入的模式串数组
+   * 获取当前ac自动机的字符集大小
    *
-   * @param matchStr 模式串信息
-   * @return ac自动机的实例对象
+   * @return
    */
-  public static AhoCorasick GetAhoCorasickInstance(List<String> matchStr) {
-    AhoCorasick ahoCorasick = new AhoCorasick();
-    ahoCorasick.buildFailure(matchStr);
-
-    return ahoCorasick;
-  }
+  protected abstract int getAcSize();
 
   /** 根节点 */
   private AcNode root = new AcNode('/');
+
+  /**
+   * 批量添加多模式串
+   *
+   * @param arrays 多模式串集合
+   */
+  public void insert(List<String> arrays) {
+
+    for (String key : arrays) {
+      this.insert(key);
+    }
+  }
 
   /**
    * 在tree树中插入字符
@@ -125,19 +124,7 @@ public class AhoCorasick {
    * @param srcArray
    * @return
    */
-  public int getIndex(char srcArray) {
-    int index = -1;
-    Integer getSpecialIndex = SPECIAL_MAP.get(srcArray);
-    if (getSpecialIndex != null) {
-      index = getSpecialIndex;
-    }
-    // 如果未找到，则直接转化原始位置索引
-    else {
-      index = Character.getNumericValue(srcArray);
-    }
-
-    return index;
-  }
+  public abstract int getIndex(char srcArray);
 
   /**
    * 添加模式串，并构建失败指针
@@ -204,6 +191,56 @@ public class AhoCorasick {
   }
 
   /**
+   * 进行字符的匹配操作,进行多次字符匹配操作,返回索引位置下标
+   *
+   * <p>使用此方使须采用相同模式串长度，否则返回的对象具有不确定性，可能是任务中间的一个
+   *
+   * <p>即方法多次调用
+   *
+   * @param mainChar 匹配的主串信息
+   * @param startPostion 开始的索引位置
+   */
+  public int matcherIndex(char[] mainChar, int startPostion) {
+
+    AcNode pmatch = root;
+
+    // 进行主串遍历
+    for (int i = startPostion; i < mainChar.length; i++) {
+      int index = this.getIndex(mainChar[i]);
+
+      if (index >= AC_SIZE || index == -1) {
+        continue;
+      }
+
+      // 失败指针的检查,如果当前字符的下一个字符不能被找到，并且不是根节点
+      while (pmatch.childred[index] == null && pmatch != root) {
+        pmatch = pmatch.fail;
+      }
+
+      // 获取当前字符在失败指针中的位置
+      pmatch = pmatch.childred[index];
+
+      // 如果不能被找到，则重新从root节点开始匹配
+      if (pmatch == null) {
+        pmatch = root;
+      }
+
+      AcNode tmpMatch = pmatch;
+
+      while (tmpMatch != root) {
+        // 如果当前能够被匹配成功，则返回匹配的字符串信息,并结束
+        if (tmpMatch.isEndingChar == true) {
+          int matPostion = i - tmpMatch.length + 1;
+          return matPostion;
+        }
+        tmpMatch = tmpMatch.fail;
+      }
+    }
+
+    return -1;
+  }
+
+  /**
    * 进行字符的匹配操作,进行多次字符匹配操作
    *
    * <p>即方法多次调用，通过matchMap记录下查找的位置信息
@@ -222,6 +259,11 @@ public class AhoCorasick {
     // 进行主串遍历
     for (int i = 0; i < mainChar.length; i++) {
       int index = this.getIndex(mainChar[i]);
+
+      // 超过字符集，直接忽略
+      if (index < 0 || index > AC_SIZE) {
+        continue;
+      }
 
       // 失败指针的检查,如果当前字符的下一个字符不能被找到，并且不是根节点
       while (pmatch.childred[index] == null && pmatch != root) {

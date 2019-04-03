@@ -1,5 +1,7 @@
 package com.liujun.search.engine.collect.operation.html.hrefget;
 
+import com.liujun.search.algorithm.ahoCorasick.AhoCorasickChar;
+import com.liujun.search.algorithm.ahoCorasick.constatnt.AcHtmlTagEnum;
 import com.liujun.search.algorithm.manager.BoyerMooreManager;
 import com.liujun.search.algorithm.manager.constant.BMHtmlTagContextEnum;
 import com.liujun.search.algorithm.manager.constant.BMHtmlTagEnum;
@@ -22,33 +24,47 @@ public class HrefContextGet implements FlowServiceInf {
 
   public static final HrefContextGet INSTANCE = new HrefContextGet();
 
+  /** href的链接标识 */
+  private static final AhoCorasickChar HREF_START = new AhoCorasickChar();
+
+  /** href的链接结束 */
+  private static final AhoCorasickChar HREF_END = new AhoCorasickChar();
+
+  static {
+    // 网页href属性的开始位置扫描
+    HREF_START.insert(AcHtmlTagEnum.HREF_TAG_START.getAckey());
+    // 生成失败指针
+    HREF_START.builderFailurePointer();
+    // 网页href属性的结束位置
+    HREF_END.insert(AcHtmlTagEnum.HREF_TAG_END.getAckey());
+    // 生成失败指针
+    HREF_END.builderFailurePointer();
+  }
+
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
     char[] htmlContext = context.getObject(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey());
     int hrefAstartIndex = context.getObject(HrefGetEnum.HREF_CON_ASTART_POSITION.getHrefKey());
 
-    // 2,然后以A标签为起始点，查找href属性
-    int hrefUrlIndex =
-        BoyerMooreManager.INSTANCE.getHrefIndex(
-            BMHtmlTagContextEnum.HTML_HREF_URL_START.getPattern(), htmlContext, hrefAstartIndex);
+    // 2,然后以A标签为起始点，查找href属性,href=“、'采用多模式串查找算法
+    int hrefUrlIndex = HREF_START.matcherIndex(htmlContext, hrefAstartIndex);
 
     if (hrefAstartIndex == -1) {
       throw new RuntimeException(
           "href process error, start postion:" + hrefAstartIndex + " find index -1");
     }
-
-    hrefUrlIndex = hrefUrlIndex + BMHtmlTagContextEnum.HTML_HREF_URL_START.getPattern().length();
+    hrefUrlIndex = hrefUrlIndex + AcHtmlTagEnum.HREF_TAG_START.getOneLength();
 
     // 3,再以href的结束点为起点查找链接的结束
-    int hrefUrlEndIndex =
-        BoyerMooreManager.INSTANCE.getHrefIndex(
-            BMHtmlTagContextEnum.HTML_HREF_URL_END.getPattern(), htmlContext, hrefUrlIndex);
-
+    int hrefUrlEndIndex = HREF_END.matcherIndex(htmlContext, hrefUrlIndex);
     // 封装网页内容
     String hrefContext = new String(htmlContext, hrefUrlIndex, hrefUrlEndIndex - hrefUrlIndex);
 
     hrefContext = hrefContext.trim();
+
+    // 结束索引位置
+    hrefUrlEndIndex = hrefUrlEndIndex + AcHtmlTagEnum.HREF_TAG_END.getOneLength();
 
     // 4,查找结束标签
     int hrefEndIndex =

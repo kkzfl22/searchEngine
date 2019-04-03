@@ -1,5 +1,6 @@
 package com.liujun.search.algorithm.ahoCorasick;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class TestAhoCorasick {
   /** 进行失败指针的构建 */
   @Test
   public void test01add() {
-    AhoCorasick ahoCorasick = new AhoCorasick();
+    AhoCorasickNum ahoCorasick = new AhoCorasickNum();
     ahoCorasick.insert("1234");
     ahoCorasick.insert("234");
     ahoCorasick.insert("23");
@@ -40,7 +41,7 @@ public class TestAhoCorasick {
   /** 进行多模式串的匹配操作 */
   @Test
   public void test02putAndMatch() {
-    AhoCorasick ahoCorasick = new AhoCorasick();
+    AhoCorasickNum ahoCorasick = new AhoCorasickNum();
 
     List<String> ahoCorasickList = new ArrayList<>();
     ahoCorasickList.add("112113");
@@ -58,18 +59,19 @@ public class TestAhoCorasick {
   /** 进行多模式串匹配一个就返回 */
   @Test
   public void test03putAndMatchOne() {
-    AhoCorasick ahoCorasick = new AhoCorasick();
+    AhoCorasickNum ahoCorasick = new AhoCorasickNum();
 
     List<String> ahoCorasickList = new ArrayList<>();
     ahoCorasickList.add("112113");
     ahoCorasickList.add("113114");
 
-    ahoCorasickList.add("117118");
+    String outPatterValue = "117118\t";
+    ahoCorasickList.add(outPatterValue);
 
     ahoCorasick.buildFailure(ahoCorasickList);
 
-    String matValue = ahoCorasick.matchOne("0011211300117118000");
-    System.out.println(matValue);
-    Assert.assertNotNull(matValue);
+    String matValue = ahoCorasick.matchOne("0011211117118\t7118000");
+    System.out.println(matValue.length());
+    Assert.assertEquals(matValue, outPatterValue);
   }
 }

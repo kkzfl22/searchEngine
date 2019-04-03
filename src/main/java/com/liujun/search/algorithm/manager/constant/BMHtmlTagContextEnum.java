@@ -9,12 +9,6 @@ package com.liujun.search.algorithm.manager.constant;
  */
 public enum BMHtmlTagContextEnum {
 
-  /** 链接的位置 */
-  HTML_HREF_URL_START("href=\""),
-
-  /** 链接位置结束 */
-  HTML_HREF_URL_END("\""),
-
   /** 链的地址的锚的处理 */
   HTML_HREF_FILTER_ANCHOR("#"),
 

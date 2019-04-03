@@ -82,11 +82,6 @@ public class HtmlHrefAnalyze {
               "html analyze is error , position:" + starPos + ",top postion:" + topPostion);
         }
 
-       if(starPos == 11179)
-       {
-          System.out.println("找到点");
-       }
-
         // 进行错误位置的记录
         topPostion = lastPos;
         lastPos = starPos;
