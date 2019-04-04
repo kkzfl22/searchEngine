@@ -9,6 +9,7 @@ import com.liujun.search.engine.collect.operation.DocIdproc;
 import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,14 @@ public class HtmlAnalyzeFLow {
 
       while ((urlAddress = queue.get()) != null) {
 
+        // 如果为空，跳过当前的处理
+        if (StringUtils.isEmpty(urlAddress)) {
+          continue;
+        }
+
         logger.info("collect url start :" + urlAddress);
+
+        urlAddress = urlAddress.trim();
 
         // 放入地址信息
         context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey(), urlAddress);
@@ -106,9 +114,9 @@ public class HtmlAnalyzeFLow {
     // 进行当前线程相关的初始化操作
     DocRawProc.INSTANCE.threadInit();
 
-    //读取上一次的最后一个id
-    long lastId  = DocIdproc.INSTANCE.getLastHrefId();
-    //设置序列号的开始值为上一次的
+    // 读取上一次的最后一个id
+    long lastId = DocIdproc.INSTANCE.getLastHrefId();
+    // 设置序列号的开始值为上一次的
     NumberLoopSeq.getNewInstance().start(lastId);
   }
 }

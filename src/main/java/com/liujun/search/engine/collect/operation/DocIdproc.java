@@ -50,7 +50,8 @@ public class DocIdproc {
   public void openFile() {
 
     try {
-      write = new FileWriter(DOC_FILEPATH);
+      // 进行追加操作
+      write = new FileWriter(DOC_FILEPATH, true);
       bufferWriter = new BufferedWriter(write);
     } catch (FileNotFoundException e) {
       e.printStackTrace();

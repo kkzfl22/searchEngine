@@ -35,6 +35,8 @@ public class HtmlDocIdToFile implements FlowServiceInf {
     // 3,进行将网页id的存储操作
     DocIdproc.INSTANCE.putDoc(urlAddress, numberId);
 
+    // 写入磁盘操作
+    DocIdproc.INSTANCE.writeDisk();
 
     logger.info("collect docid to file finish");
     return true;

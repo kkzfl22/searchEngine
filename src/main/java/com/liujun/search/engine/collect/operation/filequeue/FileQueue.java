@@ -221,7 +221,6 @@ public class FileQueue {
 
       while (!readFinish && readChannel.read(readBuffer, this.fileOffset.getReadOffset()) > 0) {
 
-        System.out.println("out rsp:....");
         long tmpReadOffset = 0;
 
         readBuffer.flip();

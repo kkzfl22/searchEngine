@@ -22,21 +22,22 @@ public class TestHtmlAnalyzeFlow {
 
     // 2，执行下载
     HtmlAnalyzeFLow.INSTANCE.downloadAndAnalyzeHtml(WebEntryEnum.SOHO);
+  }
 
-    //    // 进行结果的验证
-    //    Assert.assertNotNull(downloadSet);
-    //
-    //    Set<String> fileHrefSet = HtmlHrefUtils.INSTANCE.getHrefUrl(HtmlHrefFileEnum.SOHO);
-    //
-    //    Assert.assertNotNull(fileHrefSet);
-    //
-    //    // 检查网页链接是否正确
-    //    Assert.assertThat(downloadSet, Matchers.hasItem("http://mp.sohu.com"));
-    //    Assert.assertThat(downloadSet, Matchers.hasItem("https://mail.sohu.com"));
-    //    Assert.assertThat(
-    //        downloadSet,
-    // Matchers.hasItem("http://www.sohu.com/upload/uiue20150210/ylbj_sohu.html"));
+  /** 测试网页分析 */
+  @Test
+  public void testHtmlAnalyzeQQ() {
 
-    // Assert.assertArrayEquals(downloadSet,fileHrefSet);
+    // 2，执行下载
+    HtmlAnalyzeFLow.INSTANCE.downloadAndAnalyzeHtml(WebEntryEnum.QQ);
+  }
+
+
+  /** 测试网页分析 */
+  @Test
+  public void testHtmlAnalyze163() {
+
+    // 2，执行下载
+    HtmlAnalyzeFLow.INSTANCE.downloadAndAnalyzeHtml(WebEntryEnum.WY163);
   }
 }

@@ -47,7 +47,7 @@ public class DocRawFileStreamManager extends DocRawFileManager {
     String fileChar = super.getPathFile();
 
     try {
-      outputStream = new FileOutputStream(fileChar);
+      outputStream = new FileOutputStream(fileChar, true);
       channel = outputStream.getChannel();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
