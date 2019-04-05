@@ -43,13 +43,13 @@ public class HttpsTest {
         new X509TrustManager() {
           @Override
           public void checkClientTrusted(
-              java.security.cert.X509Certificate[] paramArrayOfX509Certificate, String paramString)
-              throws CertificateException {}
+              java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+              String paramString) {}
 
           @Override
           public void checkServerTrusted(
-              java.security.cert.X509Certificate[] paramArrayOfX509Certificate, String paramString)
-              throws CertificateException {}
+              java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+              String paramString) {}
 
           @Override
           public java.security.cert.X509Certificate[] getAcceptedIssuers() {

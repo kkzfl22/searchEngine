@@ -10,9 +10,9 @@ package com.liujun.search.engine.collect.constant;
 public enum WebEntryEnum {
   SOHO("http://www.sohu.com/", "sohu"),
 
-  QQ("http://www.qq.com/", "qq"),
+  QQ("https://www.qq.com/", "qq"),
 
-  WY163("http://www.163.com/", "163"),
+  WY163("https://www.163.com/", "163"),
 
   SINA("https://www.sina.com.cn/", "sina"),
   ;
