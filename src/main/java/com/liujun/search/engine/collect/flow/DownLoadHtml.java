@@ -2,12 +2,10 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.element.download.DownLoad;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
-import com.liujun.search.engine.collect.constant.WebEntryEnum;
-import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
-import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
+import com.liujun.search.element.download.HttpsHtmlDownloadImpl;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,23 +29,33 @@ public class DownLoadHtml implements FlowServiceInf {
     logger.info("collect download html start ");
 
     long start = System.currentTimeMillis();
-    String urlAddress = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey());
+    String urlAddress = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey());
+    CloseableHttpClient client =
+        context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_INPUT_HTTP_CONN.getKey());
 
     // 进行下载文件的操作
-    String htmlContext = DownLoad.INSTANCE.downloadHtml(urlAddress);
+    String htmlContext = HttpsHtmlDownloadImpl.INSTNACE.downloadHtml(urlAddress, client);
 
     long endtime = System.currentTimeMillis();
 
-    logger.info(
-        "collect download html finish ,use time : {} , html length: {} ",
-        (endtime - start),
-        htmlContext.length());
-
     if (StringUtils.isNotEmpty(htmlContext)) {
-      context.put(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey(), htmlContext);
+
+      logger.info(
+          "collect download html finish ,use time : {} , html length: {} ",
+          (endtime - start),
+          htmlContext.length());
+
+      // 将内容为字符数组
+      context.put(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey(), htmlContext);
+      context.put(
+          CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT_ARRAY.getKey(),
+          htmlContext.toCharArray());
 
       return true;
     }
+
+    logger.info(
+        "collect download html finish ,use time : {} , html length: {} ", (endtime - start), 0);
 
     return false;
   }

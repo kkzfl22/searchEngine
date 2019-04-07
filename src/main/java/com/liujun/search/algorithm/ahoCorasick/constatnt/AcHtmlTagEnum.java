@@ -17,6 +17,22 @@ public enum AcHtmlTagEnum {
 
   /** 网页属性href的结束位置匹配 */
   HREF_TAG_END(Arrays.asList("'", "\"")),
+
+  /** 网页中的div标签 */
+  DIV_TAG_START(Arrays.asList("<div", "<DIV")),
+
+
+  /** 网页中的div标签 */
+  DIV_TAG_END(Arrays.asList("</div>", "</DIV>")),
+
+
+  /** 网页中的html标签 */
+  HTML_TAG_START(Arrays.asList("<html", "<HTML")),
+
+
+  /** 网页中的html标签 */
+  HTML_TAG_END(Arrays.asList("</html>", "</HTML>")),
+
   ;
 
   private List<String> ackey;

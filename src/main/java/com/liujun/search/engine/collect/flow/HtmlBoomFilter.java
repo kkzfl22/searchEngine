@@ -2,8 +2,7 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.element.download.DownLoad;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import com.liujun.search.engine.collect.operation.BloomFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class HtmlBoomFilter implements FlowServiceInf {
     logger.info("collect bloom filter start ");
 
     // 获取网页信息
-    String htmlContext = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
+    String htmlContext = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
 
     boolean exists = BloomFilter.INSTANCE.exists(htmlContext);
 

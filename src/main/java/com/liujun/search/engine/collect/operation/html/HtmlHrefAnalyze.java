@@ -9,10 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 网页链接分析操作
@@ -55,65 +52,80 @@ public class HtmlHrefAnalyze {
    */
   public Set<String> getHref(String htmlContext) {
 
-    Set<String> result;
     if (StringUtils.isEmpty(htmlContext)) {
-      result = new HashSet<>();
-    } else {
-      result = new HashSet<>(32);
+      return Collections.EMPTY_SET;
     }
-
-    int starPos = 0;
 
     char[] anchorBytes = htmlContext.toCharArray();
 
-    FlowServiceContext context = new FlowServiceContext();
+    return getHref(anchorBytes);
+  }
 
-    // 存储集合的数据
-    context.put(HrefGetEnum.HREF_RESULT_SET_OBJECT.getHrefKey(), result);
-    context.put(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey(), anchorBytes);
+  /**
+   * 获取网页链接信息
+   *
+   * @param anchorBytes 岁页信息
+   * @return 网页的链接地址信息
+   */
+  public Set<String> getHref(char[] anchorBytes) {
+    {
+      if (anchorBytes == null || anchorBytes.length == 0) {
+        return Collections.EMPTY_SET;
+      }
 
-    int lastPos = 0;
-    int topPostion = 0;
-    try {
-      while (starPos < anchorBytes.length) {
+      Set<String> result = new HashSet<>(32);
 
-        if (starPos <= lastPos && starPos != 0) {
-          throw new RuntimeException(
-              "html analyze is error , position:" + starPos + ",top postion:" + topPostion);
-        }
+      int starPos = 0;
 
-        // 进行错误位置的记录
-        topPostion = lastPos;
-        lastPos = starPos;
+      FlowServiceContext context = new FlowServiceContext();
 
-        // 遍历进行链接的提取操作
-        context.put(HrefGetEnum.HREFA_START_POSITION.getHrefKey(), starPos);
+      // 存储集合的数据
+      context.put(HrefGetEnum.HREF_RESULT_SET_OBJECT.getHrefKey(), result);
+      context.put(HrefGetEnum.HTML_CONTEXT_BYTES.getHrefKey(), anchorBytes);
 
-        for (FlowServiceInf analyze : FLOW) {
-          boolean flowRsp = analyze.runFlow(context);
+      int lastPos = 0;
+      int topPostion = 0;
+      try {
+        while (starPos < anchorBytes.length) {
 
-          // 如果当前执行失败，则继续退出处理
-          if (!flowRsp) {
+          if (starPos <= lastPos && starPos != 0) {
+            throw new RuntimeException(
+                "html analyze is error , position:" + starPos + ",top postion:" + topPostion);
+          }
+
+          // 进行错误位置的记录
+          topPostion = lastPos;
+          lastPos = starPos;
+
+          // 遍历进行链接的提取操作
+          context.put(HrefGetEnum.HREFA_START_POSITION.getHrefKey(), starPos);
+
+          for (FlowServiceInf analyze : FLOW) {
+            boolean flowRsp = analyze.runFlow(context);
+
+            // 如果当前执行失败，则继续退出处理
+            if (!flowRsp) {
+              break;
+            }
+          }
+
+          AnalyzeBusi busi = context.getObject(HrefGetEnum.HREF_RESULT_OBJECT.getHrefKey());
+
+          // 当发生-1说明搜索结束
+          if (busi.getEndPostion() == -1) {
             break;
           }
+
+          starPos = busi.getEndPostion();
         }
-
-        AnalyzeBusi busi = context.getObject(HrefGetEnum.HREF_RESULT_OBJECT.getHrefKey());
-
-        // 当发生-1说明搜索结束
-        if (busi.getEndPostion() == -1) {
-          break;
-        }
-
-        starPos = busi.getEndPostion();
+      } catch (Exception e) {
+        e.printStackTrace();
+        // 当发生异常时，清空已经解析的数据，确保数据完整
+        result.clear();
+        logger.error("HtmlHrefAnalyze exception", e);
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      // 当发生异常时，清空已经解析的数据，确保数据完整
-      result.clear();
-      logger.error("HtmlHrefAnalyze exception", e);
-    }
 
-    return result;
-  }
+      return result;
+    }
+  };
 }

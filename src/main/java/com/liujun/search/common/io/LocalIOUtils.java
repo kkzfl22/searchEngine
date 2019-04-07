@@ -1,5 +1,6 @@
 package com.liujun.search.common.io;
 
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

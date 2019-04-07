@@ -4,6 +4,7 @@ import com.liujun.search.algorithm.ahoCorasick.AhoCorasickNum;
 import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -240,6 +241,11 @@ public class DocIdproc {
    * @return
    */
   private long getLastId(String lastData) {
+
+    if (StringUtils.isEmpty(lastData)) {
+      throw new IllegalArgumentException("data is error,lastdata:" + lastData);
+    }
+
     String[] spitDataArrays = this.fileDataToSrc(lastData);
 
     return Long.parseLong(spitDataArrays[0]);

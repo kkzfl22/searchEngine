@@ -188,13 +188,20 @@ public class BloomFilter implements Serializable {
   /** 从本地文件中加载布隆过滤器的数据 */
   public void loader() {
 
+    File bloomFile = new File(PROCESS_BLOOM_FILTER);
+
+    // 加载需要检查文件是否存在，首次文件是不存在的
+    if (!bloomFile.exists()) {
+      return;
+    }
+
     InputStream inputStream = null;
     BufferedInputStream bufferInput = null;
     ObjectInputStream objInputStream = null;
 
     try {
       // 加载数据
-      inputStream = new FileInputStream(PROCESS_BLOOM_FILTER);
+      inputStream = new FileInputStream(bloomFile);
       bufferInput = new BufferedInputStream(inputStream);
       objInputStream = new ObjectInputStream(bufferInput);
 

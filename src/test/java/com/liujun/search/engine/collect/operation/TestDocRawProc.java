@@ -1,6 +1,5 @@
 package com.liujun.search.engine.collect.operation;
 
-import com.liujun.search.engine.collect.operation.docraw.DocRawFileStreamManager;
 import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
 import com.liujun.search.utilscode.element.constant.HtmlHrefFileEnum;
 import com.liujun.search.utilscode.element.html.HtmlHrefUtils;
@@ -9,7 +8,6 @@ import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
 
 /**
  * 进行测试网的存取功能
@@ -36,7 +34,7 @@ public class TestDocRawProc {
 
     String sinaHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SINA);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.fileOpen();
+    DocRawProc.INSTANCE.openFile();
     // 进行线程的初始化操作
     DocRawProc.INSTANCE.threadInit();
 
@@ -49,7 +47,7 @@ public class TestDocRawProc {
     long seqId163 = 100001;
     String wy163Html = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.WY163);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.fileOpen();
+    DocRawProc.INSTANCE.openFile();
     DocRawProc.INSTANCE.putHtml(seqId163, wy163Html);
     DocRawProc.INSTANCE.close();
     String getWy163Data = DocRawProc.INSTANCE.getHtml(seqId163);
@@ -69,7 +67,7 @@ public class TestDocRawProc {
     String smallHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SMALL);
     String wy163Html = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.WY163);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.fileOpen();
+    DocRawProc.INSTANCE.openFile();
     DocRawProc.INSTANCE.putHtml(seqId, sinaHtml);
     DocRawProc.INSTANCE.putHtml(smaillId, smallHtml);
     DocRawProc.INSTANCE.putHtml(wy163Id, wy163Html);
@@ -95,7 +93,7 @@ public class TestDocRawProc {
     String smallHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SMALL);
     String wy163Html = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.WY163);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.fileOpen();
+    DocRawProc.INSTANCE.openFile();
     DocRawProc.INSTANCE.putHtml(seqId, sinaHtml);
     DocRawProc.INSTANCE.putHtml(seqId + 10, sinaHtml);
 

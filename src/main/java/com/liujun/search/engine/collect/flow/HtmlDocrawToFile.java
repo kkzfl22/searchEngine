@@ -2,7 +2,7 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +27,10 @@ public class HtmlDocrawToFile implements FlowServiceInf {
     logger.info("collect docraw start");
 
     // 2,获取当前网页的id
-    long numberId = context.getObject(CollectFlowKeyEnum.FLOW_CONTEXT_NUMBER_SEQID.getKey());
+    long numberId = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_CONTEXT_NUMBER_SEQID.getKey());
 
     // 获取网页的内容信息
-    String htmlContext = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
+    String htmlContext = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
 
     // 3,进行将网页id的存储操作
     DocRawProc.INSTANCE.putHtml(numberId, htmlContext);

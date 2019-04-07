@@ -3,10 +3,7 @@ package com.liujun.search.engine.collect.operation.html;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.FilterChainEnum;
-import com.liujun.search.engine.collect.operation.html.filter.FilterHrefAll;
-import com.liujun.search.engine.collect.operation.html.filter.FilterHrefEmail;
-import com.liujun.search.engine.collect.operation.html.filter.FilterHrefPrefix;
-import com.liujun.search.engine.collect.operation.html.filter.FilterHrefSuffix;
+import com.liujun.search.engine.collect.operation.html.filter.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +23,7 @@ public class HtmlHrefFilter {
   public static final HtmlHrefFilter INSTANCE = new HtmlHrefFilter();
 
   /** 进行过滤任务的操作 */
-  private static final FlowServiceInf[] FLOW = new FlowServiceInf[4];
+  private static final FlowServiceInf[] FLOW = new FlowServiceInf[5];
 
   static {
     // 进行整个地址的过滤操作
@@ -35,8 +32,10 @@ public class HtmlHrefFilter {
     FLOW[1] = FilterHrefPrefix.INSTANCE;
     // 2,进行后缀的过滤操作
     FLOW[2] = FilterHrefSuffix.INSTANCE;
+    // 进行内容检查过滤
+    FLOW[3] = FilterHrefContext.INSTANCE;
     // 3,进行email过滤操作
-    FLOW[3] = FilterHrefEmail.INSTANCE;
+    FLOW[4] = FilterHrefEmail.INSTANCE;
   }
 
   /**

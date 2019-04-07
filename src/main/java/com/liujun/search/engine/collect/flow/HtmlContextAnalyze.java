@@ -2,7 +2,7 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +27,13 @@ public class HtmlContextAnalyze implements FlowServiceInf {
 
     logger.info("collect html context analyze start");
 
-    String value = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
+    char[] htmlContext =
+        context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT_ARRAY.getKey());
 
     // 进行网页链接的获取操作
-    Set<String> hrefValue = HtmlHrefAnalyze.INSTANCE.getHref(value);
+    Set<String> hrefValue = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
 
-    context.put(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey(), hrefValue);
+    context.put(CollectAnalyzeFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey(), hrefValue);
 
     logger.info("collect html context analyze finish,href size:{}", hrefValue.size());
 

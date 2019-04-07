@@ -11,6 +11,8 @@ import java.util.List;
 /**
  * 需要对在<script></script>标签对中的网页链接进行过滤
  *
+ * 可以优先，使用二分查找对其进行遍历操作
+ *
  * @author liujun
  * @version 0.0.1
  * @date 2019/03/31

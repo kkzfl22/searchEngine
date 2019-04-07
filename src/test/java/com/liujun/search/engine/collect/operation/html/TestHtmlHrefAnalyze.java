@@ -3,6 +3,7 @@ package com.liujun.search.engine.collect.operation.html;
 import com.liujun.search.utilscode.io.code.PathUtils;
 import com.liujun.search.utilscode.io.constant.PathEnum;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class TestHtmlHrefAnalyze {
   private static final String BASE_ERROR_PATH =
       PathUtils.GetClassPath(PathEnum.FILE_ANALYZE_ERROR_HTML_PATH);
 
+  /** 默认文件 */
+  private static final String DEF_NAME = "html_error_zz.html";
+
   @Test
   public void testHtmlHref() throws IOException {
     String fileSoho = "soho.html";
@@ -37,33 +41,21 @@ public class TestHtmlHrefAnalyze {
   }
 
   @Test
-  public void htmlErrorHref() throws IOException {
-
-    String fileSoho = "soho_error.html";
-    File sohoFile = new File(BASE_ERROR_PATH, fileSoho);
-    String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
-
-    Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
-
-    Assert.assertNotNull(list);
-
-    Assert.assertThat(list, Matchers.hasItem("http://www.sohu.com?strategyid=00004"));
-    Assert.assertThat(
-        list, Matchers.hasItem("http://search.sohu.com/?keyword=拜伦&queryType=outside"));
-    Assert.assertThat(
-        list,
-        Matchers.hasItem(
-            "https://passport.zhan.sohu.com/passport/sohu/login-jumpto?callback=https://yonghufankui.kuaizhan.com/clubpc/topics/WhOlhDSItmL75kIf"));
-  }
-
-  @Test
   public void htmlErrorHrefGetError() throws IOException {
 
-    String fileSoho = "soho_context_error.html";
+    File fileList = new File(BASE_ERROR_PATH);
 
-    Set<String> list = this.getHref(fileSoho);
+    String[] listFileNames = fileList.list();
 
-    Assert.assertNotNull(list);
+    for (String nameValues : listFileNames) {
+
+      if (DEF_NAME.equals(nameValues)) {
+        continue;
+      }
+
+      Set<String> list = this.getHref(nameValues);
+      Assert.assertNotNull(list);
+    }
   }
 
   /**
@@ -75,40 +67,34 @@ public class TestHtmlHrefAnalyze {
    */
   private Set<String> getHref(String fileSoho) throws IOException {
     File sohoFile = new File(BASE_ERROR_PATH, fileSoho);
+
     String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
 
-    return HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+    if (StringUtils.isNotEmpty(htmlContext)) {
+      return HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+    }
+
+    return null;
   }
 
+  /**
+   * 解决bug的问题
+   *
+   * @return 文件信息
+   * @throws IOException 异常
+   */
   @Test
-  public void htmlErrorHrefGetError3() throws IOException {
+  public void special() throws IOException {
 
-    String fileSoho = "soho_error_2.html";
-    Set<String> list = this.getHref(fileSoho);
-    Assert.assertNotEquals(0, list.size());
-    Assert.assertThat(
-        list,
-        Matchers.not(Matchers.hasItem("http://search.sohu.com/?keyword=小米&queryType=outside123")));
-    Assert.assertThat(
-        list, Matchers.hasItem("http://search.sohu.com/?keyword=科技&queryType=outside"));
-  }
+    String fileSoho = "20180912.ai";
 
-  @Test
-  public void htmlErrorHrefGetError4() throws IOException {
+    File sohoFile = new File(BASE_ERROR_PATH, fileSoho);
 
-    String fileSoho = "soho_error_3.html";
-    Set<String> list = this.getHref(fileSoho);
-    Assert.assertNotEquals(0, list.size());
-    Assert.assertThat(list, Matchers.hasItem("http://servlet/enp.web.Publish"));
-  }
+    String htmlContext = FileUtils.readFileToString(sohoFile, StandardCharsets.UTF_8);
 
-  @Test
-  public void htmlErrorAnalyze4() throws IOException {
-
-    String fileSoho = "soho_error_4.html";
-    Set<String> list = this.getHref(fileSoho);
-    Assert.assertNotEquals(0, list.size());
-    Assert.assertThat(
-        list, Matchers.hasItem("http://www.baom.com.cn/2019-03/26/content_42036.html"));
+    if (StringUtils.isNotEmpty(htmlContext)) {
+      Set<String> list = HtmlHrefAnalyze.INSTANCE.getHref(htmlContext);
+      System.out.println(list);
+    }
   }
 }

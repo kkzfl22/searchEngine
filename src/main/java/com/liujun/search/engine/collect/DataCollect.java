@@ -1,11 +1,15 @@
 package com.liujun.search.engine.collect;
 
+import com.liujun.search.common.flow.FlowServiceContext;
+import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
+import com.liujun.search.engine.collect.start.*;
 import com.liujun.search.engine.collect.thread.CollectThreadPool;
 import com.liujun.search.engine.collect.thread.HtmCollectThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,17 +23,37 @@ public class DataCollect {
 
   public static final DataCollect INSTANCE = new DataCollect();
 
-  public void collect() {
+  /** 任务信息 */
+  private static final List<FlowServiceInf> FLOW = new ArrayList<>();
 
-    for (WebEntryEnum entry : WebEntryEnum.values()) {
-      // 遍动网页收集线程
-      CollectThreadPool.INSTANCE.submitTask(new HtmCollectThread(entry));
-    }
+  /** 日志数据 */
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataCollect.class);
+
+  static {
+    // 读取最后的文件序列
+    FLOW.add(ReadLastHtmlSeq.INSTANCE);
+    // 加过布隆过滤器
+    FLOW.add(LoaderBloomFilter.INSTANCE);
+    // 找开doc_id文件
+    FLOW.add(OpenDocIdFile.INSTANCE);
+    // 找开doc_raw文件
+    FLOW.add(OpenDocRawFile.INSTANCE);
+    // 加载停止流程处理器
+    FLOW.add(ShutdownCallBack.INSTANCE);
+    // 启动线程任务收集器
+    FLOW.add(StartDataCollectThread.INSTANCE);
   }
 
   public static void main(String[] args) {
 
-    // 启动网页的收集操作
-    DataCollect.INSTANCE.collect();
+    FlowServiceContext contextFlow = new FlowServiceContext();
+    try {
+      for (FlowServiceInf flowItem : FLOW) {
+        flowItem.runFlow(contextFlow);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      LOGGER.error("DataCollect Exception", e);
+    }
   }
 }

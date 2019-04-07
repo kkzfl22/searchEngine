@@ -1,5 +1,8 @@
 package com.liujun.search.element.download;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+
 /**
  * 网页下载接口
  *
@@ -15,5 +18,5 @@ public interface HtmlDownLoadInf {
    * @param url 网页链接地址
    * @return 网页内容
    */
-  String downloadHtml(String url);
+  String downloadHtml(String url, CloseableHttpClient client);
 }

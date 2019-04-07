@@ -18,7 +18,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 
 /**
  * @author liujun
@@ -68,11 +67,18 @@ public class HttpsTest {
     // 采用绕过验证的方式处理https请求
     SSLContext sslcontext = createIgnoreVerifySSL();
 
+    SSLConnectionSocketFactory socketFactory =
+        new SSLConnectionSocketFactory(
+            sslcontext,
+            new String[] {"SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"},
+            null,
+            SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+
     // 设置协议http和https对应的处理socket链接工厂的对象
     Registry<ConnectionSocketFactory> socketFactoryRegistry =
         RegistryBuilder.<ConnectionSocketFactory>create()
             .register("http", PlainConnectionSocketFactory.INSTANCE)
-            .register("https", new SSLConnectionSocketFactory(sslcontext))
+            .register("https", socketFactory)
             .build();
     PoolingHttpClientConnectionManager connManager =
         new PoolingHttpClientConnectionManager(socketFactoryRegistry);

@@ -361,7 +361,7 @@ public class FileQueue {
   }
 
   /** 关闭操作 */
-  private void closeAll() {
+  public void closeAll() {
     this.closeWrite();
     this.closeRead();
   }

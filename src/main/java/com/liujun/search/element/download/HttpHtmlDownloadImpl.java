@@ -35,13 +35,12 @@ public class HttpHtmlDownloadImpl implements HtmlDownLoadInf {
   private Logger logger = LoggerFactory.getLogger(HttpHtmlDownloadImpl.class);
 
   @Override
-  public String downloadHtml(String url) {
+  public String downloadHtml(String url, CloseableHttpClient httpclient) {
 
     String responseBody = null;
 
     long startTime = System.currentTimeMillis();
 
-    CloseableHttpClient httpclient = HttpClients.createDefault();
     try {
       HttpGet httpget = new HttpGet(url);
       // 执行下载操作
@@ -50,8 +49,6 @@ public class HttpHtmlDownloadImpl implements HtmlDownLoadInf {
     } catch (Exception e) {
       e.printStackTrace();
       logger.error("http download exception:", e);
-    } finally {
-      HttpConnUtils.close(httpclient);
     }
 
     long endTime = System.currentTimeMillis();

@@ -23,7 +23,7 @@ public enum WebEntryEnum {
   /** 标识信息 */
   private String flag;
 
-  private WebEntryEnum(String urlAddress, String flag) {
+  WebEntryEnum(String urlAddress, String flag) {
     this.urlAddress = urlAddress;
     this.flag = flag;
   }

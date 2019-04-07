@@ -2,12 +2,10 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.element.download.DownLoad;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
-import com.liujun.search.engine.collect.operation.html.HtmlHrefAnalyze;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +30,12 @@ public class FileQueueAddAddress implements FlowServiceInf {
 
     logger.info("collect file queue add start");
 
-    WebEntryEnum entry = context.getObject(CollectFlowKeyEnum.WEB_ENTRY.getKey());
+    WebEntryEnum entry = context.getObject(CollectAnalyzeFlowKeyEnum.WEB_ENTRY.getKey());
 
     FileQueue fileQueue = FileQueueManager.INSTANCE.getFileQueue(entry);
 
     // 进行网页链接的集合操作
-    Set<String> hrefValue = context.getObject(CollectFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey());
+    Set<String> hrefValue = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_CONTEXT_HREF_LIST.getKey());
 
     // 将数据入入到队列中
     fileQueue.put(hrefValue);

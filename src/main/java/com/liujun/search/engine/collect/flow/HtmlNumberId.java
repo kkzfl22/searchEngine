@@ -5,7 +5,7 @@ import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.common.number.NumberLoopSeq;
 import com.liujun.search.common.number.SeqManager;
 import com.liujun.search.common.number.SeqNameEnum;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class HtmlNumberId implements FlowServiceInf {
     logger.info("collect number seq finish ,sequenid {}", value);
 
     // 放入序列号
-    context.put(CollectFlowKeyEnum.FLOW_CONTEXT_NUMBER_SEQID.getKey(), value);
+    context.put(CollectAnalyzeFlowKeyEnum.FLOW_CONTEXT_NUMBER_SEQID.getKey(), value);
 
     return true;
   }

@@ -62,6 +62,13 @@ public class FlowServiceContext {
     }
   }
 
+  /**
+   * 进行清理操作
+   */
+  public void cleanParam() {
+    this.commonParam.clear();
+  }
+
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("FlowServiceContext{");

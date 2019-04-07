@@ -24,5 +24,6 @@ public class SymbolMsg {
   /** 数据列分隔符 */
   public static final String DATA_COLUMN = "\t";
 
-
+  /** 减号 */
+  public static final String MINUS = "-";
 }

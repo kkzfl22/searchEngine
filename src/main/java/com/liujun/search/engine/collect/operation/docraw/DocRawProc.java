@@ -58,9 +58,11 @@ public class DocRawProc extends DocRawFileStreamManager {
   public void threadInit() {
     // 检查并放入缓冲区
     threadLocal.set(ByteBuffer.allocate(BUFFER_SIZE));
+  }
 
-    // 进行文件打开操作
-    this.fileOpen();
+  /** 进行线程本地资源的清理操作 */
+  public void threadClean() {
+    threadLocal.remove();
   }
 
   /** 清理所有文件 */

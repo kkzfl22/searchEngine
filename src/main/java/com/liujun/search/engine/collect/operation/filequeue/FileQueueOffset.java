@@ -17,7 +17,10 @@ import java.io.*;
 public class FileQueueOffset {
 
   /** 文件队列的偏移前缀信息 */
-  private static final String LINKS_OFFSET_PREFIX_NAME = "links_offset";
+  private static final String LINKS_OFFSET_PREFIX_NAME = "links_";
+
+  /** 文件标识 */
+  private static final String LINKS_OFFSET_FLAG = "_offset";
 
   /** 默认数据标识 */
   private static final String DATA_DEF = "0,0";
@@ -35,7 +38,8 @@ public class FileQueueOffset {
   private long writeOffset = 0;
 
   public FileQueueOffset(String linksFile) {
-    this.linkedOffsetFile = LINKS_OFFSET_PREFIX_NAME + linksFile + FileQueue.SUFFIX_NAME;
+    this.linkedOffsetFile =
+        LINKS_OFFSET_PREFIX_NAME + linksFile + LINKS_OFFSET_FLAG + FileQueue.SUFFIX_NAME;
 
     // 文件夹的创建操作
     String mkPath = getLinkedOffsetPath();

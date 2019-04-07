@@ -12,7 +12,7 @@ import com.liujun.search.common.utils.ByteCode;
 public class CharMatcherBMBadChars {
 
   /** 字符集大小 */
-  public static final int BUFFER_SIZE = 256;
+  public static final int BUFFER_SIZE = 255;
 
   /** 模式串的坏字符规则 ，预算计算 */
   private final int[] badChar;
@@ -148,7 +148,7 @@ public class CharMatcherBMBadChars {
 
       // 检查是否超过了字符集的大小
       // 如果超过了当前字符集的大小，则将到当前坏字符的位置全部跳过
-      if (badCharCode > BUFFER_SIZE || badCharCode < 0) {
+      if (badCharCode >= BUFFER_SIZE || badCharCode < 0) {
         jumpBits = matchIndex + 1;
       } else {
         // 如果出现坏字符，找到坏字符出现在模式串中的位置

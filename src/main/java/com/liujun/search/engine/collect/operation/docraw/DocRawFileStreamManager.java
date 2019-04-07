@@ -6,7 +6,6 @@ import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
@@ -43,7 +42,7 @@ public class DocRawFileStreamManager extends DocRawFileManager {
   private int maxFileSize;
 
   /** 进行文件的打开操作 */
-  public void fileOpen() {
+  public void openFile() {
     String fileChar = super.getPathFile();
 
     try {
@@ -75,7 +74,7 @@ public class DocRawFileStreamManager extends DocRawFileManager {
           // 1,先次原来的文件通道 关闭
           this.close();
           // 然后打开新的文件
-          this.fileOpen();
+          this.openFile();
 
           // 设置新文件大小为0
           super.setNewFileSizeZero();

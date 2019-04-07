@@ -2,7 +2,7 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.constant.CollectFlowKeyEnum;
+import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import com.liujun.search.engine.collect.operation.DocIdproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +27,10 @@ public class HtmlDocIdToFile implements FlowServiceInf {
     logger.info("collect docid to file start");
 
     // 1,获取当前网页链接
-    String urlAddress = context.getObject(CollectFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey());
+    String urlAddress = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_ADDRESS.getKey());
 
     // 2,获取当前网页的id
-    long numberId = context.getObject(CollectFlowKeyEnum.FLOW_CONTEXT_NUMBER_SEQID.getKey());
+    long numberId = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_CONTEXT_NUMBER_SEQID.getKey());
 
     // 3,进行将网页id的存储操作
     DocIdproc.INSTANCE.putDoc(urlAddress, numberId);
