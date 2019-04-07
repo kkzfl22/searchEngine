@@ -19,8 +19,17 @@ public class TestHashCode {
     String url = "http://www.baidu.com";
 
     int murmurcode = Hashing.murmur3_32().hashString(url, StandardCharsets.UTF_8).asInt();
-    // System.out.println("使用murmur3得到的hashCode:" + murmurcode);
+    int murmurcode2 =
+        Hashing.murmur3_32(Integer.MAX_VALUE).hashString(url, StandardCharsets.UTF_8).asInt();
+    int murmurcode3 =
+        Hashing.murmur3_32(Integer.MAX_VALUE / 2).hashString(url, StandardCharsets.UTF_8).asInt();
+    System.out.println("使用murmur3得到的hashCode:" + murmurcode);
+    System.out.println("使用murmur3得到的hashCode:" + murmurcode2);
+    System.out.println("使用murmur3得到的hashCode:" + murmurcode3);
 
     Assert.assertNotEquals(0, murmurcode);
   }
+
+
+
 }

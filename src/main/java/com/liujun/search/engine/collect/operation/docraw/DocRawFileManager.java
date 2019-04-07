@@ -72,11 +72,7 @@ public class DocRawFileManager {
    * @param adddSize 网页增加的大小
    */
   public void fileSizeAdd(long adddSize) {
-    long oldValue = currFileSize.get();
-
-    long newValue = oldValue + adddSize;
-
-    currFileSize.compareAndSet(oldValue, newValue);
+    currFileSize.addAndGet(adddSize);
   }
 
   /**

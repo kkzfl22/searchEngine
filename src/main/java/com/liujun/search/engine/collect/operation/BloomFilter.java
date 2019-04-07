@@ -134,12 +134,14 @@ public class BloomFilter implements Serializable {
    */
   public void putData(String data) {
     int mumur3Code = Hashing.murmur3_32().hashString(data, Charsets.UTF_8).hashCode();
-    int crc32Code = Hashing.crc32().hashString(data, Charsets.UTF_8).hashCode();
-    int adlerCode = Hashing.adler32().hashString(data, Charsets.UTF_8).hashCode();
+    int mumurCode2 =
+        Hashing.murmur3_32(Integer.MAX_VALUE / 2).hashString(data, Charsets.UTF_8).hashCode();
+    int mumur128Code =
+        Hashing.murmur3_128(Integer.MAX_VALUE).hashString(data, Charsets.UTF_8).hashCode();
 
     this.bloomFilter.set(mumur3Code);
-    this.bloomFilter.set(crc32Code);
-    this.bloomFilter.set(adlerCode);
+    this.bloomFilter.set(mumurCode2);
+    this.bloomFilter.set(mumur128Code);
   }
 
   /**
