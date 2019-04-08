@@ -2,7 +2,7 @@ package com.liujun.search.engine.collect.start;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class OpenDocRawFile implements FlowServiceInf {
     logger.info("collect start open docraw file start..");
 
     // 进行当前线程相关的初始化操作
-    DocRawProc.INSTANCE.openFile();
+    DocRawWriteProc.INSTANCE.openFile();
 
     logger.info("collect start open docraw file  start..");
 

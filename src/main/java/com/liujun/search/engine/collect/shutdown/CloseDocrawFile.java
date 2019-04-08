@@ -2,10 +2,9 @@ package com.liujun.search.engine.collect.shutdown;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.rmi.runtime.Log;
 
 /**
  * 保存布隆过滤器中的数据
@@ -23,12 +22,13 @@ public class CloseDocrawFile implements FlowServiceInf {
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
-    logger.info("shutdown flow close doc raw file start");
+    logger.info("shutdown flow close doc docraw file start");
 
     // 保存布隆过滤器的数据
-    DocRawProc.INSTANCE.close();
+    DocRawWriteProc.INSTANCE.close();
 
-    logger.info("shutdown flow close doc raw file finish");
+    System.out.println("shutdown flow close doc docraw file finish");
+    logger.info("shutdown flow close doc docraw file finish");
 
     return true;
   }

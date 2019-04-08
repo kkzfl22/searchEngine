@@ -1,4 +1,4 @@
-package com.liujun.search.engine.collect.operation.docrawfind;
+package com.liujun.search.engine.collect.operation.docraw.docrawFind;
 
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;

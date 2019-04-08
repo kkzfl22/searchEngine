@@ -3,7 +3,6 @@ package com.liujun.search.engine.collect.start;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.operation.DocIdproc;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

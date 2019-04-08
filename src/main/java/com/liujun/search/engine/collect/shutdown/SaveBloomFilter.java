@@ -27,6 +27,7 @@ public class SaveBloomFilter implements FlowServiceInf {
     // 保存布隆过滤器的数据
     BloomFilter.INSTANCE.save();
 
+    System.out.println("shutdown flow save bloom filter finish");
     logger.info("shutdown flow save bloom filter finish");
 
     return true;

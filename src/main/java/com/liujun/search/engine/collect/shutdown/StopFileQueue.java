@@ -27,6 +27,7 @@ public class StopFileQueue implements FlowServiceInf {
     // 将标识改为停止，当前任务停止，则直接进行停止操作
     RunCollectThreadManager.INTANACE.stopThread();
 
+    System.out.println("shutdown flow set thread flag false finish");
     logger.info("shutdown flow set thread flag false finish");
 
     return true;

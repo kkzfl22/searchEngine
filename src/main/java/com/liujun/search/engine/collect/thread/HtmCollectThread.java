@@ -4,7 +4,7 @@ import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.element.download.HttpsClientManager;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.flow.HtmlAnalyzeFLow;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
@@ -103,7 +103,7 @@ public class HtmCollectThread implements Runnable {
     FileQueueManager.INSTANCE.getFileQueue(entry).openFileQueue();
 
     // 进行线程的资源初始化
-    DocRawProc.INSTANCE.threadInit();
+    DocRawWriteProc.INSTANCE.threadInit();
   }
 
   /** 进特线程的资源靖理 */
@@ -111,7 +111,7 @@ public class HtmCollectThread implements Runnable {
     // 关闭http的连接
     LocalIOUtils.close(client);
     // 清理线程资源
-    DocRawProc.INSTANCE.threadClean();
+    DocRawWriteProc.INSTANCE.threadClean();
     // 保存当前变量指针的值
     FileQueueManager.INSTANCE.getFileQueue(entry).writeOffset();
     // 关闭当前文件通道

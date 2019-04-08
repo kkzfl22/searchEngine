@@ -1,5 +1,8 @@
 package com.liujun.search.common.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -16,6 +19,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ByteBufferUtils {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ByteBufferUtils.class);
+
   /**
    * 将数据写入到缓冲区中，
    *
@@ -26,14 +31,16 @@ public class ByteBufferUtils {
    * @param buffer 缓冲区信息
    * @param channel 通道信息
    * @param data 字符串数据内容
+   * @return 写入的字节数
    */
-  public static void wirteBuffOrChannel(ByteBuffer buffer, FileChannel channel, String data) {
+  public static int wirteBuffOrChannel(ByteBuffer buffer, FileChannel channel, String data) {
 
+    int writeBytes = 0;
     try {
       // 检查buffer是否还存在空间，如果不存在空间需要先写入磁盘
       if (buffer.limit() - buffer.position() == 0) {
         buffer.flip();
-        channel.write(buffer);
+        writeBytes = channel.write(buffer);
         buffer.compact();
       }
 
@@ -41,11 +48,15 @@ public class ByteBufferUtils {
       byte[] dataByte = data.getBytes(StandardCharsets.UTF_8);
 
       // 写入将数据写入文件
-      writeByteOrChannel(buffer, channel, dataByte);
+      writeBytes += writeByteOrChannel(buffer, channel, dataByte);
 
+      dataByte = null;
     } catch (IOException e) {
       e.printStackTrace();
+      LOGGER.error("write byte channel IOException", e);
     }
+
+    return writeBytes;
   }
 
   /**
@@ -54,10 +65,13 @@ public class ByteBufferUtils {
    * @param buffer
    * @param channel
    * @param dataByte
+   * @return 写入字节的长度
    * @throws IOException
    */
-  public static void writeByteOrChannel(ByteBuffer buffer, FileChannel channel, byte[] dataByte)
+  public static int writeByteOrChannel(ByteBuffer buffer, FileChannel channel, byte[] dataByte)
       throws IOException {
+    int wirteBytes = 0;
+
     // 循环将数据写入缓冲区看
     int startPos = 0;
 
@@ -77,6 +91,7 @@ public class ByteBufferUtils {
         buffer.flip();
         // 将缓冲区中的数据写入文件中
         int length = channel.write(buffer);
+        wirteBytes += length;
         // 进行压缩操作
         buffer.compact();
         // 重新计算开始度度
@@ -91,6 +106,7 @@ public class ByteBufferUtils {
     } finally {
       lock.unlock();
     }
+    return wirteBytes;
   }
 
   private static int CountLenth(ByteBuffer buffer, int dataTotalLength, int startPos) {

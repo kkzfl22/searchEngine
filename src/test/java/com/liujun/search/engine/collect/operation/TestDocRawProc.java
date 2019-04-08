@@ -1,6 +1,7 @@
 package com.liujun.search.engine.collect.operation;
 
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawFindProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import com.liujun.search.utilscode.element.constant.HtmlHrefFileEnum;
 import com.liujun.search.utilscode.element.html.HtmlHrefUtils;
 import org.junit.After;
@@ -34,23 +35,23 @@ public class TestDocRawProc {
 
     String sinaHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SINA);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.openFile();
+    DocRawWriteProc.INSTANCE.openFile();
     // 进行线程的初始化操作
-    DocRawProc.INSTANCE.threadInit();
+    DocRawWriteProc.INSTANCE.threadInit();
 
-    DocRawProc.INSTANCE.putHtml(seqId, sinaHtml);
-    DocRawProc.INSTANCE.close();
-    String getData = DocRawProc.INSTANCE.getHtml(seqId);
+    DocRawWriteProc.INSTANCE.putHtml(seqId, sinaHtml);
+    DocRawWriteProc.INSTANCE.close();
+    String getData = DocRawFindProc.INSTANCE.findContextById(seqId);
 
     Assert.assertEquals(sinaHtml, getData);
 
     long seqId163 = 100001;
     String wy163Html = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.WY163);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.openFile();
-    DocRawProc.INSTANCE.putHtml(seqId163, wy163Html);
-    DocRawProc.INSTANCE.close();
-    String getWy163Data = DocRawProc.INSTANCE.getHtml(seqId163);
+    DocRawWriteProc.INSTANCE.openFile();
+    DocRawWriteProc.INSTANCE.putHtml(seqId163, wy163Html);
+    DocRawWriteProc.INSTANCE.close();
+    String getWy163Data = DocRawFindProc.INSTANCE.findContextById(seqId163);
 
     Assert.assertEquals(wy163Html, getWy163Data);
   }
@@ -67,23 +68,23 @@ public class TestDocRawProc {
     String smallHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SMALL);
     String wy163Html = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.WY163);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.openFile();
-    DocRawProc.INSTANCE.putHtml(seqId, sinaHtml);
-    DocRawProc.INSTANCE.putHtml(smaillId, smallHtml);
-    DocRawProc.INSTANCE.putHtml(wy163Id, wy163Html);
-    DocRawProc.INSTANCE.close();
-    String getSmailData = DocRawProc.INSTANCE.getHtml(smaillId);
+    DocRawWriteProc.INSTANCE.openFile();
+    DocRawWriteProc.INSTANCE.putHtml(seqId, sinaHtml);
+    DocRawWriteProc.INSTANCE.putHtml(smaillId, smallHtml);
+    DocRawWriteProc.INSTANCE.putHtml(wy163Id, wy163Html);
+    DocRawWriteProc.INSTANCE.close();
+    String getSmailData = DocRawFindProc.INSTANCE.findContextById(smaillId);
     Assert.assertEquals(smallHtml, getSmailData);
 
-    String getwy163Data = DocRawProc.INSTANCE.getHtml(wy163Id);
+    String getwy163Data = DocRawFindProc.INSTANCE.findContextById(wy163Id);
     Assert.assertEquals(wy163Html, getwy163Data);
   }
 
   @Test
   public void testMoreFile() {
     // 1,设置文件的大小
-    // Mockito.doReturn(DocRawProc.INSTANCE.getFileSize(), 1024 * 1024);
-    // Mockito.when(DocRawProc.INSTANCE.getFileSize()).thenReturn(1024 * 1024);
+    // Mockito.doReturn(DocRawWriteProc.INSTANCE.getFileSize(), 1024 * 1024);
+    // Mockito.when(DocRawWriteProc.INSTANCE.getFileSize()).thenReturn(1024 * 1024);
 
     long seqId = 100010;
     long smaillId = 100011;
@@ -93,26 +94,26 @@ public class TestDocRawProc {
     String smallHtml = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.SMALL);
     String wy163Html = HtmlHrefUtils.INSTANCE.getHtmlContext(HtmlHrefFileEnum.WY163);
     // 将数据保存到文件中
-    DocRawProc.INSTANCE.openFile();
-    DocRawProc.INSTANCE.putHtml(seqId, sinaHtml);
-    DocRawProc.INSTANCE.putHtml(seqId + 10, sinaHtml);
+    DocRawWriteProc.INSTANCE.openFile();
+    DocRawWriteProc.INSTANCE.putHtml(seqId, sinaHtml);
+    DocRawWriteProc.INSTANCE.putHtml(seqId + 10, sinaHtml);
 
     for (int i = 0; i < 100; i++) {
-      DocRawProc.INSTANCE.putHtml(smaillId + i, smallHtml);
+      DocRawWriteProc.INSTANCE.putHtml(smaillId + i, smallHtml);
     }
 
-    DocRawProc.INSTANCE.putHtml(wy163Id, wy163Html);
-    DocRawProc.INSTANCE.close();
-    String getSmailData = DocRawProc.INSTANCE.getHtml(smaillId);
+    DocRawWriteProc.INSTANCE.putHtml(wy163Id, wy163Html);
+    DocRawWriteProc.INSTANCE.close();
+    String getSmailData = DocRawFindProc.INSTANCE.findContextById(smaillId);
     Assert.assertEquals(smallHtml, getSmailData);
 
-    String getwy163Data = DocRawProc.INSTANCE.getHtml(wy163Id);
+    String getwy163Data = DocRawFindProc.INSTANCE.findContextById(wy163Id);
     Assert.assertEquals(wy163Html, getwy163Data);
   }
 
   /** 执行最后的清理操作 */
   @After
   public void after() {
-    DocRawProc.INSTANCE.cleanAll();
+    DocRawWriteProc.INSTANCE.cleanAll();
   }
 }

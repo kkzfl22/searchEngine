@@ -42,7 +42,10 @@ public class TestByteBufferUtils {
     String bigSinaHtml = HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.SINA);
 
     // 写入磁盘操作
-    this.writeData(outFile, bigSinaHtml);
+    int wirteBytes = this.writeData(outFile, bigSinaHtml);
+
+    System.out.println("字符长度：" + bigSinaHtml.length());
+    System.out.println("写入长度：" + wirteBytes);
 
     // 读取写入磁盘的网页内容
     String contextValue = FileUtils.readFileToString(outFile, StandardCharsets.UTF_8);
@@ -61,7 +64,10 @@ public class TestByteBufferUtils {
     String bigSmallHtml = HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.SMALL);
 
     // 写入磁盘操作
-    this.writeData(outFile, bigSmallHtml);
+    int wirteBytes = this.writeData(outFile, bigSmallHtml);
+
+    System.out.println("字符长度：" + bigSmallHtml.length());
+    System.out.println("写入长度：" + wirteBytes);
 
     // 读取写入磁盘的网页内容
     String contextValue = FileUtils.readFileToString(outFile, StandardCharsets.UTF_8);
@@ -75,20 +81,22 @@ public class TestByteBufferUtils {
    * @param outFile 输入文件信息
    * @param outContext 文件内容
    */
-  private void writeData(File outFile, String outContext) {
+  private int writeData(File outFile, String outContext) {
     FileOutputStream input = null;
     FileChannel channel = null;
     try {
       input = new FileOutputStream(outFile, true);
       channel = input.getChannel();
       ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
-      ByteBufferUtils.wirteBuffOrChannel(byteBuffer, channel, outContext);
+      return ByteBufferUtils.wirteBuffOrChannel(byteBuffer, channel, outContext);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } finally {
       LocalIOUtils.close(channel);
       LocalIOUtils.close(input);
     }
+
+    return 0;
   }
 
   /** 进行删除操作 */

@@ -1,7 +1,6 @@
 package com.liujun.search.common.classes;
 
-import com.liujun.search.engine.collect.operation.docraw.DocRawFileStreamManager;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,12 +13,12 @@ public class TestObjectFieldOper {
 
   @Test
   public void testSetValue() {
-    int value = DocRawProc.INSTANCE.getMaxFileSize();
+    int value = DocRawWriteProc.INSTANCE.getMaxFileSize();
     Assert.assertEquals(1048576, value);
 
-    ObjectFieldOper.INSTANCE.setFieldValue(DocRawProc.INSTANCE, "maxFileSize", 21);
+    ObjectFieldOper.INSTANCE.setFieldValue(DocRawWriteProc.INSTANCE, "maxFileSize", 21);
 
-    int value2 = DocRawProc.INSTANCE.getMaxFileSize();
+    int value2 = DocRawWriteProc.INSTANCE.getMaxFileSize();
     Assert.assertEquals(21, value2);
   }
 }

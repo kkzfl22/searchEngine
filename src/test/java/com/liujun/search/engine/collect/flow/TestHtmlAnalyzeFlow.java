@@ -4,7 +4,7 @@ import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.element.download.HttpsClientManager;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.DocIdproc;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.*;
@@ -26,7 +26,7 @@ public class TestHtmlAnalyzeFlow {
   @Before
   public void getHttpClient() {
     // 进行线程的资源初始化
-    DocRawProc.INSTANCE.threadInit();
+    DocRawWriteProc.INSTANCE.threadInit();
   }
 
   /** 测试网页分析 */
@@ -48,7 +48,7 @@ public class TestHtmlAnalyzeFlow {
     FileQueueManager.INSTANCE.getFileQueue(entry).openFileQueue();
 
     DocIdproc.INSTANCE.openFile();
-    DocRawProc.INSTANCE.openFile();
+    DocRawWriteProc.INSTANCE.openFile();
 
     String url = FileQueueManager.INSTANCE.getFileQueue(entry).get();
     // 2，执行下载

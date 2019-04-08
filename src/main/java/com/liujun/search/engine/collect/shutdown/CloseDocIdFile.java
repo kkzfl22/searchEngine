@@ -28,6 +28,7 @@ public class CloseDocIdFile implements FlowServiceInf {
     // 保存布隆过滤器的数据
     DocIdproc.INSTANCE.close();
 
+    System.out.println("shutdown flow close doc id finish");
     logger.info("shutdown flow close doc id finish");
 
     return true;

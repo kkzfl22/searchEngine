@@ -212,4 +212,21 @@ public class DocRawFileManager {
 
     return outputPath.toString();
   }
+
+  /**
+   * 获取文件列表，并且需要按名称默认排序
+   *
+   * @return 文件信息
+   */
+  protected String[] fileList() {
+    File dataFile = new File(this.getPath());
+
+    String[] list = dataFile.list();
+
+    if (list.length > 1) {
+      Arrays.sort(list);
+    }
+
+    return list;
+  }
 }

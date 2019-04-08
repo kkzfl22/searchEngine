@@ -27,6 +27,7 @@ public class ThreadCloseResource implements FlowServiceInf {
     // 将标识改为停止，当前任务停止，则直接进行停止操作
     RunCollectThreadManager.INTANACE.closeResource();
 
+    System.out.println("shutdown flow  close rsource  finish");
     logger.info("shutdown flow  close rsource  finish");
 
     return true;

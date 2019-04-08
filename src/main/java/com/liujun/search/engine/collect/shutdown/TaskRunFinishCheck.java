@@ -27,17 +27,17 @@ public class TaskRunFinishCheck implements FlowServiceInf {
 
     logger.info("shutdown flow check finish flag  start");
 
-
     // 需等待所有任务都进行结束
     while (!(RunCollectThreadManager.INTANACE.checkFinish())) {
       logger.info("shutdown flow not  finished ,wait {} millsecond", WATI_TIME);
+      System.out.println("shutdown flow not  finished ,wait " + WATI_TIME + " millsecond");
       try {
         Thread.sleep(WATI_TIME);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-
+    System.out.println("shutdown flow  check finish flag finish");
     logger.info("shutdown flow check finish flag  finish");
 
     return true;

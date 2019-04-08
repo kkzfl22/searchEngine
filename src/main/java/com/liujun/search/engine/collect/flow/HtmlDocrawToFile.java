@@ -3,7 +3,7 @@ package com.liujun.search.engine.collect.flow;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
-import com.liujun.search.engine.collect.operation.docraw.DocRawProc;
+import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public class HtmlDocrawToFile implements FlowServiceInf {
     String htmlContext = context.getObject(CollectAnalyzeFlowKeyEnum.FLOW_DOWNLOAD_CONTEXT.getKey());
 
     // 3,进行将网页id的存储操作
-    DocRawProc.INSTANCE.putHtml(numberId, htmlContext);
+    DocRawWriteProc.INSTANCE.putHtml(numberId, htmlContext);
 
     logger.info("collect docraw finish");
 
