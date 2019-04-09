@@ -1,7 +1,5 @@
 package com.liujun.search.algorithm.boyerMoore.use;
 
-import com.liujun.search.common.utils.ByteCode;
-
 /**
  * 高效的字符串匹配算法bm算法,使用坏字符的规则
  *

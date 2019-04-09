@@ -26,4 +26,7 @@ public class SymbolMsg {
 
   /** 减号 */
   public static final String MINUS = "-";
+
+  /** 路径分隔符 */
+  public static final String PATH = "/";
 }

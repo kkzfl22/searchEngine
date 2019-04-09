@@ -2,6 +2,7 @@ package com.liujun.search.engine.analyze.operation.docraw;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
+import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.engine.collect.constant.DocRawFindEnum;
 import com.liujun.search.engine.collect.operation.docraw.DocRawFileStreamManager;
 import org.slf4j.Logger;
@@ -25,8 +26,8 @@ import java.util.List;
  */
 public class DocRawReaderProc extends DocRawFileStreamManager {
 
-  /** 使用32K的缓存来进行临时存储 */
-  private static final int FIND_BUFFER_SIZE = 32 * 1024;
+  /** 使用32K的缓存来进行临时存储,4个用于将上次读取的最后3个字符保留，防止跨页匹配的问题 */
+  private static final int FIND_BUFFER_SIZE = 32 * 1024 + 3;
 
   public static final DocRawReaderProc INSTANCE = new DocRawReaderProc();
 
@@ -57,6 +58,16 @@ public class DocRawReaderProc extends DocRawFileStreamManager {
 
     // 扫描文件夹，得到文件列表
     String[] dirList = this.fileList();
+
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_FILE_LIST.getKey(), dirList);
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_BASE_PATH.getKey(), super.getPath());
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_FILE_INDEX.getKey(), 0);
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_FILE_POSITION.getKey(), 0);
+    context.put(
+        DocrawReaderEnum.DOCRAW_INPUT_READER_BUFFER.getKey(),
+        ByteBuffer.allocateDirect(FIND_BUFFER_SIZE));
+
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_RESULT_LIST.getKey(), new ArrayList<>(pageSize));
 
     String dataContext = null;
     for (String dataFile : dirList) {

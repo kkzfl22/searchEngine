@@ -1,5 +1,6 @@
 package com.liujun.search.engine.collect.operation.docraw.docrawFind;
 
+import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import com.liujun.search.common.flow.FlowServiceContext;
@@ -21,10 +22,6 @@ public class FindDataEnd implements FlowServiceInf {
   /** 实例对象 */
   public static final FindDataEnd INSTANCE = new FindDataEnd();
 
-  /** 行结束查找对象 */
-  private static final CharMatcherBMBadChars LINE_OVER_MATCHER_FLAG =
-      CharMatcherBMBadChars.getGoodSuffixInstance(SymbolMsg.LINE_OVER);
-
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
@@ -38,7 +35,7 @@ public class FindDataEnd implements FlowServiceInf {
     if (null == dataBytes) {
       startIndex = context.getObject(DocRawFindEnum.PROC_FIND_ID_INDEX.getKey());
     }
-    int endIndex = LINE_OVER_MATCHER_FLAG.matcherIndex(data, startIndex);
+    int endIndex = CommCharMatcherInstance.LINE_END_MATCHER.matcherIndex(data, startIndex);
 
     // 如果当前结束标识被找到，则继续处理，
     if (endIndex != -1) {
