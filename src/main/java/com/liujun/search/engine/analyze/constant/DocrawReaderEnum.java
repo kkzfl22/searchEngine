@@ -24,8 +24,11 @@ public enum DocrawReaderEnum {
   /** 开始处理的文件的位置 */
   DOCRAW_INPUT_FILE_POSITION("docraw_input_file_position"),
 
+  /** 每次的获取的条数 */
+  DOCRAW_INPUT_PAGELIMIT("docraw_input_pagelimit"),
+
   /** 遍历的结果中的数据信息 */
-  DOCRAW_INPUT_RESULT_LIST("docraw_input_resultlist"),
+  DOCRAW_INOUTPUT_RESULT_LIST("docraw_input_resultlist"),
 
   /** 输入的文件流信息 */
   DOCRAW_PROC_INPUT_STREAM("docraw_proc_input_stream"),
@@ -38,6 +41,12 @@ public enum DocrawReaderEnum {
 
   /** 用于缓存临时数据的 */
   DOCRAW_PROC_CACHE_BUFFERLIST("docraw_proc_cahce_buffer_list"),
+
+  /** 用于标识当前是否添加了页结束标识,在读取完成后清除 */
+  DOCRAW_PROC_PAGE_END_APPEND("docraw_proc_page_end_append"),
+
+  /** 输出的返回标识 */
+  DOCRAW_OUTPUT_RETURN_FLAG("docraw_output_return_flag"),
   ;
 
   private String key;

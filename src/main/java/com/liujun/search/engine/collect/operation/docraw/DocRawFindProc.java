@@ -62,7 +62,7 @@ public class DocRawFindProc extends DocRawFileStreamManager {
     context.put(DocRawFindEnum.INPUT_FIND_ID.getKey(), id);
 
     // 扫描文件夹，得到文件列表
-    String[] dirList = this.fileList();
+    String[] dirList = this.FileList();
 
     String dataContext = null;
     for (String dataFile : dirList) {
@@ -93,7 +93,7 @@ public class DocRawFindProc extends DocRawFileStreamManager {
 
     try {
 
-      String loopFile = super.getPath() + File.separator + fileName;
+      String loopFile = super.GetPath() + File.separator + fileName;
 
       input = new FileInputStream(loopFile);
       channel = input.getChannel();

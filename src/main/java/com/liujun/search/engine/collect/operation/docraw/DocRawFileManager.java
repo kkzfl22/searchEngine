@@ -1,6 +1,7 @@
 package com.liujun.search.engine.collect.operation.docraw;
 
 import com.liujun.search.utilscode.io.constant.PathCfg;
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class DocRawFileManager {
 
   /** 初始化读取数据信息 */
   public void initReadIndex() {
-    String basePath = this.getPath();
+    String basePath = this.GetPath();
 
     // 检查并创建目录录
     File fileCheckPath = this.dirCheckAndCreate(basePath);
@@ -80,11 +81,11 @@ public class DocRawFileManager {
    *
    * @return 路径信息
    */
-  protected String getPath() {
+  protected static String GetPath() {
     StringBuilder outputPath = new StringBuilder();
 
     outputPath.append(DOC_FILEPATH);
-    outputPath.append(DOC_RAW_DIR).append(File.separator);
+    outputPath.append(DOC_RAW_DIR).append(SymbolMsg.PATH);
 
     return outputPath.toString();
   }
@@ -97,7 +98,7 @@ public class DocRawFileManager {
   protected String getPathFile() {
 
     StringBuilder outputPath = new StringBuilder();
-    outputPath.append(this.getPath());
+    outputPath.append(GetPath());
     outputPath.append(this.getFileName());
 
     return outputPath.toString();
@@ -218,8 +219,8 @@ public class DocRawFileManager {
    *
    * @return 文件信息
    */
-  protected String[] fileList() {
-    File dataFile = new File(this.getPath());
+  protected static String[] FileList() {
+    File dataFile = new File(GetPath());
 
     String[] list = dataFile.list();
 

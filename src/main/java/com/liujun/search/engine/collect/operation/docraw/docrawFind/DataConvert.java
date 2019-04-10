@@ -1,6 +1,8 @@
 package com.liujun.search.engine.collect.operation.docraw.docrawFind;
 
+import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
+import com.liujun.search.common.io.ByteUtils;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
@@ -17,10 +19,6 @@ import java.util.List;
  */
 public class DataConvert implements FlowServiceInf {
 
-  /** 列分隔符对象 */
-  private CharMatcherBMBadChars LINE_COLUMN_MATCHER_FLAG =
-      CharMatcherBMBadChars.getGoodSuffixInstance(SymbolMsg.DATA_COLUMN);
-
   public static final DataConvert INSTANCE = new DataConvert();
 
   @Override
@@ -29,29 +27,8 @@ public class DataConvert implements FlowServiceInf {
     // 取出数据存储集合对象
     List<byte[]> dataList = context.getObject(DocRawFindEnum.PROC_COLLECT_OUT_DATA.getKey());
 
-    byte[] outDataBytes = null;
-    if (dataList.size() > 1) {
-      int arrayLength = 0;
-
-      // 统计得到整个网页的字符大小
-      for (byte[] datas : dataList) {
-        arrayLength += datas.length;
-      }
-
-      outDataBytes = new byte[arrayLength];
-
-      int startPostion = 0;
-
-      byte[] currOut = null;
-      // 将所有数据拼命到一个字符数组中
-      for (int i = 0; i < dataList.size(); i++) {
-        currOut = dataList.get(i);
-        System.arraycopy(currOut, 0, outDataBytes, startPostion, currOut.length);
-        startPostion += currOut.length;
-      }
-    } else {
-      outDataBytes = dataList.get(0);
-    }
+    // 获取一个完整的byte数组
+    byte[] outDataBytes = ByteUtils.BytesConvert(dataList);
 
     String outdataContext = getDataContext(outDataBytes);
     context.put(DocRawFindEnum.OUT_FIND_DATA_CONTEXT.getKey(), outdataContext);
@@ -71,9 +48,9 @@ public class DataConvert implements FlowServiceInf {
     int startIndex = 0;
 
     // 查找得到网页的id
-    startIndex = LINE_COLUMN_MATCHER_FLAG.matcherIndex(dataVale, startIndex);
+    startIndex = CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, startIndex);
     // 得到长度
-    startIndex = LINE_COLUMN_MATCHER_FLAG.matcherIndex(dataVale, startIndex + 1);
+    startIndex = CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, startIndex + 1);
     startIndex = startIndex + 1;
     // 返回最终的数据集
     return new String(dataVale, startIndex, dataVale.length - startIndex);

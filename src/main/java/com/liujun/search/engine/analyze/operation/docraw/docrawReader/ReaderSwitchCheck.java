@@ -29,8 +29,11 @@ public class ReaderSwitchCheck implements FlowServiceInf {
         context.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey());
     ByteBuffer buffer = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_READER_BUFFER.getKey());
 
+    // 文件位置
+    long position = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_FILE_POSITION.getKey());
+
     // 进行数据读取操作
-    int readIndex = streamChannel.read(buffer);
+    int readIndex = streamChannel.read(buffer, position);
 
     // 如果当前未读取到数据说明已经读取完成，切换到下一个文件读取
     if (readIndex <= 0) {
@@ -44,13 +47,21 @@ public class ReaderSwitchCheck implements FlowServiceInf {
 
       // 如果切换失败，则返回失败
       if (!switchFlag) {
+        context.put(DocrawReaderEnum.DOCRAW_OUTPUT_RETURN_FLAG.getKey(), true);
         return false;
       } else {
+        position = 0;
         // 切换成功，进行首个buffer的读取操作
-        readIndex = streamChannel.read(buffer);
+        readIndex = streamChannel.read(buffer, position);
       }
     }
 
+    position = position + readIndex;
+
+    // 更新位置
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_FILE_POSITION.getKey(), position);
+
+    buffer.flip();
     // 记录下当前读取的buffer的大小
     context.put(DocrawReaderEnum.DOCRAW_PROC_READ_BUFFERSIZE.getKey(), readIndex);
     return true;

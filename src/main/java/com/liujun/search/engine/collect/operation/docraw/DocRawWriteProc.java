@@ -42,6 +42,8 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
 
   /** 进行线程本地资源的清理操作 */
   public void threadClean() {
+    ByteBuffer buffer = threadLocal.get();
+    buffer.clear();
     threadLocal.remove();
   }
 
@@ -54,10 +56,10 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
     new File(super.getPathFile()).delete();
 
     // 查找文件下所有的文件
-    String[] fileList = this.fileList();
+    String[] fileList = FileList();
 
-    if (null != fileList && fileList.length > 1) {
-      String pathInfo = super.getPath();
+    if (null != fileList && fileList.length >= 1) {
+      String pathInfo = GetPath();
 
       for (String file : fileList) {
         new File(pathInfo + File.separator + file).delete();

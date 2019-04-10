@@ -15,4 +15,8 @@ public class CommCharMatcherInstance {
   /** 行结束查找对象(\r\n\r\n) */
   public static final CharMatcherBMBadChars LINE_END_MATCHER =
       CharMatcherBMBadChars.getGoodSuffixInstance(SymbolMsg.LINE_OVER);
+
+  /** 列分隔符对象 */
+  public static final CharMatcherBMBadChars LINE_COLUMN_MATCHER =
+      CharMatcherBMBadChars.getGoodSuffixInstance(SymbolMsg.DATA_COLUMN);
 }
