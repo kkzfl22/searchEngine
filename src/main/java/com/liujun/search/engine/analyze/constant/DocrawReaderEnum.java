@@ -47,6 +47,9 @@ public enum DocrawReaderEnum {
 
   /** 输出的返回标识 */
   DOCRAW_OUTPUT_RETURN_FLAG("docraw_output_return_flag"),
+
+  /** 标识当前读取已经完成 */
+  DOCRAW_OUTPUT_FINISH_FLAG("docraw_output_finish_flag"),
   ;
 
   private String key;

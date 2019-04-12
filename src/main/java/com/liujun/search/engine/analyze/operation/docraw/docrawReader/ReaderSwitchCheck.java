@@ -47,10 +47,12 @@ public class ReaderSwitchCheck implements FlowServiceInf {
 
       // 如果切换失败，则返回失败
       if (!switchFlag) {
-        context.put(DocrawReaderEnum.DOCRAW_OUTPUT_RETURN_FLAG.getKey(), true);
-        return false;
+        context.put(DocrawReaderEnum.DOCRAW_OUTPUT_FINISH_FLAG.getKey(), true);
+        // 当读取完成后，则索引位置不加
+        readIndex = 0;
       } else {
         position = 0;
+        streamChannel = context.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey());
         // 切换成功，进行首个buffer的读取操作
         readIndex = streamChannel.read(buffer, position);
       }
@@ -86,14 +88,25 @@ public class ReaderSwitchCheck implements FlowServiceInf {
     }
 
     index = index + 1;
+    // 重新将索引位置写入至流程中
+    context.put(DocrawReaderEnum.DOCRAW_INPUT_FILE_INDEX.getKey(), index);
+
     // 获取文件路径
     String basePath = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_BASE_PATH.getKey());
 
     String filePath = basePath + SymbolMsg.PATH + fileList[index];
 
+    System.out.println("切换方件:" + fileList[index]);
+
     FileInputStream input = new FileInputStream(filePath);
 
+    FileChannel channel = input.getChannel();
+
+    context.remove(DocrawReaderEnum.DOCRAW_PROC_INPUT_STREAM.getKey());
+    context.remove(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey());
+
     context.put(DocrawReaderEnum.DOCRAW_PROC_INPUT_STREAM.getKey(), input);
+    context.put(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey(), channel);
 
     return true;
   }

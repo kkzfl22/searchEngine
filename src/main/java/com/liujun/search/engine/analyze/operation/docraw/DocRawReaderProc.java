@@ -38,6 +38,9 @@ public class DocRawReaderProc extends DocRawFileManager {
 
   private static FlowServiceContext FlowCon = new FlowServiceContext();
 
+  /** 用来标识当前所有文件是否读取完成 */
+  private boolean finish = false;
+
   static {
     // 进行读取操作
     FLOW.add(ReaderInit.INSTANCE);
@@ -68,6 +71,15 @@ public class DocRawReaderProc extends DocRawFileManager {
   public static final DocRawReaderProc INSTANCE = new DocRawReaderProc();
 
   /**
+   * 检查当前读取是否已经结束
+   *
+   * @return true 已经结束 false 未结束
+   */
+  public boolean checkFinish() {
+    return finish;
+  }
+
+  /**
    * 获取html的内容信息,根据网页的id
    *
    * @param limit 每次读取的条数
@@ -85,8 +97,12 @@ public class DocRawReaderProc extends DocRawFileManager {
 
     Boolean returnFlag = false;
 
+    // 标识当前读取完成
+    Boolean outFinish = false;
+
     try {
-      while (true) {
+      // 如果当前未完成，则继续读取
+      while (!finish) {
         for (FlowServiceInf flowService : FLOW) {
           if (!flowService.runFlow(FlowCon)) {
             break;
@@ -95,8 +111,14 @@ public class DocRawReaderProc extends DocRawFileManager {
           returnFlag = FlowCon.getObject(DocrawReaderEnum.DOCRAW_OUTPUT_RETURN_FLAG.getKey());
 
           if (null != returnFlag && returnFlag) {
-
             this.clean(FlowCon);
+
+            outFinish = FlowCon.getObject(DocrawReaderEnum.DOCRAW_OUTPUT_FINISH_FLAG.getKey());
+
+            // 如果文件已经读取完成，则将标识当前已经读取完成
+            if (null != outFinish && outFinish) {
+              finish = true;
+            }
 
             return FlowCon.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
           }
@@ -107,9 +129,13 @@ public class DocRawReaderProc extends DocRawFileManager {
       logger.error("docraw reader exception", e);
     }
 
-    this.clean(FlowCon);
+    List<RawDataLine> result =
+        FlowCon.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
 
-    return FlowCon.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
+    // 进行流程的清理操作
+    FlowCon.cleanParam();
+
+    return result;
   }
 
   /**

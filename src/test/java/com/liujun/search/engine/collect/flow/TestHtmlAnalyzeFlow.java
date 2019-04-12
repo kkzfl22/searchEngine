@@ -20,7 +20,7 @@ public class TestHtmlAnalyzeFlow {
 
   private static CloseableHttpClient Client;
 
-  private static final int MAX_SIZE = 100;
+  private static final int MAX_SIZE = 1000;
 
   @BeforeClass
   public static void init() {
@@ -36,7 +36,7 @@ public class TestHtmlAnalyzeFlow {
   /** 测试网页分析 */
   @Test
   public void testHtmlAnalyze() {
-    this.testDownloadAnalyzeComm(WebEntryEnum.SOHO, 1000);
+    this.testDownloadAnalyzeComm(WebEntryEnum.SOHO, 2000);
   }
 
   /** 测试网页分析 */

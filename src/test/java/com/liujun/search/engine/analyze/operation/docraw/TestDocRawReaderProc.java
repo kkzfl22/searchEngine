@@ -71,10 +71,39 @@ public class TestDocRawReaderProc {
     return DocRawReaderProc.INSTANCE.reader(readSize);
   }
 
-  @After
+  // @After
   public void clean() {
     DocRawWriteProc.INSTANCE.threadClean();
     DocRawReaderProc.INSTANCE.closeReader();
     DocRawWriteProc.INSTANCE.cleanAll();
+  }
+
+  /** 进行循环的读取数据 */
+  @Test
+  public void loopReader() {
+    int sum = 0;
+    while (!DocRawReaderProc.INSTANCE.checkFinish()) {
+      List<RawDataLine> list = DocRawReaderProc.INSTANCE.reader(100);
+      Assert.assertNotNull(list);
+
+      //this.print(list);
+
+      sum += list.size();
+    }
+
+    System.out.println("总条数:" + sum);
+
+    Assert.assertEquals(true, DocRawReaderProc.INSTANCE.checkFinish());
+  }
+
+  private void print(List<RawDataLine> list) {
+    int index = 0;
+    for (RawDataLine data : list) {
+      System.out.print(data.getId() + "\t");
+      if (index % 10 == 0) {
+        System.out.println();
+      }
+      index++;
+    }
   }
 }

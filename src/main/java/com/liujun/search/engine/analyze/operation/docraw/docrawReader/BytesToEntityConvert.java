@@ -27,21 +27,24 @@ public class BytesToEntityConvert implements FlowServiceInf {
     List<byte[]> dataList =
         context.getObject(DocrawReaderEnum.DOCRAW_PROC_CACHE_BUFFERLIST.getKey());
 
-    byte[] covertData = ByteUtils.BytesConvert(dataList);
+    // 进行对象的封装操作
+    if (dataList != null && !dataList.isEmpty()) {
+      byte[] covertData = ByteUtils.BytesConvert(dataList);
 
-    // 进行转换操作
-    RawDataLine data = this.getDataEntity(covertData);
+      // 进行转换操作
+      RawDataLine data = this.getDataEntity(covertData);
 
-    List<RawDataLine> dataLinesArrays =
-        context.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
+      List<RawDataLine> dataLinesArrays =
+          context.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
 
-    dataLinesArrays.add(data);
+      dataLinesArrays.add(data);
 
-    // 完成之后释放缓存集合
-    dataList.clear();
+      // 完成之后释放缓存集合
+      dataList.clear();
 
-    // 转换完成释放内存
-    covertData = null;
+      // 转换完成释放内存
+      covertData = null;
+    }
 
     return true;
   }

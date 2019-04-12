@@ -29,6 +29,9 @@ public class DocRawFileManager {
   /** 网页后缀名 */
   private static final String DOC_ID_SUFFIX_NAME = ".bin";
 
+  /** 名称索长度 */
+  private static final int NAME_INDEX_LENGTH = 4;
+
   /** url与id对应的关系的文件存储路径 */
   protected static final String DOC_FILEPATH = PathCfg.BASEPATH + PathCfg.COLLEC_PATH;
 
@@ -40,7 +43,7 @@ public class DocRawFileManager {
 
   /** 初始化读取数据信息 */
   public void initReadIndex() {
-    String basePath = this.GetPath();
+    String basePath = GetPath();
 
     // 检查并创建目录录
     File fileCheckPath = this.dirCheckAndCreate(basePath);
@@ -208,10 +211,31 @@ public class DocRawFileManager {
    */
   private String getFileName() {
     StringBuilder outputPath = new StringBuilder();
-    outputPath.append(DOC_ID_FILE_SUFFIX).append(currFileIndex.get());
+    outputPath.append(DOC_ID_FILE_SUFFIX).append(nameIndex());
     outputPath.append(DOC_ID_SUFFIX_NAME);
 
     return outputPath.toString();
+  }
+
+  /**
+   * 获取名称索引
+   *
+   * @return
+   */
+  private String nameIndex() {
+    String curIndexLen = String.valueOf(currFileIndex.get());
+
+    int lengSum = NAME_INDEX_LENGTH - curIndexLen.length();
+
+    StringBuilder outName = new StringBuilder();
+
+    // 在不足的位数上补0操作
+    for (int i = 0; i < lengSum; i++) {
+      outName.append("0");
+    }
+    outName.append(curIndexLen);
+
+    return outName.toString();
   }
 
   /**
