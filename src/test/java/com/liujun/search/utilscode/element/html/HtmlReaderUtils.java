@@ -18,6 +18,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class HtmlReaderUtils {
 
+  private static final String BASE_ERROR_PATH =
+      PathUtils.GetClassPath(PathEnum.FILE_ANALYZE_ERROR_HTML_PATH);
+
   /**
    * 获取网页内容信息
    *
@@ -41,6 +44,39 @@ public class HtmlReaderUtils {
 
     if (null == htmlContext) {
       throw new IllegalArgumentException(fileEnum.getFile() + " file error");
+    }
+
+    return htmlContext;
+  }
+
+  /**
+   * 获取错误文件列表
+   * @return
+   */
+  public static File[] GetErrorFileList() {
+    File curFile = new File(BASE_ERROR_PATH);
+
+    return curFile.listFiles();
+  }
+
+  /**
+   * 获取网页文件内容
+   *
+   * @param file 文件信息
+   * @return 网页内容
+   */
+  public static String GetContext(File file) {
+    String htmlContext = null;
+
+    try {
+      htmlContext = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    if (null == htmlContext) {
+      throw new IllegalArgumentException(file + " file error");
     }
 
     return htmlContext;

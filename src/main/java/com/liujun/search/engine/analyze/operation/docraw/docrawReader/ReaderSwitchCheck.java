@@ -96,8 +96,6 @@ public class ReaderSwitchCheck implements FlowServiceInf {
 
     String filePath = basePath + SymbolMsg.PATH + fileList[index];
 
-    System.out.println("切换方件:" + fileList[index]);
-
     FileInputStream input = new FileInputStream(filePath);
 
     FileChannel channel = input.getChannel();

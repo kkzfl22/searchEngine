@@ -1,8 +1,6 @@
 package com.liujun.search.algorithm.ahoCorasick;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * ac自动机算法，用于字符的多模式串匹配操作

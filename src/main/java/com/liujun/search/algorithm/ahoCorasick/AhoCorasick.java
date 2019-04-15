@@ -1,5 +1,7 @@
 package com.liujun.search.algorithm.ahoCorasick;
 
+import com.liujun.search.algorithm.ahoCorasick.pojo.MatcherBusi;
+
 import java.util.*;
 
 /**
@@ -144,9 +146,8 @@ public abstract class AhoCorasick {
   /**
    * 进行字符的匹配操作,进行多次字符匹配操作
    *
-   * <p>即方法多次调用，通过matchMap记录下查找的位置信息
-   *
-   * @param src 匹配的字符串信息
+   * @param src 匹配的主串信息
+   * @return 匹配的字符串信息
    */
   public String matchOne(String src) {
 
@@ -188,6 +189,56 @@ public abstract class AhoCorasick {
     }
 
     return null;
+  }
+
+  /**
+   * 进行字符的匹配操作,进行多次字符匹配操作
+   *
+   * @param mainChar 主串信息
+   * @param startIndex 开始的位置
+   * @return 匹配的对象信息
+   */
+  public MatcherBusi matcherOne(char[] mainChar, int startIndex) {
+
+    MatcherBusi matcherBusi = new MatcherBusi();
+
+    AcNode pmatch = root;
+
+    // 进行主串遍历
+    for (int i = startIndex; i < mainChar.length; i++) {
+      int index = this.getIndex(mainChar[i]);
+
+      if (index >= AC_SIZE || index == -1) {
+        continue;
+      }
+
+      // 失败指针的检查,如果当前字符的下一个字符不能被找到，并且不是根节点
+      while (pmatch.childred[index] == null && pmatch != root) {
+        pmatch = pmatch.fail;
+      }
+
+      // 获取当前字符在失败指针中的位置
+      pmatch = pmatch.childred[index];
+
+      // 如果不能被找到，则重新从root节点开始匹配
+      if (pmatch == null) {
+        pmatch = root;
+      }
+
+      AcNode tmpMatch = pmatch;
+
+      while (tmpMatch != root) {
+        // 如果当前能够被匹配成功，则返回匹配的字符串信息,并结束
+        if (tmpMatch.isEndingChar == true) {
+          matcherBusi.setMatcherKey(tmpMatch.srcData);
+          matcherBusi.setMatcherIndex(i - tmpMatch.length + 1);
+          return matcherBusi;
+        }
+        tmpMatch = tmpMatch.fail;
+      }
+    }
+
+    return matcherBusi;
   }
 
   /**
