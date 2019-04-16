@@ -59,10 +59,6 @@ public class HtmlSectionTagProcess {
 
       System.out.println(busiStart);
 
-      if (busiStart.getMatcherIndex() == 14047) {
-        System.out.println("error pont");
-      }
-
       if (busiStart.getMatcherIndex() != -1) {
         // 查找结束标签
         MatcherBusi busiEnd =

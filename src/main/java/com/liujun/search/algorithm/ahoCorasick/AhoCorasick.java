@@ -16,6 +16,15 @@ public abstract class AhoCorasick {
   /** ac自动机的大小 */
   private final int AC_SIZE = getAcSize();
 
+  /** 大写字母的开始号 */
+  private static final int UPPER_CASE_START = 65;
+
+  /** 大写字母的结束 */
+  private static final int UPPER_CASE_END = 90;
+
+  /** 小写字符与大写字符的差值 */
+  private static final int UPPER_TO_LOWER = 32;
+
   /**
    * 获取当前ac自动机的字符集大小
    *
@@ -242,6 +251,56 @@ public abstract class AhoCorasick {
   }
 
   /**
+   * 进行字符的匹配操作,进行多次字符匹配操作
+   *
+   * @param mainChar 主串信息
+   * @param startIndex 开始的位置
+   * @return 匹配的对象信息
+   */
+  public MatcherBusi matcherIgnoreCaseOne(char[] mainChar, int startIndex) {
+
+    MatcherBusi matcherBusi = new MatcherBusi();
+
+    AcNode pmatch = root;
+
+    // 进行主串遍历
+    for (int i = startIndex; i < mainChar.length; i++) {
+      int index = this.getIgnoreCaseIndex(mainChar[i]);
+
+      if (index >= AC_SIZE || index == -1) {
+        continue;
+      }
+
+      // 失败指针的检查,如果当前字符的下一个字符不能被找到，并且不是根节点
+      while (pmatch.childred[index] == null && pmatch != root) {
+        pmatch = pmatch.fail;
+      }
+
+      // 获取当前字符在失败指针中的位置
+      pmatch = pmatch.childred[index];
+
+      // 如果不能被找到，则重新从root节点开始匹配
+      if (pmatch == null) {
+        pmatch = root;
+      }
+
+      AcNode tmpMatch = pmatch;
+
+      while (tmpMatch != root) {
+        // 如果当前能够被匹配成功，则返回匹配的字符串信息,并结束
+        if (tmpMatch.isEndingChar == true) {
+          matcherBusi.setMatcherIndex(i - tmpMatch.length + 1);
+          matcherBusi.setMatcherKey(tmpMatch.srcData);
+          return matcherBusi;
+        }
+        tmpMatch = tmpMatch.fail;
+      }
+    }
+
+    return matcherBusi;
+  }
+
+  /**
    * 进行字符的匹配操作,进行多次字符匹配操作,返回索引位置下标
    *
    * <p>使用此方使须采用相同模式串长度，否则返回的对象具有不确定性，可能是任务中间的一个
@@ -368,5 +427,28 @@ public abstract class AhoCorasick {
     public AcNode(char data) {
       this.data = data;
     }
+  }
+
+  /**
+   * 进行不区分大小写的字符检查获取
+   *
+   * @param mainChar 字符信息
+   * @return
+   */
+  private int getIgnoreCaseIndex(char mainChar) {
+
+    int index = this.getIndex(mainChar);
+
+    // 超过字符集范围返回-1
+    if (index > AC_SIZE) {
+      return -1;
+    } else {
+      // 如果检查发现在大写字符的范围内，则转换为小写字符的索引位置
+      if (index >= UPPER_CASE_START && index <= UPPER_CASE_END) {
+        return index + UPPER_TO_LOWER;
+      }
+    }
+
+    return index;
   }
 }

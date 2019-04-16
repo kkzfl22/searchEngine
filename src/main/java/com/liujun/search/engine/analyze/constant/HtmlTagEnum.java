@@ -1,6 +1,13 @@
 package com.liujun.search.engine.analyze.constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
+ * 网页的标签信息
+ *
+ * <p>标签在java代码中需采用小写，否则会出现匹配不了的情况
+ *
  * @author liujun
  * @version 0.0.1
  * @date 2019/04/13
@@ -968,8 +975,6 @@ public enum HtmlTagEnum {
    */
   HTML_SCRIPT_OBJECT("<object", "</object>"),
 
-
-
 // ******************************program程序结束*************************************************************
 ;
 
@@ -990,5 +995,21 @@ public enum HtmlTagEnum {
 
   public String getEnd() {
     return end;
+  }
+
+  /**
+   * 获取网页开始标签集合
+   *
+   * @return 开始标签信合
+   */
+  public static List<String> GetHtmlStartTagList() {
+
+    List<String> getList = new ArrayList<>(values().length);
+
+    for (HtmlTagEnum tagSection : values()) {
+      getList.add(tagSection.getStart());
+    }
+
+    return getList;
   }
 }

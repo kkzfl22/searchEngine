@@ -1,5 +1,8 @@
 package com.liujun.search.engine.analyze.constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author liujun
  * @version 0.0.1
@@ -7,16 +10,16 @@ package com.liujun.search.engine.analyze.constant;
  */
 public enum HtmlTagOneEnum {
   /** 定义文档类型。 */
-  HTML_BASE_TYPE("<!doctype", ">"),
+  HTML_BASE_TYPE("<!doctype"),
 
   /** 一个简单的换行符。 */
-  HTML_BASE_BR("<br", ">", "/>"),
+  HTML_BASE_BR("<br"),
 
   /** 定义水平线 */
-  HTML_BASE_HR("<hr", ">", "/>"),
+  HTML_BASE_HR("<hr"),
 
   /** 规定了用户可以在其输入数据的输入字段 */
-  HTML_FORM_INPUT("<input", ">", "/>"),
+  HTML_FORM_INPUT("<input"),
 
   /**
    * <keygen> 标签规定用于表单的密钥对生成器字段。
@@ -25,7 +28,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>HTML5新标签
    */
-  HTML_FORM_KEYGEN("<keygen", ">", "/>"),
+  HTML_FORM_KEYGEN("<keygen"),
 
   /**
    * 定义图像。
@@ -46,7 +49,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>在 XHTML 中，<img> 标签必须被正确地关闭。
    */
-  HTML_IMG_IMG("<img", ">", "/>"),
+  HTML_IMG_IMG("<img"),
 
   /**
    * <area> 标签定义图像映射内部的区域（图像映射指的是带有可点击区域的图像）。
@@ -55,7 +58,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>注释： <img> 标签中的 usemap 属性与 <map> 元素中的 name 相关联，以创建图像与映射之间的关系。
    */
-  HTML_IMG_AREA("<area", ">", "/>"),
+  HTML_IMG_AREA("<area"),
 
   /**
    * IE 10、Opera 和 Chrome 浏览器支持 <track> 标签。
@@ -66,7 +69,7 @@ public enum HtmlTagOneEnum {
    *
    * <p><track> 标签是 HTML5 中的新标签。
    */
-  HTML_VIDEO_TRACK("<track", ">", "/>"),
+  HTML_VIDEO_TRACK("<track"),
 
   /**
    * 所有主流浏览器都支持 <link> 标签。
@@ -83,7 +86,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>HTML5 新增了 "sizes" 属性。
    */
-  HTML_LINK_LINK("<link", ">", "/>"),
+  HTML_LINK_LINK("<link"),
 
   /**
    * <col> 标签规定了 <colgroup> 元素内部的每一列的列属性。
@@ -92,7 +95,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>HTML5 中不再支持 HTML 4.01 中的大部分属性。
    */
-  HTML_TABLE_COL("<col", ">", "/>"),
+  HTML_TABLE_COL("<col"),
 
   /**
    * 定义关于 HTML 文档的元信息。
@@ -111,7 +114,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>注意： 如果没有提供 name 属性，那么名称/值对中的名称会采用 http-equiv 属性的值。
    */
-  HTML_META_META("<meta", ">", "/>"),
+  HTML_META_META("<meta"),
 
   /**
    * <base> 标签为页面上的所有的相对链接规定默认 URL 或默认目标。
@@ -122,7 +125,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>注释：如果使用了 <base> 标签，则必须具备 href 属性或者 target 属性或者两个属性都具备。
    */
-  HTML_META_BASE("<base", ">", "/>"),
+  HTML_META_BASE("<base"),
 
   /**
    * HTML5不再支持。 HTML 4.01 已废弃。 定义页面中文本的默认字体、颜色或尺寸。
@@ -137,7 +140,7 @@ public enum HtmlTagOneEnum {
    *
    * <p>HTML5 不支持 <basefont> 标签，HTML 4.01 已废弃 <basefont> 标签
    */
-  HTML_META_BASEFONT("<basefont", ">", "/>"),
+  HTML_META_BASEFONT("<basefont"),
 
   /**
    * 所有主流浏览器都支持 <embed> 标签。
@@ -146,7 +149,7 @@ public enum HtmlTagOneEnum {
    *
    * <p><embed> 标签是 HTML 5 中的新标签
    */
-  HTML_SCRIPT_EMBED("<embed", ">", "/>"),
+  HTML_SCRIPT_EMBED("<embed"),
 
   /**
    * <param> 标签支持大部分主流浏览器。但是 <object> 定义的文件格式不是所有的浏览器都支持。
@@ -155,38 +158,33 @@ public enum HtmlTagOneEnum {
    *
    * <p>HTML 4.01 属性： "type" 和 "valuetype"，在 HTML5 中不支持。
    */
-  HTML_SCRIPT_PARAM("<param", ">", "/>"),
+  HTML_SCRIPT_PARAM("<param"),
   ;
 
   /** 标签 */
   private String tag;
 
-  /** 结束标签形式1 */
-  private String tagEnd1;
-
-  /** 结束形式2 */
-  private String tagEnd2;
-
-  HtmlTagOneEnum(String tag, String tagEnd1) {
+  HtmlTagOneEnum(String tag) {
     this.tag = tag;
-    this.tagEnd1 = tagEnd1;
-  }
-
-  HtmlTagOneEnum(String tag, String tagEnd1, String tagEnd2) {
-    this.tag = tag;
-    this.tagEnd1 = tagEnd1;
-    this.tagEnd2 = tagEnd2;
   }
 
   public String getTag() {
     return tag;
   }
 
-  public String getTagEnd1() {
-    return tagEnd1;
-  }
+  /**
+   * 获取网页开始标签集合
+   *
+   * @return 开始标签信合
+   */
+  public static List<String> GetHtmlStartTagList() {
 
-  public String getTagEnd2() {
-    return tagEnd2;
+    List<String> getList = new ArrayList<>(values().length);
+
+    for (HtmlTagOneEnum tagSection : values()) {
+      getList.add(tagSection.getTag());
+    }
+
+    return getList;
   }
 }

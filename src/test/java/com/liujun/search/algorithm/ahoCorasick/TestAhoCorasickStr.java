@@ -1,6 +1,7 @@
 package com.liujun.search.algorithm.ahoCorasick;
 
 import com.liujun.search.algorithm.ahoCorasick.constatnt.AcHtmlTagEnum;
+import com.liujun.search.algorithm.ahoCorasick.pojo.MatcherBusi;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -70,5 +71,51 @@ public class TestAhoCorasickStr {
     int indexOut = ahoCorasick.matcherIndex(mainChars, index);
 
     Assert.assertEquals(33, indexOut);
+  }
+
+  @Test
+  public void testMatchBean() {
+    AhoCorasickChar ahoCorasick = new AhoCorasickChar();
+    ahoCorasick.insert(AcHtmlTagEnum.HREF_TAG_START.getAckey());
+
+    ahoCorasick.builderFailurePointer();
+
+    char[] mainChars =
+        "<a href=\"www.baidu.com2\">百度</a><a href='www.sina.com'>新浪</a>".toCharArray();
+
+    MatcherBusi outBusi = ahoCorasick.matcherOne(mainChars, 0);
+
+    Assert.assertEquals(3, outBusi.getMatcherIndex());
+
+    int index = outBusi.getMatcherIndex();
+
+    index = index + AcHtmlTagEnum.HREF_TAG_START.getAckey().get(0).length();
+
+    int indexOut = ahoCorasick.matcherIndex(mainChars, index);
+
+    Assert.assertEquals(34, indexOut);
+  }
+
+  @Test
+  public void testMatchBeanUpperCase() {
+    AhoCorasickChar ahoCorasick = new AhoCorasickChar();
+    ahoCorasick.insert(AcHtmlTagEnum.HREF_TAG_START.getAckey());
+
+    ahoCorasick.builderFailurePointer();
+
+    char[] mainChars =
+        "<a HREF=\"www.baidu.com2\">百度</a><a HREF='www.sina.com'>新浪</A>".toCharArray();
+
+    MatcherBusi outBusi = ahoCorasick.matcherIgnoreCaseOne(mainChars, 0);
+
+    Assert.assertEquals(3, outBusi.getMatcherIndex());
+
+    int index = outBusi.getMatcherIndex();
+
+    index = index + AcHtmlTagEnum.HREF_TAG_START.getAckey().get(0).length();
+
+    outBusi = ahoCorasick.matcherIgnoreCaseOne(mainChars, index);
+
+    Assert.assertEquals(34, outBusi.getMatcherIndex());
   }
 }
