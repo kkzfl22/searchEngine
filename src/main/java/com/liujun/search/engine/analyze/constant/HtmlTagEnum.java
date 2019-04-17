@@ -1012,4 +1012,20 @@ public enum HtmlTagEnum {
 
     return getList;
   }
+
+  /**
+   * 获取网页结束标签集合
+   *
+   * @return 开始标签信合
+   */
+  public static List<String> GetHtmlEndTagList() {
+
+    List<String> getList = new ArrayList<>(values().length);
+
+    for (HtmlTagEnum tagSection : values()) {
+      getList.add(tagSection.getEnd());
+    }
+
+    return getList;
+  }
 }

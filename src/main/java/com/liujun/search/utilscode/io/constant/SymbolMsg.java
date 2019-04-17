@@ -29,4 +29,5 @@ public class SymbolMsg {
 
   /** 路径分隔符 */
   public static final String PATH = "/";
+
 }
