@@ -15,9 +15,6 @@ public enum HtmlTagFlowEnum {
   /** 搜索的开始位置 */
   TAG_INPUT_POSITION_START("tag_input_postion_start"),
 
-  /** 开始处理的类型 */
-  TAG_PROC_FLAG_STARTEND_TYPE("tag_proc_flag_startend_type"),
-
   /** 标识当前为匹配的信息 */
   TAG_PROC_FLAG_STARTMATCHER("tag_proc_flag_start_matcher"),
 
@@ -26,6 +23,15 @@ public enum HtmlTagFlowEnum {
 
   /** 输出标签结束 */
   TAG_OUTPUT_FINISH_FLAG("tag_output_finish_flag"),
+
+  /** 标签后进行过滤的输入数据信息 */
+  TAG_AFTER_FILTER_INPUT_CONTEXT("tag_after_filter_input_context"),
+
+  /** 标签处理前的数据处理 */
+  TAG_BEFORE_INPUT_CONTEXT_ARRAY("tag_after_filter_input_context_array"),
+
+  /** 进行网页标签的输出操作 */
+  TAG_BEFORE_OUTPUT_CONTEXT("tag_before_output_context"),
   ;
 
   /** 网页标签处理 */

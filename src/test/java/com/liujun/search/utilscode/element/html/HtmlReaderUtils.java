@@ -51,12 +51,47 @@ public class HtmlReaderUtils {
 
   /**
    * 获取错误文件列表
+   *
    * @return
    */
   public static File[] GetErrorFileList() {
     File curFile = new File(BASE_ERROR_PATH);
 
     return curFile.listFiles();
+  }
+
+  /**
+   * 获取错误文件列表
+   *
+   * @return
+   */
+  public static File GetErrorFile(String name) {
+    File curFile = new File(BASE_ERROR_PATH);
+
+    for (File fileItem : curFile.listFiles()) {
+      if (fileItem.getName().equals(name)) {
+        return fileItem;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * 获取网页文件内容
+   *
+   * @param fileName 文件名
+   * @return 网页内容
+   */
+  public static String GetContext(String fileName) {
+    File currFile = GetErrorFile(fileName);
+
+    if (null != currFile) {
+      // 获取文件内容
+      return GetContext(currFile);
+    }
+
+    return null;
   }
 
   /**

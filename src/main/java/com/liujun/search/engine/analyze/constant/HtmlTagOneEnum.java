@@ -12,6 +12,12 @@ public enum HtmlTagOneEnum {
   /** 定义文档类型。 */
   HTML_BASE_TYPE("<!doctype"),
 
+  /** 兼容各版本IE浏览器的方法技术 */
+  HTML_BASE_IF("<!["),
+
+  /** 用于进行流程器判断的标签 */
+  HTML_BASE_CASE("<!--["),
+
   /** 一个简单的换行符。 */
   HTML_BASE_BR("<br"),
 

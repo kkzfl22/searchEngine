@@ -27,7 +27,11 @@ public class TestHtmlSectionTagProcess {
   private void htmlCheck(String htmlCode) {
 
     System.out.println("----------------------------开始-----------");
-    String htmlClean = HtmlSectionTagProcess.INSTANCE.cleanHtmlTagSection(htmlCode.toCharArray());
+    char[] htmlCleanArrays =
+        HtmlSectionTagProcess.INSTANCE.cleanHtmlTagSection(htmlCode.toCharArray());
+
+    String htmlClean = new String(htmlCleanArrays);
+    System.out.println(htmlClean);
 
     Assert.assertNotNull(htmlClean);
 

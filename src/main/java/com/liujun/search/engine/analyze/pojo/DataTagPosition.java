@@ -13,6 +13,9 @@ public class DataTagPosition {
   /** 结束位置 */
   private int end;
 
+  /** 标签名称 */
+  private String tagName;
+
   public DataTagPosition() {}
 
   public DataTagPosition(int start, int end) {
@@ -36,11 +39,20 @@ public class DataTagPosition {
     this.end = end;
   }
 
+  public String getTagName() {
+    return tagName;
+  }
+
+  public void setTagName(String tagName) {
+    this.tagName = tagName;
+  }
+
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("DataTagPosition{");
     sb.append("start=").append(start);
     sb.append(", end=").append(end);
+    sb.append(", tagName='").append(tagName).append('\'');
     sb.append('}');
     return sb.toString();
   }

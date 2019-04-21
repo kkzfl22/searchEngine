@@ -11,8 +11,38 @@
         </Console>
         <!-- 配置日志输出文件名字 追加读写 -->
         <!-- 配制授权控制的日志 -->
-        <RollingFile name="searchEngineLog" fileName="log/searchEngine.log"
+        <RollingFile name="infoSearchEngineLog" fileName="log/infoSearchEngine.log"
                      filePattern="log/$${date:yyyy-MM}/searchEngine-%d{yyyy-MM-dd}-%i.log" append="true">
+
+            <Filters>
+                <!-- onMatch:Action to take when the filter matches. The default value is NEUTRAL -->
+                <!-- onMismatch:    Action to take when the filter does not match. The default value is DENY -->
+                <!-- 级别在 ERROR 之上的都拒绝输出 -->
+                <!-- 在组合过滤器中，接受使用 NEUTRAL（中立），被第一个过滤器接受的日志信息，会继续用后面的过滤器进行过滤，只有符合所有过滤器条件的日志信息，才会被最终写入日志文件 -->
+                <!--<ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>-->
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+
+            <!-- 输出格式 -->
+            <PatternLayout
+                    pattern="[%p] [%d{yyyy-MM-dd HH:mm:ss,SSS}] [%l] [%t] [%-4r]   \: %m%n"/>
+            <!-- 设置策略 -->
+            <Policies>
+                <!--此参数用于在每次启动后执行对日志的备份操作-->
+                <!--<OnStartupTriggeringPolicy/>-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <!-- 配制授权控制的日志 -->
+        <RollingFile name="errorEngineLog" fileName="log/errorEngineLog.log"
+                     filePattern="log/$${date:yyyy-MM}/errorEngineLog-%d{yyyy-MM-dd}-%i.log" append="true">
+
+            <Filters>
+                <!-- 只白接受级别在 ERROR 之上的输出 -->
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
             <!-- 输出格式 -->
             <PatternLayout
                     pattern="[%p] [%d{yyyy-MM-dd HH:mm:ss,SSS}] [%l] [%t] [%-4r]   \: %m%n"/>
@@ -30,9 +60,22 @@
     <loggers>
 
 
-        <root level="INFO"> <!-- 全局配置 -->
-            <appenderRef ref="consoleLog"/>
-            <appenderRef ref="searchEngineLog"/>
+        <!-- 控制台日志 -->
+        <logger name="com" level="DEBUG" additivity="false">
+            <appender-ref ref="consoleLog"/>
+        </logger>
+        <!-- 执行的错误日志输出 -->
+        <logger name="com" level="INFO" additivity="false">
+            <appender-ref ref="errorEngineLog"/>
+            <appender-ref ref="infoSearchEngineLog"/>
+        </logger>
+
+        <!-- logger 用于定义 log 的 level 以及所采用的 appender，如果无需自定义，可以使用 root 解决，root 标签是 log 的默认输出形式 -->
+        <!-- 级别顺序（低到高）：TRACE < DEBUG < INFO < WARN < ERROR < FATAL -->
+        <root level="DEBUG"> <!-- 全局配置 -->
+            <appenderRef level="DEBUG" ref="consoleLog"/>
+            <appenderRef ref="infoSearchEngineLog"/>
+            <appenderRef ref="errorEngineLog"/>
         </root>
     </loggers>
 

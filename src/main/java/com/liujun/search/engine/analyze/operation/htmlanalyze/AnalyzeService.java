@@ -3,8 +3,12 @@ package com.liujun.search.engine.analyze.operation.htmlanalyze;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.analyze.constant.AnalyzeEnum;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagClean;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagSection;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.process.HtmlTagAnnotationProcess;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.process.HtmlTagBeforeProcess;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagAnnotationFlow;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagBeforeFlow;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagProcessFLow;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagSectionFlow;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +33,13 @@ public class AnalyzeService {
 
   static {
     // 进行网页的标签段处理
-    FLOW.add(HtmlTagSection.INSTANCE);
+    FLOW.add(HtmlTagSectionFlow.INSTANCE);
+    // 2,注释的特殊处理
+    FLOW.add(HtmlTagAnnotationFlow.INSTANCE);
+    // 3,进行网页的开始处理
+    FLOW.add(HtmlTagBeforeFlow.INSTANCE);
     // 进行网页标签的处理，去掉所有标签
-    FLOW.add(HtmlTagClean.INSTANCE);
+    FLOW.add(HtmlTagProcessFLow.INSTANCE);
     // 开始分词处理
   }
 

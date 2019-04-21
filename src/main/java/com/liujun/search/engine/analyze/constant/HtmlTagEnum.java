@@ -17,37 +17,37 @@ public enum HtmlTagEnum {
   // ******************************base基础开始*************************************************************
 
   /** 定义一个 HTML 文档 */
-  HTML_BASE_HTML("<html", "</html>"),
+  HTML_BASE_HTML("<html", "</html"),
+
+
 
   /** 为文档定义一个标题 */
-  HTML_BASE_TITLE("<title", "</title>"),
+  HTML_BASE_TITLE("<title", "</title"),
 
   /** 定义文档的主体 */
-  HTML_BASE_BODAY("<body", "</body>"),
+  HTML_BASE_BODAY("<body", "</body"),
 
   /** 定义 HTML 标题 */
-  HTML_BASE_H1("<h1", "</h1>"),
+  HTML_BASE_H1("<h1", "</h1"),
 
   /** 定义 HTML 标题 */
-  HTML_BASE_H2("<h2", "</h2>"),
+  HTML_BASE_H2("<h2", "</h2"),
 
   /** 定义 HTML 标题 */
-  HTML_BASE_H3("<h3", "</h3>"),
+  HTML_BASE_H3("<h3", "</h3"),
 
   /** 定义 HTML 标题 */
-  HTML_BASE_H4("<h4", "</h4>"),
+  HTML_BASE_H4("<h4", "</h4"),
 
   /** 定义 HTML 标题 */
-  HTML_BASE_H5("<h5", "</h5>"),
+  HTML_BASE_H5("<h5", "</h5"),
 
   /** 定义 HTML 标题 */
-  HTML_BASE_H6("<h6", "</h6>"),
+  HTML_BASE_H6("<h6", "</h6"),
 
   /** 定义一个段落 */
-  HTML_BASE_P("<p", "</p>"),
+  HTML_BASE_P("<p", "</p"),
 
-  /** 注释 */
-  HTML_BASE_ANNOTATION("<!--", "-->"),
 
   // ******************************base基础结束*************************************************************
 
@@ -58,39 +58,39 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5 不支持 <acronym> 标签。请使用 <abbr> 标签代替它。
    */
-  HTML_FORMAT_ACRONYM("<acronym", "</acronym>"),
+  HTML_FORMAT_ACRONYM("<acronym", "</acronym"),
 
   /**
    * 标签用来表示一个缩写词或者首字母缩略词，如"WWW"或者"NATO"。
    *
    * <p>通过对缩写词语进行标记，您就能够为浏览器、拼写检查程序、翻译系统以及搜索引擎分度器提供有用的信息。
    */
-  HTML_FORMAT_ABBR("<abbr", "</abbr>"),
+  HTML_FORMAT_ABBR("<abbr", "</abbr"),
 
   /** 定义文档作者或拥有者的联系信息。 */
-  HTML_FORMAT_ADDRESS("<address", "</address>"),
+  HTML_FORMAT_ADDRESS("<address", "</address"),
 
   /** 标签定义粗体的文本。 */
-  HTML_FORMAT_B("<b", "</b>"),
+  HTML_FORMAT_B("<b", "</b"),
 
   /**
    * 允许您设置一段文本，使其脱离其父元素的文本方向设置。
    *
    * <p>标签是 HTML5 的新标签
    */
-  HTML_FORMAT_BDI("<bdi", "</bdi>"),
+  HTML_FORMAT_BDI("<bdi", "</bdi"),
 
   /** 标签用来覆盖默认的文本方向。 */
-  HTML_FORMAT_BDO("<bdo", "</bdo>"),
+  HTML_FORMAT_BDO("<bdo", "</bdo"),
 
   /** HTML5不再支持。 定义大号文本。 */
-  HTML_FORMAT_BIG("<big", "</big>"),
+  HTML_FORMAT_BIG("<big", "</big"),
 
   /** 定义块引用。 */
-  HTML_FORMAT_BLOCKQUOTE("<blockquote", "</blockquote>"),
+  HTML_FORMAT_BLOCKQUOTE("<blockquote", "</blockquote"),
 
   /** HTML5不再支持。 HTML 4.01 已废弃。定义居中文本。 */
-  HTML_FORMAT_CENTER("<center>", "</center>"),
+  HTML_FORMAT_CENTER("<center", "</center"),
 
   /**
    * <cite> 标签定义作品（比如书籍、歌曲、电影、电视节目、绘画、雕塑等等）的标题。
@@ -101,7 +101,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 HTML 4.01 中，<cite> 标签定义一个引用。
    */
-  HTML_FORMAT_CITE("<cite", "</cite>"),
+  HTML_FORMAT_CITE("<cite", "</cite"),
 
   /**
    * 定义计算机代码文本。
@@ -110,111 +110,111 @@ public enum HtmlTagEnum {
    *
    * 提示：我们并不反对使用这个标签，但是如果您只是为了达到某种视觉效果而使用这个标签的话，我们建议您使用 CSS ，这样可能会取得更丰富的效果。
    */
-  HTML_FORMAT_CODE("<code>", "</code>"),
+  HTML_FORMAT_CODE("<code", "</code"),
 
   /** 定义文档中已经删除的文本 */
-  HTML_FORMAT_DEL("<del", "</del>"),
+  HTML_FORMAT_DEL("<del", "</del"),
 
   /** 定义项目 */
-  HTML_FORMAT_DFN("<dfn", "</dfn>"),
+  HTML_FORMAT_DFN("<dfn", "</dfn"),
 
   /** 定义强调文本 */
-  HTML_FORMAT_EM("<em", "</em>"),
+  HTML_FORMAT_EM("<em", "</em"),
 
   /** HTML5不再支持。 HTML 4.01 已废弃。 定义文本的字体、尺寸和颜色 */
-  HTML_FORMAT_FONT("<font", "</font>"),
+  HTML_FORMAT_FONT("<font", "</font"),
 
   /** 定义斜体文本。 */
-  HTML_FORMAT_I("<i", "</i>"),
+  HTML_FORMAT_I("<i", "</i"),
 
   /** 定义被插入文本。 */
-  HTML_FORMAT_INS("<ins", "</ins>"),
+  HTML_FORMAT_INS("<ins", "</ins"),
 
   /** 定义键盘文本。 */
-  HTML_FORMAT_KBD("<kbd", "</kbd>"),
+  HTML_FORMAT_KBD("<kbd", "</kbd"),
 
   /** 定义带有记号的文本。，html5新标签 */
-  HTML_FORMAT_MARK("<mark>", "</mark>"),
+  HTML_FORMAT_MARK("<mark", "</mark"),
 
   /** 定义度量衡。仅用于已知最大和最小值的度量。 HTML5新标签 */
-  HTML_FORMAT_METER("<meter>", "</meter>"),
+  HTML_FORMAT_METER("<meter", "</meter"),
 
   /** 定义预格式文本 */
-  HTML_FORMAT_PRE("<pre>", "</pre>"),
+  HTML_FORMAT_PRE("<pre", "</pre"),
 
   /** 定义运行中的任务进度（进程）。 HTML5新标签 */
-  HTML_FORMAT_PROGRESS("<progress>", "</progress>"),
+  HTML_FORMAT_PROGRESS("<progress", "</progress"),
 
   /** 定义短的引用。 */
-  HTML_FORMAT_Q("<q", "</q>"),
+  HTML_FORMAT_Q("<q", "</q"),
 
   /**
    * 定义不支持 ruby 元素的浏览器所显示的内容。
    *
    * <p>html5新标签
    */
-  HTML_FORMAT_RP("<rp", "</rp>"),
+  HTML_FORMAT_RP("<rp", "</rp"),
 
   /** 定义字符（中文注音或字符）的解释或发音。HTML5新标签 */
-  HTML_FORMAT_RT("<rt", "</rt>"),
+  HTML_FORMAT_RT("<rt", "</rt"),
 
   /** 定义 ruby 注释（中文注音或字符）。 */
-  HTML_FORMAT_RUBY("<ruby", "</ruby>"),
+  HTML_FORMAT_RUBY("<ruby", "</ruby"),
 
   /** 加删除线和文本 */
-  HTML_FORMAT_S("<s", "</s>"),
+  HTML_FORMAT_S("<s", "</s"),
 
   /** 定义计算机代码样本。 */
-  HTML_FORMAT_SAMP("<samp", "</samp>"),
+  HTML_FORMAT_SAMP("<samp", "</samp"),
 
   /** 定义小号文本。 */
-  HTML_FORMAT_SMALL("<small", "</small>"),
+  HTML_FORMAT_SMALL("<small", "</small"),
 
   /** HTML5不再支持。 HTML 4.01 已废弃。 定义加删除线的文本。 */
-  HTML_FORMAT_STRIKE("<strike", "</strike>"),
+  HTML_FORMAT_STRIKE("<strike", "</strike"),
 
   /** 定义语气更为强烈的强调文本。 */
-  HTML_FORMAT_STRONG("<strong", "</strong>"),
+  HTML_FORMAT_STRONG("<strong", "</strong"),
 
   /** 定义下标文本。 */
-  HTML_FORMAT_SUB("<sub", "</sub>"),
+  HTML_FORMAT_SUB("<sub", "</sub"),
 
   /** 定义上标文本。 */
-  HTML_FORMAT_SUP("<sup", "</sup>"),
+  HTML_FORMAT_SUP("<sup", "</sup"),
 
   /** 定义一个日期/时间 HTML5新标签 */
-  HTML_FORMAT_TIME("<time", "</time>"),
+  HTML_FORMAT_TIME("<time", "</time"),
 
   /** HTML5不再支持。 定义打字机文本。 */
-  HTML_FORMAT_TT("<tt", "</tt>"),
+  HTML_FORMAT_TT("<tt", "</tt"),
 
   /** 定义下划线文本。 */
-  HTML_FORMAT_U("<u", "</u>"),
+  HTML_FORMAT_U("<u", "</u"),
 
   /** 定义文本的变量部分。 */
-  HTML_FORMAT_VAR("<var", "</var>"),
+  HTML_FORMAT_VAR("<var", "</var"),
 
   /** 规定在文本中的何处适合添加换行符。 */
-  HTML_FORMAT_WBR("<wbr", "</wbr>"),
+  HTML_FORMAT_WBR("<wbr", "</wbr"),
 
   // ******************************format络式结束*************************************************************
 
   // ******************************form表单开始*************************************************************
 
   /** 定义一个 HTML 表单，用于用户输入。 */
-  HTML_FORM_FORM("<form", "</form>"),
+  HTML_FORM_FORM("<form", "</form"),
 
   /** 定义多行的文本输入控件。 */
-  HTML_FORM_TEXTAREA("<textarea", "</textarea>"),
+  HTML_FORM_TEXTAREA("<textarea", "</textarea"),
 
   /** 定义按钮。 在html表单中使用input表单中创建按钮 */
-  HTML_FORM_BUTTON("<button", "</button>"),
+  HTML_FORM_BUTTON("<button", "</button"),
 
   /** 定义选择列表（下拉列表）。 */
-  HTML_FORM_SELECT("<select", "</select>"),
+  HTML_FORM_SELECT("<select", "</select"),
 
   /** 定义选择列表中相关选项的组合。 */
-  HTML_FORM_OPTGROUP("<optgroup", "</optgroup>"),
+  HTML_FORM_OPTGROUP("<optgroup", "</optgroup"),
 
   /**
    * 定义选择列表中的选项。
@@ -223,7 +223,7 @@ public enum HtmlTagEnum {
    *
    * <p><option> 标签中的内容作为 <select> 或者<datalist> 一个元素使用。
    */
-  HTML_FORM_OPTION("<option", "</option>"),
+  HTML_FORM_OPTION("<option", "</option"),
 
   /**
    * <label> 标签为 input 元素定义标注（标记）。
@@ -234,17 +234,17 @@ public enum HtmlTagEnum {
    *
    * <p><label> 标签的 for 属性应当与相关元素的 id 属性相同。
    */
-  HTML_FORM_LABLE("<label", "</label>"),
+  HTML_FORM_LABLE("<label", "</label"),
 
   /**
    * <fieldset> 标签可以将表单内的相关元素分组。
    *
    * <p><fieldset> 标签会在相关表单元素周围绘制边框。
    */
-  HTML_FORM_FIELDSET("<fieldset", "</fieldset>"),
+  HTML_FORM_FIELDSET("<fieldset", "</fieldset"),
 
   /** The <legend> 元素为 <fieldset>元素定义标题。 */
-  HTML_FORM_LEGEND("<legend", "</legend>"),
+  HTML_FORM_LEGEND("<legend", "</legend"),
 
   /**
    * <datalist> 标签规定了 <input> 元素可能的选项列表。
@@ -255,14 +255,14 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5新标签
    */
-  HTML_FORM_DATALIST("<datalist", "</datalist>"),
+  HTML_FORM_DATALIST("<datalist", "</datalist"),
 
   /**
    * <output> 标签作为计算结果输出显示(比如执行脚本的输出)。
    *
    * <p>注意:Internet Explorer 浏览器不支持 <output> 标签。
    */
-  HTML_FORM_OUTPUT("<output", "</output>"),
+  HTML_FORM_OUTPUT("<output", "</output"),
 
   // ******************************form表单结束*************************************************************
 
@@ -279,7 +279,7 @@ public enum HtmlTagEnum {
    *
    * <p>注释：如果您希望验证包含框架的页面，请确保 <!DOCTYPE> 被设置为 "HTML Frameset DTD" 或者 "XHTML Frameset DTD" 。
    */
-  HTML_FRAME_FRAME("<frame", "</frame>"),
+  HTML_FRAME_FRAME("<frame", "</frame"),
 
   /**
    * HTML5 不支持 <frameset> 标签。 <frameset> 标签定义一个框架集。
@@ -290,7 +290,7 @@ public enum HtmlTagEnum {
    *
    * <p>注释：如果您希望验证包含框架的页面，请确保 <!DOCTYPE> 被设置为 "HTML Frameset DTD" 或者 "XHTML Frameset DTD" 。
    */
-  HTML_FRAME_FRAMESET("<frameset", "</frameset>"),
+  HTML_FRAME_FRAMESET("<frameset", "</frameset"),
 
   /**
    * HTML5 不支持 <noframes> 标签。
@@ -301,7 +301,7 @@ public enum HtmlTagEnum {
    *
    * <p>注意： 如果您希望验证包含框架的页面，请确保 DTD 被设置为 "Frameset DTD"。
    */
-  HTML_FRAME_NOFRAMES("<noframes", "</noframes>"),
+  HTML_FRAME_NOFRAMES("<noframes", "</noframes"),
 
   /**
    * <iframe> 标签规定一个内联框架。
@@ -310,7 +310,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 XHTML 中，name 属性已被废弃，并将被去掉。请使用 id 属性代替。
    */
-  HTML_FRAME_IFRAME("<iframe", "</iframe>"),
+  HTML_FRAME_IFRAME("<iframe", "</iframe"),
 
   // ******************************frame框架结束*************************************************************
 
@@ -327,7 +327,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 XHTML 中，name 属性已经废弃，使用 id 属性替换它。
    */
-  HTML_IMG_MAP("<map", "</map>"),
+  HTML_IMG_MAP("<map", "</map"),
 
   /**
    * IE 9、Firefox、Opera、Chrome 和 Safari 支持 <canvas> 标签。
@@ -342,7 +342,7 @@ public enum HtmlTagEnum {
    *
    * <p><canvas> 标签是 HTML5 中的新标签。
    */
-  HTML_IMG_CANVAS("<canvas", "</canvas>"),
+  HTML_IMG_CANVAS("<canvas", "</canvas"),
 
   /**
    * figure 标签用于对元素进行组合。
@@ -357,7 +357,7 @@ public enum HtmlTagEnum {
    *
    * <p><figure> 标签是 HTML 5 中的新标签。
    */
-  HTML_IMG_FIGURE("<figure", "</figure>"),
+  HTML_IMG_FIGURE("<figure", "</figure"),
 
   /**
    * IE 9、Firefox、Opera、Chrome 和 Safari 支持 <figcaption> 标签。
@@ -370,7 +370,7 @@ public enum HtmlTagEnum {
    *
    * <p><figcaption> 标签是 HTML5 中的新标签。
    */
-  HTML_IMG_FIGCAPTION("<figcaption", "</figcaption>"),
+  HTML_IMG_FIGCAPTION("<figcaption", "</figcaption"),
 
   // ******************************image图像结束*************************************************************
 
@@ -389,7 +389,7 @@ public enum HtmlTagEnum {
    *
    * <p><audio> 标签是 HTML5 的新标签。
    */
-  HTML_VIDEO_AUDIO("<audio", "</audio>"),
+  HTML_VIDEO_AUDIO("<audio", "</audio"),
 
   /**
    * IE 9+、Firefox、Opera、Chrome 和 Safari 都支持 <source> 标签。
@@ -402,7 +402,7 @@ public enum HtmlTagEnum {
    *
    * <p><source> 标签是 HTML5 中的新标签。
    */
-  HTML_VIDEO_SOURCE("<audio", "</audio>"),
+  HTML_VIDEO_SOURCE("<audio", "</audio"),
 
   /**
    * <video> 标签定义视频，比如电影片段或其他视频流。
@@ -421,7 +421,7 @@ public enum HtmlTagEnum {
    *
    * <p>提示：可以在 <video> 和 </video> 标签之间放置文本内容，这样不支持 <video> 元素的浏览器就可以显示出该标签的信息。
    */
-  HTML_VIDEO_VIDEO("<video", "</video>"),
+  HTML_VIDEO_VIDEO("<video", "</video"),
 
   // ******************************audio音频结束*************************************************************
 
@@ -448,7 +448,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5 有一些新的属性，同时不再支持一些 HTML 4.01 的属性。
    */
-  HTML_LINK_A("<a", "</a>"),
+  HTML_LINK_A("<a", "</a"),
 
   /**
    * 目前大多数浏览器支持 <nav> 标签。
@@ -461,7 +461,7 @@ public enum HtmlTagEnum {
    *
    * <p><nav> 是 HTML5 的新标签。
    */
-  HTML_LINK_NAV("<nav", "</nav>"),
+  HTML_LINK_NAV("<nav", "</nav"),
 
   // ******************************href链接结束*************************************************************
 
@@ -471,7 +471,7 @@ public enum HtmlTagEnum {
    *
    * <p>ul标签定义无序列表。 将ul标签与li标签一起使用，创建无序列表。
    */
-  HTML_LIST_UL("<ul>", "</ul>"),
+  HTML_LIST_UL("<ul", "</ul"),
 
   /**
    * 目前大多数浏览器支持
@@ -486,22 +486,22 @@ public enum HtmlTagEnum {
    *
    * <p>在 HTML 4.01 中"start" 和 "type" 属性已经废弃，HTML5不支持该属性。
    *
-   * <p>"reversed" 属性是 HTML5 中的新属性。
+   * <p"reversed" 属性是 HTML5 中的新属性。
    *
    * <p>在HTML 4.01中"compact" 属性已经废弃,在 HTML5中不支持该属性。
    */
-  HTML_LIST_OL("<ol", "</ol>"),
+  HTML_LIST_OL("<ol", "</ol"),
 
   /**
    * li 标签定义列表项目。
    *
    * <p>li 标签可用在有序列表（ol）、无序列表（ul）和菜单列表（menu）中。
    *
-   * <p>"type" 属性 在 HTML 4.01 已被废弃。HTML5 不支持该属性。
+   * <p"type" 属性 在 HTML 4.01 已被废弃。HTML5 不支持该属性。
    *
-   * <p>"value" 属性 在 HTML 4.01 已被废弃。HTML5 不支持该属性。
+   * <p"value" 属性 在 HTML 4.01 已被废弃。HTML5 不支持该属性。
    */
-  HTML_LIST_LI("<li", "</li>"),
+  HTML_LIST_LI("<li", "</li"),
 
   /**
    * 所有主流浏览器都支持 <dir> 标签。
@@ -516,7 +516,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5 不支持 <dir> 标签，HTML 4.01 已废弃 <dir> 标签。
    */
-  HTML_LIST_DIR("<dir", "</dir>"),
+  HTML_LIST_DIR("<dir", "</dir"),
 
   /**
    * dl 标签定义一个描述列表。
@@ -527,7 +527,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 HTML5 中，dl 标签定义一个描述列表。
    */
-  HTML_LIST_DL("<dl", "</dl>"),
+  HTML_LIST_DL("<dl", "</dl"),
 
   /**
    * dt 标签定义一个描述列表的项目/名字。
@@ -538,7 +538,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 HTML5 中，dt 标签定义一个描述列表的项目/名字。
    */
-  HTML_LIST_DT("<dt", "</dt>"),
+  HTML_LIST_DT("<dt", "</dt"),
 
   /**
    * dd 标签被用来对一个描述列表中的项目/名字进行描述。
@@ -547,7 +547,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 dd 标签内，您能放置段落、换行、图片、链接、列表等等。
    */
-  HTML_LIST_DD("<dd", "</dd>"),
+  HTML_LIST_DD("<dd", "</dd"),
 
   /**
    * 目前主流浏览器并不支持 <menu> 标签。
@@ -560,7 +560,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5 中 <menu> 元素已被重新定义 。
    */
-  HTML_LIST_MENU("<menu", "</menu>"),
+  HTML_LIST_MENU("<menu", "</menu"),
 
   /**
    * 目前，主流浏览器都不支持 <command> 标签。
@@ -574,7 +574,7 @@ public enum HtmlTagEnum {
    *
    * <p><command> 标签是 HTML 5 中的新标签。
    */
-  HTML_LIST_COMMAND("<command", "</command>"),
+  HTML_LIST_COMMAND("<command", "</command"),
 
   // ******************************list列表结束*************************************************************
 
@@ -596,7 +596,7 @@ public enum HtmlTagEnum {
    *
    *
    */
-  HTML_TABLE_TABLE("<table", "</table>"),
+  HTML_TABLE_TABLE("<table", "</table"),
 
   /**
    * 所有主流浏览器都支持 <caption> 标签。
@@ -614,7 +614,7 @@ public enum HtmlTagEnum {
    *
    * HTML 4.01 已废弃 align 属性。
    */
-  HTML_TABLE_CAPTION("<caption", "</caption>"),
+  HTML_TABLE_CAPTION("<caption", "</caption"),
 
   /**
    * 所有主流浏览器都支持 <th> 标签。
@@ -631,7 +631,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML 5 中不再支持 HTML 4.01 中的某些属性。
    */
-  HTML_TABLE_TH("<th", "</th>"),
+  HTML_TABLE_TH("<th", "</th"),
 
   /**
    * 所有主流浏览器都支持 <tr> 标签。
@@ -642,7 +642,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 HTML 5 中，不支持 <tr> 标签在 HTML 4.01 中的任何属性。
    */
-  HTML_TABLE_TR("<tr", "</tr>"),
+  HTML_TABLE_TR("<tr", "</tr"),
 
   /**
    * 所有主流浏览器都支持 <td> 标签。
@@ -659,7 +659,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML 5 中不再支持 HTML 4.01 中的某些属性。
    */
-  HTML_TABLE_TD("<td", "</td>"),
+  HTML_TABLE_TD("<td", "</td"),
 
   /**
    * 所有主流浏览器都支持 <thead> 标签。
@@ -677,7 +677,7 @@ public enum HtmlTagEnum {
    * 提示：<thead>、<tbody> 和 <tfoot> 元素默认不会影响表格的布局。不过，您可以使用 CSS 来为这些元素定义样式，从而改变表格的外观。
    *
    */
-  HTML_TABLE_THEAD("<thead", "</thead>"),
+  HTML_TABLE_THEAD("<thead", "</thead"),
 
   /**
    * 所有主流浏览器都支持 <tbody> 标签
@@ -690,7 +690,7 @@ public enum HtmlTagEnum {
    *
    * <tbody> 标签必须被用在以下情境中：作为 <table> 元素的子元素，出现在 <caption>、<colgroup> 和 <thead> 元素之后。
    */
-  HTML_TABLE_TBODY("<tbody", "</tbody>"),
+  HTML_TABLE_TBODY("<tbody", "</tbody"),
 
   /**
    * 所有主流浏览器都支持 <tfoot> 标签。
@@ -708,7 +708,7 @@ public enum HtmlTagEnum {
    * 提示：<thead>、<tbody> 和 <tfoot> 元素默认不会影响表格的布局。不过，您可以使用 CSS 来为这些元素定义样式，从而改变表格的外观。
    *
    */
-  HTML_TABLE_TFOOT("<tfoot", "</tfoot>"),
+  HTML_TABLE_TFOOT("<tfoot", "</tfoot"),
 
   /**
    *所有主流浏览器都支持 <colgroup> 标签。
@@ -723,7 +723,7 @@ public enum HtmlTagEnum {
    *
    * HTML5 中不再支持 HTML 4.01 中的大部分属性。
    */
-  HTML_TABLE_COLGROUP("<colgroup", "</colgroup>"),
+  HTML_TABLE_COLGROUP("<colgroup", "</colgroup"),
 
   // ******************************table表格结束*************************************************************
   // ******************************style样式开始*************************************************************
@@ -741,7 +741,7 @@ public enum HtmlTagEnum {
    *
    * <p>注释：如果没有使用 "scoped" 属性，则每一个 <style> 标签必须位于 head 头部区域。
    */
-  HTML_STYLE_STYLE("<style", "</style>"),
+  HTML_STYLE_STYLE("<style", "</style"),
 
   /**
    * 所有主流浏览器都支持 <div> 标签。
@@ -758,7 +758,7 @@ public enum HtmlTagEnum {
    *
    * <p>在 HTML 4.01 中，align 属性 已废弃。
    */
-  HTML_STYLE_DIV("<div", "</div>"),
+  HTML_STYLE_DIV("<div", "</div"),
 
   /**
    * 所有主流浏览器都支持 <span> 标签。
@@ -773,7 +773,7 @@ public enum HtmlTagEnum {
    *
    * <p>提示：被 <span> 元素包含的文本，您可以使用 CSS 对它定义样式，或者使用 JavaScript 对它进行操作。
    */
-  HTML_STYLE_SPAN("<span", "</span>"),
+  HTML_STYLE_SPAN("<span", "</span"),
 
   /**
    * IE 9、Firefox、Opera、Chrome 和 Safari 支持 <header> 标签。
@@ -790,7 +790,7 @@ public enum HtmlTagEnum {
    *
    * <p><header> 标签是 HTML 5 中的新标签。
    */
-  HTML_STYLE_HEADER("<header", "</header>"),
+  HTML_STYLE_HEADER("<header", "</header"),
 
   /**
    * IE 9、Firefox、Opera、Chrome 和 Safari 支持 <footer> 标签。
@@ -807,7 +807,7 @@ public enum HtmlTagEnum {
    *
    * <p><footer> 标签是 HTML 5 中的新标签。
    */
-  HTML_STYLE_FOOTER("<footer", "</footer>"),
+  HTML_STYLE_FOOTER("<footer", "</footer"),
 
   /**
    * IE 9+、Firefox、Opera、Chrome 和 Safari <section> 标签。
@@ -818,7 +818,7 @@ public enum HtmlTagEnum {
    *
    * <p><section> 标签是 HTML5 中的新标签。
    */
-  HTML_STYLE_SECTION("<section", "</section>"),
+  HTML_STYLE_SECTION("<section", "</section"),
 
   /**
    * IE 9+、Firefox、Opera、Chrome 和 Safari 都支持 <article> 标签。
@@ -835,7 +835,7 @@ public enum HtmlTagEnum {
    *
    * <p><article> 标签是 HTML5 的新标签。
    */
-  HTML_STYLE_ARTICLE("<article", "</article>"),
+  HTML_STYLE_ARTICLE("<article", "</article"),
 
   /**
    * IE 9+、Firefox、Opera、Chrome 和 Safari 都支持 <aside> 标签。
@@ -850,7 +850,7 @@ public enum HtmlTagEnum {
    *
    * <p>提示：<aside> 的内容可用作文章的侧栏。
    */
-  HTML_STYLE_ASIDE("<aside", "</aside>"),
+  HTML_STYLE_ASIDE("<aside", "</aside"),
 
   /**
    * 目前，只有 Chrome 和 Safari 6 支持 <details> 标签。
@@ -863,14 +863,14 @@ public enum HtmlTagEnum {
    *
    * <p><details> 标签是 HTML5 中的新标签。
    */
-  HTML_STYLE_DETAILS("<details", "</details>"),
+  HTML_STYLE_DETAILS("<details", "</details"),
 
   /**
    * <dialog> 标签定义一个对话框、确认框或窗口。
    *
    * <p><dialog> 标签是 HTML5 中的新标签。
    */
-  HTML_STYLE_DIALOG("<dialog", "</dialog>"),
+  HTML_STYLE_DIALOG("<dialog", "</dialog"),
 
   /**
    * 目前，只有 Chrome 和 Safari 6 支持 <summary> 标签。
@@ -881,7 +881,7 @@ public enum HtmlTagEnum {
    *
    * <p>注释：<summary> 元素应该是 <details> 元素的第一个子元素。
    */
-  HTML_STYLE_SUMMARY("<summary", "</summary>"),
+  HTML_STYLE_SUMMARY("<summary", "</summary"),
 
   // ******************************style样式结束*************************************************************
 
@@ -898,7 +898,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5 不再支持 profile 属性。
    */
-  HTML_META_HEAD("<head", "</head>"),
+  HTML_META_HEAD("<head", "</head"),
 
   // ******************************meta元信息开始*************************************************************
   // ******************************program程序开始*************************************************************
@@ -921,7 +921,7 @@ public enum HtmlTagEnum {
    * <p>如果 async="async"：脚本相对于页面的其余部分异步地执行（当页面继续进行解析时，脚本将被执行） 如果不使用 async 且
    * defer="defer"：脚本将在页面完成解析时执行 如果既不使用 async 也不使用 defer：在浏览器继续解析页面之前，立即读取并执行脚本
    */
-  HTML_SCRIPT_SCRIPT("<script", "</script>"),
+  HTML_SCRIPT_SCRIPT("<script", "</script"),
 
   /**
    * 目前大多数浏览器支持 <noscript> 标签。
@@ -936,7 +936,7 @@ public enum HtmlTagEnum {
    *
    * <p>XHTML 不支持 <noscript> 标签。
    */
-  HTML_SCRIPT_NOSCRIPT("<noscript", "</noscript>"),
+  HTML_SCRIPT_NOSCRIPT("<noscript", "</noscript"),
 
   /**
    * 注释：某些浏览器中依然存在对 <applet> 但是需要额外的插件和安装过程才能起作用。
@@ -949,7 +949,7 @@ public enum HtmlTagEnum {
    *
    * <p>HTML5 不支持 <applet> 标签，HTML 4.01 已废弃 <applet> 标签。
    */
-  HTML_SCRIPT_APPLET("<applet", "</applet>"),
+  HTML_SCRIPT_APPLET("<applet", "</applet"),
 
   /**
    * 目前大多数浏览器支持 <object> 标签。
@@ -967,13 +967,13 @@ public enum HtmlTagEnum {
    *
    * <p>一些 HTML 4.01 属性在 HTML5 中不被支持。
    *
-   * <p>"form" 是 HTML5 定义的新属性。
+   * <p"form" 是 HTML5 定义的新属性。
    *
    * <p>在 HTML5 中，objects 可以在form表单中提交。
    *
    * <p>在 HTML5 中，objects 不再出现在 <head> 元素区域内。
    */
-  HTML_SCRIPT_OBJECT("<object", "</object>"),
+  HTML_SCRIPT_OBJECT("<object", "</object"),
 
 // ******************************program程序结束*************************************************************
 ;

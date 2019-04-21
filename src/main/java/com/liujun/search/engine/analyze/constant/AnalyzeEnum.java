@@ -15,8 +15,8 @@ public enum AnalyzeEnum {
   /** 网页分析的内容，分拆为char数组 */
   ANALYZE_INPUT_HTMLCONTEXT_ARRAY("analyze_input_htmlcontext_array"),
 
-  /** 处理中的网页内容信息 */
-  ANALYZE_PROC_HTMLCONTEXT("analyze_proc_htmlcontext"),
+  /** 进行网页分析的输入 */
+  ANLYZE_OUTPUT_HTMLCONTEXT("analyze_output_htmlcontext"),
   ;
 
   private String key;

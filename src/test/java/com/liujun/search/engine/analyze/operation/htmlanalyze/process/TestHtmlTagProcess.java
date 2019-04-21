@@ -6,6 +6,8 @@ import com.liujun.search.utilscode.element.html.HtmlReaderUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+
 /**
  * @author liujun
  * @version 0.0.1
@@ -17,7 +19,7 @@ public class TestHtmlTagProcess {
   @Test
   public void testCleantag() {
     // 进行网页的标签的清除工作
-    this.htmlCheck(HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.WY163));
+    this.htmlCheck(HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.SMALL));
   }
 
   private void htmlCheck(String htmlCode) {
@@ -26,16 +28,47 @@ public class TestHtmlTagProcess {
 
     char[] htmlTagArrays = htmlCode.toCharArray();
     // 1,进行标签段的清除
-    String cleanSectionTags = HtmlSectionTagProcess.INSTANCE.cleanHtmlTagSection(htmlTagArrays);
+    char[] cleanSectionTags = HtmlSectionTagProcess.INSTANCE.cleanHtmlTagSection(htmlTagArrays);
 
-    String htmlClean = HtmlTagProcess.INSTANCE.cleanHtmlTag(cleanSectionTags.toCharArray());
+    String htmlClean = HtmlTagProcess.INSTANCE.cleanHtmlTag(cleanSectionTags);
 
+    System.out.println(htmlClean);
     Assert.assertNotNull(htmlClean);
 
     for (HtmlTagSectionEnum tagsection : HtmlTagSectionEnum.values()) {
       Assert.assertEquals(-1, htmlClean.indexOf(tagsection.getSectionStart()));
       Assert.assertEquals(-1, htmlClean.indexOf(tagsection.getSectionEnd()));
     }
+
     System.out.println("----------------------------结束-----------");
+  }
+
+  @Test
+  public void testSoho() {
+    this.htmlCheck(HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.SOHO));
+  }
+
+  @Test
+  public void testSina() {
+    this.htmlCheck(HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.SINA));
+  }
+
+  @Test
+  public void testHtmlError() {
+    File[] fileList = HtmlReaderUtils.GetErrorFileList();
+
+    for (File fileItem : fileList) {
+      System.out.println("文件:" + fileItem.getPath());
+
+      if (fileItem.length() > 0) {
+
+        this.htmlCheck(HtmlReaderUtils.GetContext(fileItem));
+      }
+    }
+  }
+
+  @Test
+  public void testWy163() {
+    this.htmlCheck(HtmlReaderUtils.ReadHtml(HtmlHrefFileEnum.WY163));
   }
 }

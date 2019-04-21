@@ -24,7 +24,7 @@ public class HtmlSectionTagProcess {
   private static final AhoCorasickChar ACMATCH_END_INSTANCE = new AhoCorasickChar();
 
   /** 防止死循环操作 */
-  private static final int MAX_LOOP_NUM = 1000;
+  private static final int MAX_LOOP_NUM = 10000;
 
   static {
     // 获取网页标签段所有开始标签
@@ -44,7 +44,7 @@ public class HtmlSectionTagProcess {
    * @param htmlArray 网页内容
    * @return 网页信息
    */
-  public String cleanHtmlTagSection(char[] htmlArray) {
+  public char[] cleanHtmlTagSection(char[] htmlArray) {
     int startPoint = 0;
 
     List<DataTagPosition> dataScriptTagList = new ArrayList<>();
@@ -56,8 +56,6 @@ public class HtmlSectionTagProcess {
     // 需要去掉所有的网页段标签
     while (loopIndex <= MAX_LOOP_NUM) {
       MatcherBusi busiStart = ACMATCH_START_INSTANCE.matcherOne(htmlArray, startPoint);
-
-      System.out.println(busiStart);
 
       if (busiStart.getMatcherIndex() != -1) {
         // 查找结束标签
@@ -87,82 +85,8 @@ public class HtmlSectionTagProcess {
       throw new RuntimeException("loop find index");
     }
 
-    return this.newHtmlContext(htmlArray, dataScriptTagList);
-  }
 
-  /**
-   * 进行重组网页中的内容
-   *
-   * @param htmlArray 原始网页信息
-   * @param dataTagList 网页标签
-   * @return
-   */
-  public String newHtmlContext(char[] htmlArray, List<DataTagPosition> dataTagList) {
 
-    if (dataTagList.isEmpty()) {
-      return new String(htmlArray);
-    }
-
-    List<DataTagPosition> dataPraseScopeList =
-        this.parseHtmlTagSection(dataTagList, htmlArray.length);
-
-    StringBuilder outMsg = new StringBuilder();
-
-    for (DataTagPosition dataItem : dataPraseScopeList) {
-
-      outMsg.append(
-          new String(htmlArray, dataItem.getStart(), dataItem.getEnd() - dataItem.getStart()));
-    }
-
-    return outMsg.toString();
-  }
-
-  /**
-   * 将网页标签段转化为网页内容段的开始与结束索引
-   *
-   * @param dataTagList
-   * @return
-   */
-  private List<DataTagPosition> parseHtmlTagSection(List<DataTagPosition> dataTagList, int length) {
-
-    List<DataTagPosition> newTagSection = new ArrayList<>();
-
-    DataTagPosition dataNewTag = new DataTagPosition();
-
-    DataTagPosition item = null;
-
-    for (int i = 0; i < dataTagList.size(); i++) {
-
-      item = dataTagList.get(i);
-      if (i == 0) {
-        if (item.getStart() == 0) {
-          dataNewTag.setStart(item.getEnd());
-        } else {
-          dataNewTag.setStart(0);
-          dataNewTag.setEnd(item.getStart());
-          newTagSection.add(dataNewTag);
-          dataNewTag = new DataTagPosition();
-          dataNewTag.setStart(item.getEnd());
-        }
-      } else if (i == dataTagList.size() - 1) {
-        dataNewTag.setEnd(item.getStart());
-        newTagSection.add(dataNewTag);
-
-        if (item.getEnd() < length) {
-          dataNewTag = new DataTagPosition();
-          dataNewTag.setStart(item.getEnd());
-          dataNewTag.setEnd(length);
-          newTagSection.add(dataNewTag);
-        }
-
-      } else {
-        dataNewTag.setEnd(item.getStart());
-        newTagSection.add(dataNewTag);
-        dataNewTag = new DataTagPosition();
-        dataNewTag.setStart(item.getEnd());
-      }
-    }
-
-    return newTagSection;
+    return DataTagPosCommonProc.INSTANCE.htmlRegroup(htmlArray, dataScriptTagList);
   }
 }

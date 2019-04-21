@@ -16,9 +16,6 @@ public enum HtmlTagSectionEnum {
   /** 网页样式标签段 */
   SECTION_STYLE("<style", "</style>"),
 
-  /** 网页的select选择择框 */
-  SECTION_SELECT("<select", "</select>"),
-
   /** 选择框的标签段 */
   SECTION_OPTION("<option", "</option>");
 

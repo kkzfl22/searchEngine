@@ -267,7 +267,7 @@ public abstract class AhoCorasick {
     for (int i = startIndex; i < mainChar.length; i++) {
       int index = this.getIgnoreCaseIndex(mainChar[i]);
 
-      if (index >= AC_SIZE || index == -1) {
+      if (index >= AC_SIZE || index <= -1) {
         continue;
       }
 
