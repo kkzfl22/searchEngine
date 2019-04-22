@@ -18,8 +18,13 @@ public class TestTrieTreeChina {
     china.insert("中国");
     china.insert("中国人");
     china.insert("中国人民");
+    china.insert("天空");
 
-    MatcherBusi index = china.match("中国人民", 0);
+    String src = "天空的中国人民";
+
+    MatcherBusi index = china.match(src, 0);
+    MatcherBusi index2 = china.match(src, index.getMatcherIndex() + index.getMatcherKey().length());
     System.out.println("索引:" + index);
+    System.out.println("索引:" + index2);
   }
 }
