@@ -55,6 +55,7 @@ public class TrieTreeChina {
     }
     // 最后一个节点，需要标识为结束节点
     tmpRoot.isEndingChar = true;
+    tmpRoot.nocdeValue = src;
   }
 
   /**
@@ -95,15 +96,14 @@ public class TrieTreeChina {
 
     // 进行字符串的匹配查找
     int index = 0;
+    int i = 0;
 
-    for (int i = startPos; i < findChars.length; i++) {
-
+    for (i = startPos; i < findChars.length; i++) {
       index = this.getCharIndex(findChars[i]);
 
       // 检查是否可以匹配
       if (tempRoot.childred[index] == null) {
-        result.setMatcherIndex(-1);
-        return result;
+        break;
       }
 
       tempRoot = tempRoot.childred[index];
@@ -111,10 +111,11 @@ public class TrieTreeChina {
 
     // 如果当前非结束字符，说明部分匹配
     if (!tempRoot.isEndingChar) {
-      result.setMatcherIndex(0);
+      result.setMatcherIndex(-1);
       return result;
     } else {
-
+      result.setMatcherKey(tempRoot.nocdeValue);
+      result.setMatcherIndex(i - result.getMatcherKey().length());
       return result;
     }
   }

@@ -85,6 +85,10 @@ public class WordLoader {
 
     String[] lineArray = line.split(SymbolMsg.DATA_COLUMN);
 
+    if (lineArray[0].indexOf("\"") != -1) {
+      System.out.println("找到引号:"+lineArray[0]);
+    }
+
     if (!KEYWORD.contains(lineArray[0])) {
       // 添加词组中
       KEYWORD.add(lineArray[0]);

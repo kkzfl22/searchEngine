@@ -10,7 +10,7 @@ package com.liujun.search.engine.analyze.constant;
 public enum SpitWordFileEnum {
 
   /** 英文分词的词库 */
-  EN_WORKD("en_word_103977.csv"),
+  EN_WORKD("en_word_103977.txt"),
 
   /** 中文分词库动物 */
   CH_WORD_ANIMAL("THUOCL_animal.txt"),
