@@ -22,8 +22,11 @@ public class TestTrieTreeChina {
 
     String src = "天空的中国人民";
 
-    MatcherBusi index = china.match(src, 0);
-    MatcherBusi index2 = china.match(src, index.getMatcherIndex() + index.getMatcherKey().length());
+    char[] valueChars = src.toCharArray();
+
+    MatcherBusi index = china.match(valueChars, 0);
+    MatcherBusi index2 =
+        china.match(valueChars, index.getMatcherIndex() + index.getMatcherKey().length() + 1);
     System.out.println("索引:" + index);
     System.out.println("索引:" + index2);
   }

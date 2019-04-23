@@ -1,4 +1,4 @@
-package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword;
+package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader;
 
 import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.engine.analyze.constant.SpitWordFileEnum;
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 分词信息的加载
@@ -24,10 +23,10 @@ import java.util.Set;
 public class WordLoader {
 
   /** 关键字出现频度计数 */
-  private static final Map<Character, Integer> CHARNUM = new HashMap<>(5000);
+  private static final Map<Character, Integer> CHARNUM = new HashMap<>(6500);
 
   /** 关键词的记录 */
-  private static final HashSet<String> KEYWORD = new HashSet<>(20000);
+  private static final HashSet<String> KEYWORD = new HashSet<>(27000);
 
   /** 基础路径 */
   private static final String BASE_PATH = "./participle/";
@@ -39,8 +38,8 @@ public class WordLoader {
       LoadFile(spitWord);
     }
 
-    System.out.println("总词组数:" + KEYWORD.size());
-    System.out.println("总字组数:" + CHARNUM.size());
+    LOGGER.info("word loader finish , word numer : {} ", KEYWORD.size());
+    LOGGER.info("word loader finish , charset num : {} ", CHARNUM.size());
   }
 
   public static final WordLoader INSTANCE = new WordLoader();
@@ -55,7 +54,7 @@ public class WordLoader {
     FileReader reader = null;
     BufferedReader bufferReader = null;
     try {
-      System.out.println("文件:" + fileEnum.getFile());
+
       String filePath = BASE_PATH + fileEnum.getFile();
 
       String readPath = WordLoader.class.getClassLoader().getResource(filePath).getPath();
@@ -70,7 +69,6 @@ public class WordLoader {
         lineProcess(line);
       }
 
-      System.out.println("---------------------");
     } catch (IOException e) {
       e.printStackTrace();
       LOGGER.error("Wordloader loader IOException", e);
@@ -85,15 +83,9 @@ public class WordLoader {
 
     String[] lineArray = line.split(SymbolMsg.DATA_COLUMN);
 
-    if (lineArray[0].indexOf("\"") != -1) {
-      System.out.println("找到引号:"+lineArray[0]);
-    }
-
     if (!KEYWORD.contains(lineArray[0])) {
       // 添加词组中
       KEYWORD.add(lineArray[0]);
-    } else {
-      System.out.println("出现相同的词:" + lineArray[0]);
     }
 
     // 添加到单个字符中
@@ -110,5 +102,9 @@ public class WordLoader {
       }
       CHARNUM.put(keyItem, nums);
     }
+  }
+
+  public HashSet<String> getKeyword() {
+    return KEYWORD;
   }
 }

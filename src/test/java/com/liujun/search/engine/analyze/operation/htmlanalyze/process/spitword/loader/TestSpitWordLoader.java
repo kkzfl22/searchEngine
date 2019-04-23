@@ -1,6 +1,6 @@
-package com.liujun.search.engine.analyze.operation.htmlanalyze.process;
+package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader;
 
-import com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.WordLoader;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader.WordLoader;
 import org.junit.Test;
 
 /**
@@ -10,7 +10,7 @@ import org.junit.Test;
  * @version 0.0.1
  * @date 2019/04/20
  */
-public class TestSpitWordProcess {
+public class TestSpitWordLoader {
 
   /** 分词测试 */
   @Test
