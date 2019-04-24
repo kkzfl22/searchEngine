@@ -31,20 +31,22 @@ public class TrieTreeChina {
       return;
     }
 
+    if(src.indexOf("深入人心") != -1)
+    {
+      System.out.println("//");
+    }
+
     TrieNode tmpRoot = root;
 
     char[] srcArrays = src.toCharArray();
 
     for (int i = 0; i < srcArrays.length; i++) {
-
-      if (null != tmpRoot) {
-        // 如果当前子未存储数据,则直接存储
-        if (tmpRoot.getChildren(srcArrays[i]) == null) {
-          tmpRoot.addChildren(srcArrays[i]);
-        }
-        // 当前节点垮了指向子节点
-        tmpRoot = tmpRoot.getChildren(srcArrays[i]);
+      // 如果当前子未存储数据,则直接存储
+      if (tmpRoot.getChildren(srcArrays[i]) == null) {
+        tmpRoot.addChildren(srcArrays[i]);
       }
+      // 当前节点垮了指向子节点
+      tmpRoot = tmpRoot.getChildren(srcArrays[i]);
     }
     // 最后一个节点，需要标识为结束节点
     tmpRoot.isEndingChar = true;

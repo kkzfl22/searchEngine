@@ -83,13 +83,16 @@ public class WordLoader {
 
     String[] lineArray = line.split(SymbolMsg.DATA_COLUMN);
 
-    if (!KEYWORD.contains(lineArray[0])) {
+    String dataValue = lineArray[0].trim();
+
+    if (!KEYWORD.contains(dataValue)) {
+
       // 添加词组中
-      KEYWORD.add(lineArray[0]);
+      KEYWORD.add(dataValue);
     }
 
     // 添加到单个字符中
-    char[] keys = lineArray[0].toCharArray();
+    char[] keys = dataValue.toCharArray();
 
     Integer nums;
     for (char keyItem : keys) {

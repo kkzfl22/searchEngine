@@ -57,8 +57,6 @@ public class FilterWordLoader {
         // 进行行数据处理
         lineProcess(line);
       }
-
-      System.out.println("---------------------");
     } catch (IOException e) {
       e.printStackTrace();
       LOGGER.error("Wordloader loader IOException", e);
@@ -78,7 +76,6 @@ public class FilterWordLoader {
 
     if (StringUtils.isNotEmpty(line)) {
       String dataline = line.trim();
-
       // 将数据加到在过滤分词中
       FILTER_WORD.add(dataline);
     }

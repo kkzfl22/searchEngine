@@ -12,41 +12,43 @@ import org.junit.Test;
  * @version 0.0.1
  * @date 2019/04/22
  */
-public class TestTrideTreeWord {
+public class TestTrideFilterWord {
 
   @Test
-  public void testTrideTree() {
+  public void testTrideTreeFilter() {
     long startTime = System.currentTimeMillis();
-    TrieTreeChina chinaChar = TrieTreeWord.INSTANCE.getSpitWord();
+    TrieTreeChina filterMatcher = TrieFilterWord.INSTANCE.getFilterWord();
     long endTime = System.currentTimeMillis();
 
     System.out.println("用时:" + (endTime - startTime));
 
     StringBuilder testFile = new StringBuilder();
-    testFile.append("goddaughter");
-    testFile.append("贝林克拟四须魮");
-    testFile.append("资产评估");
-    testFile.append("珠海国际赛车场");
-    testFile.append("大手大脚");
-    testFile.append("心病还须心药医");
-    testFile.append("大秦回族乡");
-    testFile.append("口镇顺香斋南肠");
-    testFile.append("自然语言语法");
-    testFile.append("云南省保守国家秘密若干规定");
-    testFile.append("折笠富美子");
-    testFile.append("医学纲目");
-    testFile.append("与高适薛据登慈恩寺浮图");
-    testFile.append("不将颜色托春风");
+    testFile.append("...................");
+    testFile.append("7");
+    testFile.append("//");
+    testFile.append("φ．");
+    testFile.append("Ψ");
+    testFile.append("⑥");
+    testFile.append("∪φ∈");
+    testFile.append("长话短说");
+    testFile.append("＠");
+    testFile.append("ＬＩ");
+    testFile.append("［①①］");
+    testFile.append("［③ｄ］");
+    testFile.append("～＋");
+    testFile.append("￥");
+    testFile.append("ｎｇ昉");
+
 
     char[] charWords = testFile.toString().toCharArray();
 
     int start = 0;
     while (true) {
-      MatcherBusi busi = chinaChar.match(charWords, start);
+      MatcherBusi busi = filterMatcher.match(charWords, start);
 
       if (busi.getMatcherIndex() != -1) {
-        System.out.println("匹配:" + busi.getMatcherKey());
         Assert.assertNotNull(busi.getMatcherKey());
+        System.out.println("匹配:" + busi.getMatcherKey());
         start = busi.getMatcherIndex() + busi.getMatcherKey().length();
       } else {
         break;

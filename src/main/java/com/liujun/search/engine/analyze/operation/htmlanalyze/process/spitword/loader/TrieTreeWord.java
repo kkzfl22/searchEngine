@@ -11,23 +11,22 @@ import java.util.Set;
  * @version 0.0.1
  * @date 2019/04/22
  */
-public class TrideTreeWord {
+public class TrieTreeWord {
 
   /** 分词对象 */
-  public static final TrieTreeChina TRIECHINA = new TrieTreeChina();
+  private static final TrieTreeChina TRIE_WORD_CHINA = new TrieTreeChina();
 
   static {
     // 进行tride树的加载操作
     Set<String> keys = WordLoader.INSTANCE.getKeyword();
     for (String key : keys) {
-      TRIECHINA.insert(key);
+      TRIE_WORD_CHINA.insert(key);
     }
-
   }
 
-  public static final TrideTreeWord INSTANCE = new TrideTreeWord();
+  public static final TrieTreeWord INSTANCE = new TrieTreeWord();
 
   public TrieTreeChina getSpitWord() {
-    return TRIECHINA;
+    return TRIE_WORD_CHINA;
   }
 }
