@@ -1,6 +1,7 @@
 package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader;
 
 import com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader.WordLoader;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -27,19 +28,27 @@ public class TestSpitWordLoader {
     System.out.println("结束:" + end);
     System.out.println("单词范围:" + (end - start));
 
-    for (int i = 0; i <= Character.MAX_VALUE; i++) {
-      char out = (char) i;
-
-      System.out.print(out + "\t");
-
-      if (i % 100 == 0) {
-        System.out.println();
-      }
-    }
+    //    for (int i = 0; i <= Character.MAX_VALUE; i++) {
+    //      char out = (char) i;
+    //
+    //      System.out.print(out + "\t");
+    //
+    //      if (i % 100 == 0) {
+    //        System.out.println();
+    //      }
+    //    }
   }
 
   @Test
   public void spitLoad() {
-    WordLoader.INSTANCE.toString();
+    WordLoader.INSTANCE.getKeys();
+  }
+
+  @Test
+  public void loaderAlign() {
+    WordLoader loader = new WordLoader();
+    int size = loader.getKeys().size();
+
+    Assert.assertNotEquals(0, size);
   }
 }

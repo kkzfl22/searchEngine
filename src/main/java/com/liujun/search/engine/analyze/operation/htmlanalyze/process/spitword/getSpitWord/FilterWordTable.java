@@ -30,7 +30,6 @@ public class FilterWordTable implements FlowServiceInf {
     MatcherBusi matchBusi = trieFilter.match(contextArrays, position);
 
     if (matchBusi.getMatcherIndex() != -1) {
-
       matchBusi.setMatcherIndex(matchBusi.getMatcherIndex() + matchBusi.getMatcherKey().length());
       matchBusi.setMatcherKey(null);
       context.put(SpitWordFlowEnum.SPITWORD_OUTPUT_WORDBUSI.getKey(), matchBusi);

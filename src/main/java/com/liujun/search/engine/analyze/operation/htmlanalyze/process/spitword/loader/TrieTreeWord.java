@@ -18,7 +18,7 @@ public class TrieTreeWord {
 
   static {
     // 进行tride树的加载操作
-    Set<String> keys = WordLoader.INSTANCE.getKeyword();
+    Set<String> keys = WordLoader.INSTANCE.getKeys();
     for (String key : keys) {
       TRIE_WORD_CHINA.insert(key);
     }

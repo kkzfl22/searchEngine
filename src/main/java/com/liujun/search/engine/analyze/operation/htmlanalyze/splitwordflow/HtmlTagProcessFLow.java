@@ -3,7 +3,6 @@ package com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.analyze.constant.AnalyzeEnum;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.process.HtmlSectionTagProcess;
 import com.liujun.search.engine.analyze.operation.htmlanalyze.process.HtmlTagProcess;
 
 /**
@@ -26,7 +25,7 @@ public class HtmlTagProcessFLow implements FlowServiceInf {
     String htmlTagFinish = HtmlTagProcess.INSTANCE.cleanHtmlTag(htmlArray);
 
     context.remove(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
-    context.put(AnalyzeEnum.ANLYZE_OUTPUT_HTMLCONTEXT.getKey(), htmlTagFinish);
+    context.put(AnalyzeEnum.ANALYZE_OUTPUT_HTMLCONTEXT.getKey(), htmlTagFinish);
 
     return true;
   }

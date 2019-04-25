@@ -9,7 +9,7 @@ package com.liujun.search.engine.analyze.pojo;
  */
 public class RawDataLine {
 
-  /** 数据的序列号 */
+  /** 网页的编号 */
   private long id;
 
   /** 数据列的长度 */
