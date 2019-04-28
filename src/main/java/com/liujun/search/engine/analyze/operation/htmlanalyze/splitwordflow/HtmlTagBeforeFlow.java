@@ -21,13 +21,13 @@ public class HtmlTagBeforeFlow implements FlowServiceInf {
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
-    char[] htmlArray = context.getObject(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
+    char[] htmlArray = context.getObject(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey());
 
     // 去掉网页中的注释段
     char[] cleanBefore = HtmlTagBeforeProcess.INSTANCE.beforeProc(htmlArray);
 
-    context.remove(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
-    context.put(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey(), cleanBefore);
+    context.remove(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey());
+    context.put(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey(), cleanBefore);
 
     return true;
   }

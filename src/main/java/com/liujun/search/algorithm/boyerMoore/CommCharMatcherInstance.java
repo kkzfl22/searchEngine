@@ -19,4 +19,8 @@ public class CommCharMatcherInstance {
   /** 列分隔符对象 */
   public static final CharMatcherBMBadChars LINE_COLUMN_MATCHER =
       CharMatcherBMBadChars.getGoodSuffixInstance(SymbolMsg.DATA_COLUMN);
+
+  /** 网页标签的结束分隔符 */
+  public static final CharMatcherBMBadChars HTML_TAG_END_MATCHER =
+      CharMatcherBMBadChars.getGoodSuffixInstance(SymbolMsg.RIGHT_ANGLE);
 }

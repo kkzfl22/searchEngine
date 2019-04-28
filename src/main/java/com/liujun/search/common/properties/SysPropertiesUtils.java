@@ -1,8 +1,13 @@
 package com.liujun.search.common.properties;
 
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -22,31 +27,41 @@ public class SysPropertiesUtils {
 
   private static final SysPropertiesUtils PROINSTANCE = new SysPropertiesUtils();
 
-  public SysPropertiesUtils() {
-    // loader default property fiile application.properties
-    loadProperties(DEF_FILENAME);
-  }
+  private static final Logger LOGGER = LoggerFactory.getLogger(SysPropertiesUtils.class);
+
+  public SysPropertiesUtils() {}
 
   public static SysPropertiesUtils getInstance() {
     return PROINSTANCE;
   }
 
-  public void loadProperties(String fileName) {
+  public void loadProc(String basePath) {
+    if (StringUtils.isNotEmpty(basePath)) {
+      String pathFile = basePath + SymbolMsg.PATH + DEF_FILENAME;
+
+      File basePathExist = new File(pathFile);
+
+      if (basePathExist.exists()) {
+
+        LOGGER.info("SysPropertiesUtils loader path:" + basePathExist.getPath());
+
+        loadProperties(basePathExist);
+      } else {
+        throw new RuntimeException(
+            "SysPropertiesUtils load " + DEF_FILENAME + " is not exists !!!");
+      }
+    }
+  }
+
+  public void loadProperties(File fileInfo) {
     if (prop.isEmpty()) {
       InputStream in = null;
 
       try {
-        in = SysPropertiesUtils.class.getResourceAsStream(fileName);
-        if (in == null) {
-          in = SysPropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
-        }
-        if (in == null) {
-          in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
-        }
+        in = new FileInputStream(fileInfo);
 
-        if (in != null) {
-          prop.load(in);
-        }
+        prop.load(in);
+
       } catch (IOException e) {
         throw new RuntimeException(e);
       } finally {

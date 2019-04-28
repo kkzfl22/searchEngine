@@ -5,10 +5,7 @@ import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.analyze.constant.AnalyzeEnum;
 import com.liujun.search.engine.analyze.operation.htmlanalyze.process.HtmlTagAnnotationProcess;
 import com.liujun.search.engine.analyze.operation.htmlanalyze.process.HtmlTagBeforeProcess;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagAnnotationFlow;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagBeforeFlow;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagProcessFLow;
-import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.HtmlTagSectionFlow;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.splitwordflow.*;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,14 +38,26 @@ public class AnalyzeService {
     // 进行网页标签的处理，去掉所有标签
     FLOW.add(HtmlTagProcessFLow.INSTANCE);
     // 开始分词处理
+    FLOW.add(SpitWordGodownFlow.INSTANCE);
   }
+
+  public static final AnalyzeService INSTANCE = new AnalyzeService();
 
   /**
    * 进行网页的处理
    *
    * @param rawList
    */
-  private void analyzeFlow(List<RawDataLine> rawList) {}
+  public void analyzeFlow(List<RawDataLine> rawList) {
+
+    if (null == rawList || rawList.isEmpty()) {
+      return;
+    }
+
+    for (RawDataLine rawData : rawList) {
+      this.analyzeHtml(rawData);
+    }
+  }
 
   /**
    * 进行一个网页的分词流程
@@ -56,6 +65,12 @@ public class AnalyzeService {
    * @param rawData
    */
   private void analyzeHtml(RawDataLine rawData) {
+
+    if(1040 == rawData.getId())
+    {
+      System.out.println("find error point");
+    }
+
 
     FlowServiceContext context = new FlowServiceContext();
 
@@ -74,6 +89,7 @@ public class AnalyzeService {
     } catch (Exception e) {
       e.printStackTrace();
       logger.error("AnalyzeService analyzeHtml Exception", e);
+      throw new RuntimeException("error html :" + rawData.getId());
     }
   }
 }

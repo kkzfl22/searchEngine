@@ -66,6 +66,7 @@ public class BytesToEntityConvert implements FlowServiceInf {
 
     // 得到网页的id
     String htmlId = new String(dataVale, startIndex, seqNumEnd);
+
     dataLine.setId(Long.parseLong(htmlId));
     // 得到长度
     int htmlLength =

@@ -19,13 +19,13 @@ public class HtmlTagAnnotationFlow implements FlowServiceInf {
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
-    char[] htmlArray = context.getObject(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
+    char[] htmlArray = context.getObject(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey());
 
     // 去掉网页中的注释段
     char[] cleanAnnotation = HtmlTagAnnotationProcess.INSTANCE.annotationProc(htmlArray, 0);
 
-    context.remove(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
-    context.put(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey(), cleanAnnotation);
+    context.remove(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey());
+    context.put(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey(), cleanAnnotation);
 
     return true;
   }

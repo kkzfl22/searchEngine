@@ -2,6 +2,7 @@ package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.
 
 import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.engine.analyze.constant.SpitWordFileEnum;
+import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -23,15 +23,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class WordLoader {
 
   /** 关键词的记录 */
-  private static final Map<String, Integer> KEYWORD = new HashMap<>(27000);
+  protected static final Map<String, Integer> KEYWORD = new HashMap<>(27000);
 
   /** 基础路径 */
   private static final String BASE_PATH = "./participle/";
 
   /** 分词以及编号对应信息 */
-  private static final String KEY_WORD_FILE = "key_word.txt";
+  protected static final String KEY_WORD_FILE = "key_word.txt";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WordLoader.class);
+
+  /** 将分词与单词号进行存储路径 */
+  private static final String ANALYZE_KEYS_PATH =
+      PathCfg.BASEPATH + PathCfg.ANALYZE_PATH + KEY_WORD_FILE;
 
   public static final WordLoader INSTANCE = new WordLoader();
 
@@ -42,10 +46,8 @@ public class WordLoader {
 
   /** 检查文件并加载分词信息 */
   private void checkAndLoader() {
-    String filePath = BASE_PATH;
-    String readPath = WordLoader.class.getClassLoader().getResource(filePath).getPath();
 
-    File currFile = new File(readPath, KEY_WORD_FILE);
+    File currFile = new File(ANALYZE_KEYS_PATH);
 
     if (!currFile.exists()) {
       AtomicInteger intValue = new AtomicInteger(0);
@@ -53,9 +55,10 @@ public class WordLoader {
         INSTANCE.loadFile(spitWord, intValue);
       }
 
-      // 进行数据的输出操作
-      INSTANCE.writeKeys(currFile);
       LOGGER.info("word loader finish , word numer : {} ", KEYWORD.size());
+
+      //进行分词文件的写入
+      writeKeys();
     } else {
       INSTANCE.loaderKeys(currFile);
     }
@@ -137,70 +140,6 @@ public class WordLoader {
     KEYWORD.put(data[0], Integer.parseUnsignedInt(data[1]));
   }
 
-  private Map<Integer, String> parseKeyMap(Map<String, Integer> map) {
-    Map<Integer, String> result = new HashMap<>(map.size());
-
-    for (Map.Entry<String, Integer> itemEntry : map.entrySet()) {
-      result.put(itemEntry.getValue(), itemEntry.getKey());
-    }
-
-    return result;
-  }
-
-  /**
-   * 进行将分词以及序列写入文件中
-   *
-   * @param outFile
-   */
-  private void writeKeys(File outFile) {
-    FileWriter writer = null;
-    BufferedWriter bufferWirte = null;
-
-    try {
-      writer = new FileWriter(outFile);
-      bufferWirte = new BufferedWriter(writer);
-
-      int size = KEYWORD.size();
-
-      Map<Integer, String> parseMap = this.parseKeyMap(KEYWORD);
-
-      String data = null;
-      String line = null;
-
-      for (int i = 0; i < size; i++) {
-        data = parseMap.get(i);
-        line = this.getOutData(data, i);
-        bufferWirte.write(line);
-      }
-
-      parseMap.clear();
-      parseMap = null;
-
-    } catch (IOException e) {
-      e.printStackTrace();
-      LOGGER.error("wordloader IOException :", e);
-    } finally {
-      LocalIOUtils.close(bufferWirte);
-      LocalIOUtils.close(writer);
-    }
-  }
-
-  /**
-   * 进行数据的输出格式排列
-   *
-   * @param key 单词信息
-   * @param indexNum 索引编号
-   * @return 数据信息
-   */
-  private String getOutData(String key, int indexNum) {
-    StringBuilder outData = new StringBuilder();
-    outData.append(key);
-    outData.append(SymbolMsg.DATA_COLUMN);
-    outData.append(indexNum);
-    outData.append(SymbolMsg.LINE);
-    return outData.toString();
-  }
-
   /**
    * 进行行数据的处理操作
    *
@@ -224,5 +163,65 @@ public class WordLoader {
 
   public Map<String, Integer> getKeywordMap() {
     return KEYWORD;
+  }
+
+  /** 进行将分词以及序列写入文件中 */
+  public void writeKeys() {
+    FileWriter writer = null;
+    BufferedWriter bufferWirte = null;
+
+    try {
+      writer = new FileWriter(ANALYZE_KEYS_PATH);
+      bufferWirte = new BufferedWriter(writer);
+
+      int size = KEYWORD.size();
+
+      Map<Integer, String> parseMap = this.parseKeyMap(KEYWORD);
+
+      String data;
+      String line;
+
+      for (int i = 0; i < size; i++) {
+        data = parseMap.get(i);
+        line = this.getOutData(data, i);
+        bufferWirte.write(line);
+      }
+
+      parseMap.clear();
+      parseMap = null;
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      LOGGER.error("WordWriter IOException :", e);
+    } finally {
+      LocalIOUtils.close(bufferWirte);
+      LocalIOUtils.close(writer);
+    }
+  }
+
+  private Map<Integer, String> parseKeyMap(Map<String, Integer> map) {
+    Map<Integer, String> result = new HashMap<>(map.size());
+
+    for (Map.Entry<String, Integer> itemEntry : map.entrySet()) {
+      result.put(itemEntry.getValue(), itemEntry.getKey());
+    }
+
+    return result;
+  }
+
+  /**
+   * 进行数据的输出格式排列
+   *
+   * @param key 单词信息
+   * @param indexNum 索引编号
+   * @return 数据信息
+   */
+  private String getOutData(String key, int indexNum) {
+    StringBuilder outData = new StringBuilder();
+    outData.append(key);
+    outData.append(SymbolMsg.DATA_COLUMN);
+    outData.append(indexNum);
+    outData.append(SymbolMsg.LINE);
+    return outData.toString();
   }
 }

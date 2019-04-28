@@ -5,7 +5,6 @@ import com.liujun.search.utilscode.element.html.HtmlReaderUtils;
 import com.liujun.search.utilscode.io.code.PathUtils;
 import com.liujun.search.utilscode.io.constant.PathEnum;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -88,7 +87,7 @@ public class TestByteBufferUtils {
       input = new FileOutputStream(outFile, true);
       channel = input.getChannel();
       ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
-      return ByteBufferUtils.wirteBuffOrChannel(byteBuffer, channel, outContext);
+      return ByteBufferUtils.wirteChannel(byteBuffer, channel, outContext);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } finally {

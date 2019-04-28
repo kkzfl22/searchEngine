@@ -30,6 +30,9 @@ public class SymbolMsg {
   /** 路径分隔符 */
   public static final String PATH = "/";
 
+  /** 下划细 */
+  public static final String UNDER_LINE = "_";
+
   /** 左尖括号 */
   public static final String LEFT_OPEN_ANGLE = "<";
 

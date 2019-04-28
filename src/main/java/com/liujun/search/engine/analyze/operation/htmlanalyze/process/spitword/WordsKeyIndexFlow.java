@@ -21,7 +21,7 @@ public class WordsKeyIndexFlow implements FlowServiceInf {
 
     String keys = context.getObject(WordFLowEnum.WORD_INPUT_WORD.getKey());
 
-    // 检查当前是否已经在容器中，如果已经在容器中，则进直接获取编号
+    //通过分词获取索引号
     int index = KeyWordMap.INSTANCE.getKeyIndex(keys);
 
     context.put(WordFLowEnum.WORD_PROC_INDEX.getKey(), index);

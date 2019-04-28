@@ -86,8 +86,8 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
     // 获取文件通道
     FileChannel channel = super.getChannel();
 
-    // 将数据写入通道中,统计需要以最终的写入大小为准
-    int wirteBytes = ByteBufferUtils.wirteBuffOrChannel(buffer, channel, lineData);
+    // 将数据写入文件通道中,统计需要以最终的写入大小为准
+    int wirteBytes = ByteBufferUtils.wirteChannel(buffer, channel, lineData);
 
     // 写入完成更新文件大小
     super.fileSizeAdd(wirteBytes);

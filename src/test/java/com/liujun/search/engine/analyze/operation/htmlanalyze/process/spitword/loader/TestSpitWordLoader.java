@@ -41,13 +41,13 @@ public class TestSpitWordLoader {
 
   @Test
   public void spitLoad() {
-    WordLoader.INSTANCE.getKeys();
+    KeyWordMap.INSTANCE.getKeys();
   }
 
   @Test
   public void loaderAlign() {
-    WordLoader loader = new WordLoader();
-    int size = loader.getKeys().size();
+
+    int size = KeyWordMap.INSTANCE.getKeys().size();
 
     Assert.assertNotEquals(0, size);
   }

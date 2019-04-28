@@ -15,4 +15,7 @@ public class PathCfg {
 
   /** 数据收集的目录 */
   public static final String COLLEC_PATH = "collect/";
+
+  /** 数据分析的基础目录 */
+  public static final String ANALYZE_PATH = "analyze/";
 }

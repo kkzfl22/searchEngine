@@ -3,6 +3,7 @@ package com.liujun.search.engine.analyze.operation.htmlanalyze.process;
 import com.liujun.search.algorithm.ahoCorasick.AhoCorasickChar;
 import com.liujun.search.algorithm.ahoCorasick.pojo.MatcherBusi;
 import com.liujun.search.engine.analyze.constant.HtmlTagSectionEnum;
+import com.liujun.search.engine.analyze.operation.htmlanalyze.process.section.SectionEndProcess;
 import com.liujun.search.engine.analyze.pojo.DataTagPosition;
 
 import java.util.ArrayList;
@@ -22,9 +23,6 @@ public class HtmlSectionTagProcess {
 
   /** ac自动机的匹配实例信息结束标签 */
   private static final AhoCorasickChar ACMATCH_END_INSTANCE = new AhoCorasickChar();
-
-  /** 防止死循环操作 */
-  private static final int MAX_LOOP_NUM = 10000;
 
   static {
     // 获取网页标签段所有开始标签
@@ -51,41 +49,34 @@ public class HtmlSectionTagProcess {
 
     int loopIndex = 0;
 
-    HtmlTagSectionEnum tagSection = null;
-
     // 需要去掉所有的网页段标签
-    while (loopIndex <= MAX_LOOP_NUM) {
+    while (loopIndex <= htmlArray.length) {
       MatcherBusi busiStart = ACMATCH_START_INSTANCE.matcherOne(htmlArray, startPoint);
 
       if (busiStart.getMatcherIndex() != -1) {
         // 查找结束标签
-        MatcherBusi busiEnd =
-            ACMATCH_END_INSTANCE.matcherOne(htmlArray, busiStart.getMatcherIndex());
+        MatcherBusi busiEnd = SectionEndProcess.INSTANCE.sectionEndPos(busiStart, htmlArray);
 
-        if ((tagSection =
-                HtmlTagSectionEnum.getSectionTag(
-                    busiStart.getMatcherKey(), busiEnd.getMatcherKey()))
-            != null) {
-
-          int endPos = busiEnd.getMatcherIndex() + tagSection.getSectionEnd().length();
+        if (busiEnd.getMatcherIndex() != -1) {
+          int endPos = busiEnd.getMatcherIndex() + busiEnd.getMatcherKey().length();
           // 更新结束位置
           startPoint = endPos;
 
           dataScriptTagList.add(new DataTagPosition(busiStart.getMatcherIndex(), endPos));
+        } else {
+          throw new RuntimeException("find error tag start :" + busiStart);
         }
 
       } else {
         break;
       }
 
-      loopIndex++;
+      loopIndex = busiStart.getMatcherIndex() + 1;
     }
 
-    if (loopIndex >= MAX_LOOP_NUM) {
-      throw new RuntimeException("loop find index");
+    if (loopIndex >= htmlArray.length) {
+      throw new RuntimeException("loop find index : ");
     }
-
-
 
     return DataTagPosCommonProc.INSTANCE.htmlRegroup(htmlArray, dataScriptTagList);
   }

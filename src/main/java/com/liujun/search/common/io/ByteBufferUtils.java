@@ -22,39 +22,28 @@ public class ByteBufferUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(ByteBufferUtils.class);
 
   /**
-   * 将数据写入到缓冲区中，
-   *
-   * <p>当缓冲区满了写入文件中
-   *
-   * <p>遍历结束了，数据都需要写入至文件中
+   * 将数据写入至文件中
    *
    * @param buffer 缓冲区信息
    * @param channel 通道信息
    * @param data 字符串数据内容
    * @return 写入的字节数
    */
-  public static int wirteBuffOrChannel(ByteBuffer buffer, FileChannel channel, String data) {
+  public static int wirteChannel(ByteBuffer buffer, FileChannel channel, String data) {
+
+    if (buffer.position() != 0) {
+      throw new RuntimeException("wirte  buffer  error, buffer postion:" + buffer.position());
+    }
 
     int writeBytes = 0;
-    try {
-      // 检查buffer是否还存在空间，如果不存在空间需要先写入磁盘
-      if (buffer.limit() - buffer.position() == 0) {
-        buffer.flip();
-        writeBytes = channel.write(buffer);
-        buffer.compact();
-      }
 
-      // 2,将当前数据转码为byte数据
-      byte[] dataByte = data.getBytes(StandardCharsets.UTF_8);
+    // 2,将当前数据转码为byte数据
+    byte[] dataByte = data.getBytes(StandardCharsets.UTF_8);
 
-      // 写入将数据写入文件
-      writeBytes += writeByteOrChannel(buffer, channel, dataByte);
+    // 将数据写入文件
+    writeBytes = writeToChannel(buffer, channel, dataByte);
 
-      dataByte = null;
-    } catch (IOException e) {
-      e.printStackTrace();
-      LOGGER.error("write byte channel IOException", e);
-    }
+    dataByte = null;
 
     return writeBytes;
   }
@@ -62,14 +51,13 @@ public class ByteBufferUtils {
   /**
    * 将数据写入文件操作
    *
-   * @param buffer
-   * @param channel
-   * @param dataByte
+   * @param buffer 数据缓冲区
+   * @param channel 文件通道
+   * @param dataByte 数据内容
    * @return 写入字节的长度
    * @throws IOException
    */
-  public static int writeByteOrChannel(ByteBuffer buffer, FileChannel channel, byte[] dataByte)
-      throws IOException {
+  public static int writeToChannel(ByteBuffer buffer, FileChannel channel, byte[] dataByte) {
     int wirteBytes = 0;
 
     // 循环将数据写入缓冲区看
@@ -102,13 +90,29 @@ public class ByteBufferUtils {
       }
     } catch (IOException e) {
       e.printStackTrace();
-      throw e;
+      LOGGER.error("write data error:", e);
+      throw new RuntimeException("write buffer to file ioExceptoin", e);
     } finally {
       lock.unlock();
     }
+
+    if (buffer.position() != 0) {
+      throw new RuntimeException("wirte data error position:" + buffer.position());
+    }
+
+    dataByte = null;
+
     return wirteBytes;
   }
 
+  /**
+   * 计算数据写入长度
+   *
+   * @param buffer buffer的数据
+   * @param dataTotalLength 数据的长度
+   * @param startPos 开始的位置
+   * @return 计算写入的长度
+   */
   private static int CountLenth(ByteBuffer buffer, int dataTotalLength, int startPos) {
     int byteSpaceLength = 0;
     // 数据长度

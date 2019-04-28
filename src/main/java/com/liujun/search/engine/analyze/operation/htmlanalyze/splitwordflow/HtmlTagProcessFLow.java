@@ -19,12 +19,12 @@ public class HtmlTagProcessFLow implements FlowServiceInf {
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
-    char[] htmlArray = context.getObject(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
+    char[] htmlArray = context.getObject(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey());
 
     // 进行网页标签的处理，去掉网页标签段
     String htmlTagFinish = HtmlTagProcess.INSTANCE.cleanHtmlTag(htmlArray);
 
-    context.remove(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey());
+    context.remove(AnalyzeEnum.ANALYZE_INPUT_HTMLCONTEXT_ARRAY.getKey());
     context.put(AnalyzeEnum.ANALYZE_OUTPUT_HTMLCONTEXT.getKey(), htmlTagFinish);
 
     return true;
