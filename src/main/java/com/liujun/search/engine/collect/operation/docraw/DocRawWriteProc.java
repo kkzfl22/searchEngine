@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * docraw用来进行原始网页的写入磁盘操作
@@ -23,11 +25,11 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
 
   public static final DocRawWriteProc INSTANCE = new DocRawWriteProc();
 
-  /** 日志信息 */
-  private Logger logger = LoggerFactory.getLogger(DocRawWriteProc.class);
-
   /** 线程局部变量 */
   private ThreadLocal<ByteBuffer> threadLocal = new ThreadLocal<>();
+
+  /** 作为所有任务共享的独占锁，每次操作前都需要获取独占锁，写入数据，然后释放 */
+  private Lock lock = new ReentrantLock();
 
   public DocRawWriteProc() {
     // 进行首次的初始化操作
@@ -43,7 +45,9 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
   /** 进行线程本地资源的清理操作 */
   public void threadClean() {
     ByteBuffer buffer = threadLocal.get();
-    buffer.clear();
+    if (null != buffer) {
+      buffer.clear();
+    }
     threadLocal.remove();
   }
 
@@ -86,11 +90,17 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
     // 获取文件通道
     FileChannel channel = super.getChannel();
 
-    // 将数据写入文件通道中,统计需要以最终的写入大小为准
-    int wirteBytes = ByteBufferUtils.wirteChannel(buffer, channel, lineData);
-
-    // 写入完成更新文件大小
-    super.fileSizeAdd(wirteBytes);
+    try {
+      // 写入数据先需要获取锁
+      lock.lock();
+      // 将数据写入文件通道中,统计需要以最终的写入大小为准
+      int wirteBytes = ByteBufferUtils.wirteChannel(buffer, channel, lineData);
+      // 写入完成更新文件大小
+      super.fileSizeAdd(wirteBytes);
+    } finally {
+      // 使用完毕后需要解锁操作
+      lock.unlock();
+    }
   }
 
   /**

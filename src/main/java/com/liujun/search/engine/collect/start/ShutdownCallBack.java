@@ -38,6 +38,8 @@ public class ShutdownCallBack implements FlowServiceInf {
     SHUTDOWNFLOW.add(CloseDocIdFile.INSTANCE);
     // 5,关闭docraw文件
     SHUTDOWNFLOW.add(CloseDocrawFile.INSTANCE);
+    // 关闭日志
+    SHUTDOWNFLOW.add(CloseLogframe.INSTANCE);
     // 最后等待5秒钟再关系系统
     SHUTDOWNFLOW.add(WaitCloseDelay.INSTANCE);
   }

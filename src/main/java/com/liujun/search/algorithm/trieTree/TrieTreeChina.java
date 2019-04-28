@@ -31,11 +31,6 @@ public class TrieTreeChina {
       return;
     }
 
-    if(src.indexOf("深入人心") != -1)
-    {
-      System.out.println("//");
-    }
-
     TrieNode tmpRoot = root;
 
     char[] srcArrays = src.toCharArray();

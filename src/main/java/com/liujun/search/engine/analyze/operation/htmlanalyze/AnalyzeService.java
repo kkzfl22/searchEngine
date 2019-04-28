@@ -55,7 +55,9 @@ public class AnalyzeService {
     }
 
     for (RawDataLine rawData : rawList) {
+      logger.info("analyze roawid :" + rawData.getId());
       this.analyzeHtml(rawData);
+      logger.info("analyze roawid :" + rawData.getId() + "finish ");
     }
   }
 
@@ -66,11 +68,9 @@ public class AnalyzeService {
    */
   private void analyzeHtml(RawDataLine rawData) {
 
-    if(1040 == rawData.getId())
-    {
+    if (1040 == rawData.getId()) {
       System.out.println("find error point");
     }
-
 
     FlowServiceContext context = new FlowServiceContext();
 

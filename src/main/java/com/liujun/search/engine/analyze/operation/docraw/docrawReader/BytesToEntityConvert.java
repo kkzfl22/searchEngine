@@ -64,6 +64,12 @@ public class BytesToEntityConvert implements FlowServiceInf {
     // 查找得到网页的id
     int seqNumEnd = CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, startIndex);
 
+
+    if(seqNumEnd == -1)
+    {
+      System.out.println("查找到错误点");
+    }
+
     // 得到网页的id
     String htmlId = new String(dataVale, startIndex, seqNumEnd);
 

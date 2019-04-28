@@ -29,7 +29,9 @@ public class SysPropertiesUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SysPropertiesUtils.class);
 
-  public SysPropertiesUtils() {}
+  public SysPropertiesUtils() {
+    loadProperties(DEF_FILENAME);
+  }
 
   public static SysPropertiesUtils getInstance() {
     return PROINSTANCE;
@@ -38,29 +40,34 @@ public class SysPropertiesUtils {
   public void loadProc(String basePath) {
     if (StringUtils.isNotEmpty(basePath)) {
       String pathFile = basePath + SymbolMsg.PATH + DEF_FILENAME;
-
-      File basePathExist = new File(pathFile);
-
-      if (basePathExist.exists()) {
-
-        LOGGER.info("SysPropertiesUtils loader path:" + basePathExist.getPath());
-
-        loadProperties(basePathExist);
-      } else {
-        throw new RuntimeException(
-            "SysPropertiesUtils load " + DEF_FILENAME + " is not exists !!!");
-      }
+      loadProperties(pathFile);
     }
   }
 
-  public void loadProperties(File fileInfo) {
+  public void loadProperties(String fileName) {
     if (prop.isEmpty()) {
       InputStream in = null;
 
       try {
-        in = new FileInputStream(fileInfo);
+        File existsChec = new File(fileName);
 
-        prop.load(in);
+        if (existsChec.exists()) {
+          in = new FileInputStream(existsChec);
+        }
+
+        if (null == in) {
+          in = SysPropertiesUtils.class.getResourceAsStream(fileName);
+        }
+        if (in == null) {
+          in = SysPropertiesUtils.class.getClassLoader().getResourceAsStream(fileName);
+        }
+        if (in == null) {
+          in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        }
+
+        if (null != in) {
+          prop.load(in);
+        }
 
       } catch (IOException e) {
         throw new RuntimeException(e);

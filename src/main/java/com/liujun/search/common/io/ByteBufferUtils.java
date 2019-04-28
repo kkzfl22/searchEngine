@@ -66,12 +66,7 @@ public class ByteBufferUtils {
     // 计算数据长度信息
     int byteSpaceLength = CountLenth(buffer, dataByte.length, startPos);
 
-    // 针对单次写入来说，需确保完整性
-    Lock lock = new ReentrantLock();
-
     try {
-      lock.lock();
-
       // 检查待写入的数据长度是否大于0
       while (byteSpaceLength > 0) {
         // 数据拷贝操作
@@ -92,8 +87,6 @@ public class ByteBufferUtils {
       e.printStackTrace();
       LOGGER.error("write data error:", e);
       throw new RuntimeException("write buffer to file ioExceptoin", e);
-    } finally {
-      lock.unlock();
     }
 
     if (buffer.position() != 0) {
