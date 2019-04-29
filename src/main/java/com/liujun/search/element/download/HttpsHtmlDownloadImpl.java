@@ -1,5 +1,7 @@
 package com.liujun.search.element.download;
 
+import com.liujun.search.common.properties.SysPropertiesUtils;
+import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -60,11 +62,23 @@ public class HttpsHtmlDownloadImpl implements HtmlDownLoadInf {
       // 获取结果实体
       HttpEntity entity = response.getEntity();
       if (entity != null) {
-        // 按指定编码转换结果实体为String类型
-        body = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-      }
+        boolean isStream = entity.isStreaming();
+        long contextLength = entity.getContentLength();
 
-      EntityUtils.consume(entity);
+        logger.info(
+            "html downloadHtml url :{} ,rsp context type {}, issteam: {} ,content length : {}  ,",
+            url,
+            entity.getContentType().getValue(),
+            isStream,
+            contextLength);
+
+        // 如果当前文件非流，则进行下载文本操作
+        if (HttpConnUtils.ContextTypeChec(entity.getContentType().getValue())) {
+          // 按指定编码转换结果实体为String类型
+          body = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+          EntityUtils.consume(entity);
+        }
+      }
 
     } catch (ClientProtocolException e) {
       e.printStackTrace();

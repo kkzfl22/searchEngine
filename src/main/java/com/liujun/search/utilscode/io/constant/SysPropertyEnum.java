@@ -29,6 +29,9 @@ public enum SysPropertyEnum {
 
   /** 网页请求的超时设置 */
   HTTP_CONN_REQ_TIMEOUT("http.conn.req.timeout"),
+
+  /** 网页分词分析结果，限制最大单文件大小 */
+  ANALYZE_MAX_FILE("analyze.max.file"),
   ;
 
   private String key;

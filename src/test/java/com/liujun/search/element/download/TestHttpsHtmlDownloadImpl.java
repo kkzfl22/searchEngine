@@ -50,4 +50,13 @@ public class TestHttpsHtmlDownloadImpl {
         HttpsHtmlDownloadImpl.INSTNACE.downloadHtml(WebEntryEnum.SOHO.getUrlAddress(), client);
     Assert.assertNotEquals(0, conect.length());
   }
+
+  @Test
+  public void testDownStream()
+  {
+    String url = "http://node.video.qq.com/x/api/download_pc";
+    String conect =
+            HttpsHtmlDownloadImpl.INSTNACE.downloadHtml(url, client);
+    Assert.assertEquals(null,conect);
+  }
 }

@@ -37,6 +37,11 @@ public class TempIndexFile {
   private static final String BASEPATH =
       SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
 
+  /** 临时索引文件大小 */
+  private static final int TEMP_MAX_INDEX =
+      SysPropertiesUtils.getInstance()
+          .getIntegerValueOrDef(SysPropertyEnum.ANALYZE_MAX_FILE, 1 * 1024 * 1024 * 1024);
+
   /** 输出的索引文件编号 */
   private AtomicInteger indexFile = new AtomicInteger(0);
 
@@ -45,12 +50,6 @@ public class TempIndexFile {
 
   /** 临时索引文件 */
   public static final TempIndexFile INSTANCE = new TempIndexFile();
-
-  /** 单文件最大大小，默认为1G */
-  private static final int DEF_FILESIZE = 1 * 1024 * 1024 * 1024;
-
-  /** 单文件大小限制 */
-  private int fileMaxSize;
 
   /** 输出流 */
   private FileOutputStream fileOutputStream;
@@ -95,6 +94,15 @@ public class TempIndexFile {
     this.currFileSize.addAndGet(outBufferedData.length);
   }
 
+  public void flush() {
+    try {
+      this.bufferOutputStream.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+      logger.error("TempIndexFile write disk flush IOException", e);
+    }
+  }
+
   /**
    * 检查并切换文件
    *
@@ -102,11 +110,11 @@ public class TempIndexFile {
    */
   private void checkAndSwitchFile(int outbufferLength) {
     // 当超过单文件大小后，则进行切换操作,需要加锁以及二次检查确认
-    if (this.currFileSize.get() + outbufferLength > this.getMaxFileSize()) {
+    if (this.currFileSize.get() + outbufferLength > TEMP_MAX_INDEX) {
       try {
         lock.lock();
         // 1，将再次检查文件大小是否符合要求,进行二次确认,防止高并发问题
-        if (this.currFileSize.get() + outbufferLength > this.getMaxFileSize()) {
+        if (this.currFileSize.get() + outbufferLength > TEMP_MAX_INDEX) {
           // 关闭所有
           this.closeAll();
           // 进行索引的加1操作
@@ -306,24 +314,6 @@ public class TempIndexFile {
         fileItem.delete();
       }
     }
-  }
-
-  /**
-   * 获取最大单文件大小
-   *
-   * @return
-   */
-  private int getMaxFileSize() {
-
-    if (fileMaxSize == 0) {
-      fileMaxSize = DEF_FILESIZE;
-    }
-
-    return fileMaxSize;
-  }
-
-  void setFileMaxSize(int fileMaxSize) {
-    this.fileMaxSize = fileMaxSize;
   }
 
   int getFileIndex() {

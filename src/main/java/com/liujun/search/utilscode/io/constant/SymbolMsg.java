@@ -18,6 +18,9 @@ public class SymbolMsg {
   /** 逗号 */
   public static final String COMMA = ",";
 
+  /** 分号 */
+  public static final String SEMICOLON = ";";
+
   /** 行数据结束标识 */
   public static final String LINE_OVER = "\n\f\r\t";
 

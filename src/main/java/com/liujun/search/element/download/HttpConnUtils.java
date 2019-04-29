@@ -1,5 +1,6 @@
 package com.liujun.search.element.download;
 
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,9 @@ public class HttpConnUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HttpConnUtils.class);
 
+  /** 网页文本内容 */
+  private static final String TEXT_HOME = "text/html";
+
   /**
    * 进行关闭操作
    *
@@ -29,5 +33,17 @@ public class HttpConnUtils {
         LOGGER.error("client close IOException", e);
       }
     }
+  }
+
+  public static boolean ContextTypeChec(String contextType) {
+    String[] contextArrays = contextType.split(SymbolMsg.SEMICOLON);
+
+    for (String context : contextArrays) {
+      if (TEXT_HOME.equals(context)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

@@ -1,5 +1,7 @@
 package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.tempIndexFile;
 
+import com.liujun.search.common.properties.SysPropertiesUtils;
+import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,21 +31,17 @@ public class TestTempIndexFile {
   /** 用于测试当文件到达指定大小后，切换的操作 */
   @Test
   public void writeSwitch() {
-    int size = 1024 * 1024 * 3;
+    int size = 20;
 
-    // 设置文件的限制大小为2M
-    TempIndexFile.INSTANCE.setFileMaxSize(size);
-    // 进行文件数据写入
-    StringBuilder outData = new StringBuilder();
+    SysPropertiesUtils.getInstance()
+        .setValue(SysPropertyEnum.ANALYZE_MAX_FILE, String.valueOf(size));
 
-    int keyIndex = 2413;
-
-    for (int i = 0; i < size - 100; i++) {
-      outData.append(i % 10);
-    }
+    int keyIndex = 123456789;
 
     TempIndexFile.INSTANCE.writeData(keyIndex, 12041);
     TempIndexFile.INSTANCE.writeData(keyIndex, 12041);
+    // 数据刷入磁盘操作
+    TempIndexFile.INSTANCE.flush();
 
     // 何时索引文件是否已经切换为1
     Assert.assertEquals(1, TempIndexFile.INSTANCE.getFileIndex());

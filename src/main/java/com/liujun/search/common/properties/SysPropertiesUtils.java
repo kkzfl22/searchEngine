@@ -37,8 +37,14 @@ public class SysPropertiesUtils {
     return PROINSTANCE;
   }
 
-  public void loadProc(String basePath) {
+  /**
+   * 进行重新加载操作
+   *
+   * @param basePath
+   */
+  public void reloadProc(String basePath) {
     if (StringUtils.isNotEmpty(basePath)) {
+      prop.clear();
       String pathFile = basePath + SymbolMsg.PATH + DEF_FILENAME;
       loadProperties(pathFile);
     }
@@ -129,5 +135,15 @@ public class SysPropertiesUtils {
     } else {
       return defValue;
     }
+  }
+
+  /**
+   * 用于修改属性的值
+   *
+   * @param key
+   * @param value
+   */
+  public void setValue(SysPropertyEnum key, String value) {
+    prop.setProperty(key.getKey(), value);
   }
 }

@@ -56,6 +56,11 @@ public class AnalyzeService {
 
     for (RawDataLine rawData : rawList) {
       logger.info("analyze roawid :" + rawData.getId());
+
+      if (rawData.getId() == 6243) {
+        System.out.println("error point");
+      }
+
       this.analyzeHtml(rawData);
       logger.info("analyze roawid :" + rawData.getId() + "finish ");
     }
@@ -67,11 +72,6 @@ public class AnalyzeService {
    * @param rawData
    */
   private void analyzeHtml(RawDataLine rawData) {
-
-    if (1040 == rawData.getId()) {
-      System.out.println("find error point");
-    }
-
     FlowServiceContext context = new FlowServiceContext();
 
     context.put(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey(), rawData);
