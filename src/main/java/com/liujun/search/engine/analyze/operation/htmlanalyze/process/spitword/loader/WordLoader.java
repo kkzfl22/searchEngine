@@ -57,7 +57,7 @@ public class WordLoader {
 
       LOGGER.info("word loader finish , word numer : {} ", KEYWORD.size());
 
-      //进行分词文件的写入
+      // 进行分词文件的写入
       writeKeys();
     } else {
       INSTANCE.loaderKeys(currFile);

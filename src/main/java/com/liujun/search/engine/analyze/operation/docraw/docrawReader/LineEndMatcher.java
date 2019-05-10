@@ -4,10 +4,10 @@ import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
+import com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess.LineDataProcFlow;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +21,14 @@ import java.util.List;
  */
 public class LineEndMatcher implements FlowServiceInf {
 
-  /** 缓存长度 */
-  public static final int MATCH_CACHE_SIZE = 3;
-
   /** 实例 */
   public static final LineEndMatcher INSTANCE = new LineEndMatcher();
+
+  /** 最大的buffer中的匹配次数，当达到这个次数时，说时网页中存在问题 */
+  private static final int READ_MAX_NUM = 200;
+
+  /** 缓存长度 */
+  public static final int MATCH_CACHE_SIZE = 3;
 
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
@@ -38,80 +41,102 @@ public class LineEndMatcher implements FlowServiceInf {
       byte[] matchBuffer = new byte[buffer.limit()];
       buffer.get(matchBuffer);
 
-      int matchIndex = CommCharMatcherInstance.LINE_END_MATCHER.matcherIndex(matchBuffer, 0);
+      // 进行数据转换成集合操作
+      return this.readBufferToList(matchBuffer, buffer, context);
+    }
+    return true;
+  }
 
-      // 检查缓存buffer数组集合是否存在
-      List<byte[]> bufferList =
-          context.getObject(DocrawReaderEnum.DOCRAW_PROC_CACHE_BUFFERLIST.getKey());
+  private boolean readBufferToList(
+      byte[] matchBuffer, ByteBuffer buffer, FlowServiceContext context) {
 
-      if (null == bufferList) {
-        bufferList = new ArrayList<>();
-        context.put(DocrawReaderEnum.DOCRAW_PROC_CACHE_BUFFERLIST.getKey(), bufferList);
-      }
+    List<byte[]> bufferList =
+        context.getObject(DocrawReaderEnum.DOCRAW_PROC_CACHE_BUFFERLIST.getKey());
+
+    int readNum = 0;
+
+    int position = 0;
+
+    // 进行多轮的字符匹配操作
+    while (readNum < READ_MAX_NUM) {
+      // 进行结束符的查找
+      int matchIndex = CommCharMatcherInstance.LINE_END_MATCHER.matcherIndex(matchBuffer, position);
 
       // 如果当前未找到结束符
       if (matchIndex == -1) {
-        // 如果为首次匹配，则将将所有字符加入到缓存命令中
-        if (bufferList.isEmpty()) {
-          // 进行压缩操作，准备进行下一次的读取
-          buffer.compact();
-          bufferList.add(matchBuffer);
-        } else {
-          byte[] buffers = this.readerBufferData(matchBuffer.length, buffer, matchBuffer);
+        byte[] buffers = this.readerBufferDataNotFinish(matchBuffer.length, position, buffer);
+
+        if (buffers != null && buffers.length > 0) {
           bufferList.add(buffers);
-          // 加入跨页的标识
-          context.put(DocrawReaderEnum.DOCRAW_PROC_PAGE_END_APPEND.getKey(), true);
         }
+
+        buffer.compact();
 
         return false;
       }
       // 如果当前找到结束符，则将结束符前的数据加入到缓存结果集中
       else {
-        // 如果当前存在跨页的标识，则在读取时需要去掉前3个字符
-        Boolean endAppendFlag =
-            context.getObject(DocrawReaderEnum.DOCRAW_PROC_PAGE_END_APPEND.getKey());
-        if (null != endAppendFlag && endAppendFlag) {
-          byte[] endBufferData = this.readerBufferEndAppend(matchIndex, buffer);
-          bufferList.add(endBufferData);
-          context.remove(DocrawReaderEnum.DOCRAW_PROC_PAGE_END_APPEND.getKey());
+        // 当找到结束符后，加入到缓冲字符的集合中
+        byte[] endBufferData = this.readerBufferEndAppend(matchIndex, position, buffer);
+        bufferList.add(endBufferData);
+
+        // 然后进行对象的转化
+        boolean runFlag = LineDataProcFlow.INSTANCE.parseToListAndCheck(context);
+
+        // 如果当前已经到达了阈值，则返回，但需要记录下当前的
+        if (runFlag) {
+          // 将buffer中空余的数据记录到上下文中，下次需要优先读取
+          byte[] buferNext = this.readerBufferNext(matchIndex, buffer);
+
+          if (buferNext.length > 0) {
+            context.put(DocrawReaderEnum.DOCRAW_PROC_CACHE_NEXTBUFFER.getKey(), buferNext);
+          }
+
+          buffer.compact();
+
+          return true;
         }
-        // 当不存在跨页时，则不需要
-        else {
-          byte[] endBufferData = this.readerBufferEnd(matchIndex, buffer);
-          bufferList.add(endBufferData);
-        }
+
+        // 位置信息
+        position = matchIndex + SymbolMsg.LINE_OVER.length();
       }
+
+      readNum++;
     }
-    return true;
+
+    throw new RuntimeException("readBufferToList exception ,is loop");
   }
 
   /**
    * 将数据中间部分的data从集合中读出
    *
+   * <p>仅限在未找到结束符时进行读取操作
+   *
+   * <p>每次读取时，只读取开始到倒数第三个字符
+   *
    * @param dataLength 匹配索引
    * @param buffer 字符
-   * @param matchBuffer 字符信息
    */
-  private byte[] readerBufferData(int dataLength, ByteBuffer buffer, byte[] matchBuffer) {
+  private byte[] readerBufferDataNotFinish(int dataLength, int positon, ByteBuffer buffer) {
     if (buffer.position() <= MATCH_CACHE_SIZE) {
       return new byte[0];
     }
 
-    int readLength = dataLength - MATCH_CACHE_SIZE;
-    byte[] outdata = new byte[readLength];
-    buffer.position(MATCH_CACHE_SIZE);
-    buffer.get(outdata, 0, readLength);
+    int readLength = dataLength - positon - MATCH_CACHE_SIZE;
 
-    // 进行压缩操作，准备进行下一次的读取,位置需要加上结束符的长度
-    buffer.position(dataLength);
-    buffer.compact();
+    if (readLength > 0) {
+      byte[] outdata = new byte[readLength];
+      buffer.position(positon);
+      buffer.get(outdata, 0, readLength);
 
-    // 将最后三个字符放入到byteBuffer中
-    buffer.put(matchBuffer[matchBuffer.length - 3]);
-    buffer.put(matchBuffer[matchBuffer.length - 2]);
-    buffer.put(matchBuffer[matchBuffer.length - 1]);
+      // 进行压缩操作，将最后三个字符留在buffer中
+      int pos = dataLength - MATCH_CACHE_SIZE;
+      buffer.position(pos);
 
-    return outdata;
+      return outdata;
+    }
+
+    return new byte[0];
   }
 
   /**
@@ -120,34 +145,41 @@ public class LineEndMatcher implements FlowServiceInf {
    * @param matchIndex 匹配索引
    * @param buffer 字符
    */
-  private byte[] readerBufferEndAppend(int matchIndex, ByteBuffer buffer) {
-    int readLength = matchIndex - MATCH_CACHE_SIZE;
-    byte[] outdata = new byte[readLength];
-    buffer.position(MATCH_CACHE_SIZE);
-    buffer.get(outdata, 0, readLength);
+  private byte[] readerBufferEndAppend(int matchIndex, int position, ByteBuffer buffer) {
+    // 进行匹配上结束部分数据的读取操作
+    int readLength = matchIndex + SymbolMsg.LINE_OVER.length() - position;
 
-    // 进行压缩操作，准备进行下一次的读取,位置需要加上结束符的长度
-    buffer.position(matchIndex + SymbolMsg.LINE_OVER.length());
-    buffer.compact();
+    if (readLength < 0) {
+      throw new RuntimeException("readerBufferEndAppend end error length:" + readLength);
+    }
+
+    byte[] outdata = new byte[readLength];
+    buffer.position(position);
+    buffer.get(outdata, 0, readLength);
 
     return outdata;
   }
 
   /**
-   * 读取并且添加数据到集合中
+   * 读取buffer中下半部分的数据
    *
    * @param matchIndex 匹配索引
    * @param buffer 字符
    */
-  private byte[] readerBufferEnd(int matchIndex, ByteBuffer buffer) {
-    int readLength = matchIndex;
-    byte[] outdata = new byte[readLength];
-    buffer.position(0);
-    buffer.get(outdata, 0, readLength);
-    // 进行压缩操作，准备进行下一次的读取,位置需要加上结束符的长度
-    buffer.position(matchIndex + SymbolMsg.LINE_OVER.length());
-    buffer.compact();
+  private byte[] readerBufferNext(int matchIndex, ByteBuffer buffer) {
 
-    return outdata;
+    int matIndex = matchIndex + SymbolMsg.LINE_OVER.length();
+
+    // 进行匹配上结束部分数据的读取操作
+    int readLength = buffer.limit() - matIndex;
+
+    if (readLength > 0) {
+      byte[] outdata = new byte[readLength];
+      buffer.position(matIndex);
+      buffer.get(outdata, 0, readLength);
+
+      return outdata;
+    }
+    return new byte[0];
   }
 }

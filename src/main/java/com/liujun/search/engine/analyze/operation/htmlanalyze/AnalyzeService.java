@@ -54,16 +54,20 @@ public class AnalyzeService {
       return;
     }
 
+    long start = System.currentTimeMillis();
+
     for (RawDataLine rawData : rawList) {
-      logger.info("analyze roawid :" + rawData.getId());
-
-      if (rawData.getId() == 6243) {
-        System.out.println("error point");
-      }
-
       this.analyzeHtml(rawData);
-      logger.info("analyze roawid :" + rawData.getId() + "finish ");
     }
+    long end = System.currentTimeMillis();
+    long sumValue = end - start;
+
+    logger.info(
+        "analyze last docId:{} , rownum {} finish , use time {},average time : {}",
+        rawList.get(rawList.size() - 1).getId(),
+        rawList.size(),
+        sumValue,
+        sumValue / rawList.size());
   }
 
   /**
@@ -71,7 +75,7 @@ public class AnalyzeService {
    *
    * @param rawData
    */
-  private void analyzeHtml(RawDataLine rawData) {
+  public void analyzeHtml(RawDataLine rawData) {
     FlowServiceContext context = new FlowServiceContext();
 
     context.put(AnalyzeEnum.ANALYZE_INPUT_DATALINE.getKey(), rawData);

@@ -30,9 +30,6 @@ public class TempIndexFile {
   /** 文件后缀名 */
   private static final String SUFFIX_NAME = ".tempindex";
 
-  /** 临时索引文件，可能有多个 */
-  private static final String TEMP_INDEX_PATH = "tempindex";
-
   /** 基础路径 */
   private static final String BASEPATH =
       SysPropertiesUtils.getInstance().getValue(SysPropertyEnum.FILE_PROCESS_PATH);
@@ -41,6 +38,9 @@ public class TempIndexFile {
   private static final int TEMP_MAX_INDEX =
       SysPropertiesUtils.getInstance()
           .getIntegerValueOrDef(SysPropertyEnum.ANALYZE_MAX_FILE, 1 * 1024 * 1024 * 1024);
+
+  /** 索引占用数字的位数 */
+  private static final int MAX_INDEX_LENGTH = 4;
 
   /** 输出的索引文件编号 */
   private AtomicInteger indexFile = new AtomicInteger(0);
@@ -276,7 +276,7 @@ public class TempIndexFile {
     tempIndexPath.append(SymbolMsg.PATH);
     tempIndexPath.append(PathCfg.ANALYZE_PATH);
     tempIndexPath.append(SymbolMsg.PATH);
-    tempIndexPath.append(TEMP_INDEX_PATH);
+    tempIndexPath.append(PathCfg.ANALYZE_PATH_TEMP_INDEX_PATH);
 
     return tempIndexPath.toString();
   }
@@ -291,10 +291,28 @@ public class TempIndexFile {
 
     fileName.append(PREFIX_NAME);
     fileName.append(SymbolMsg.UNDER_LINE);
-    fileName.append(indexFile.get());
+    fileName.append(nameIndex(indexFile.get()));
     fileName.append(SUFFIX_NAME);
 
     return fileName.toString();
+  }
+
+  /**
+   * 获取名称索引输出值
+   *
+   * @return
+   */
+  private String nameIndex(int value) {
+    String valueStr = String.valueOf(value);
+
+    StringBuilder outIndex = new StringBuilder();
+
+    for (int i = 0; i < MAX_INDEX_LENGTH - valueStr.length(); i++) {
+      outIndex.append("0");
+    }
+    outIndex.append(valueStr);
+
+    return outIndex.toString();
   }
 
   /** 进行清理操作 */

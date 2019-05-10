@@ -6,6 +6,7 @@ import com.liujun.search.common.io.LocalIOUtils;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -32,8 +33,12 @@ public class ReaderSwitchCheck implements FlowServiceInf {
     // 文件位置
     long position = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_FILE_POSITION.getKey());
 
-    // 进行数据读取操作
-    int readIndex = streamChannel.read(buffer, position);
+    int readIndex = -1;
+
+    if (streamChannel.isOpen()) {
+      // 进行数据读取操作
+      readIndex = streamChannel.read(buffer, position);
+    }
 
     // 如果当前未读取到数据说明已经读取完成，切换到下一个文件读取
     if (readIndex <= 0) {
@@ -50,6 +55,10 @@ public class ReaderSwitchCheck implements FlowServiceInf {
         context.put(DocrawReaderEnum.DOCRAW_OUTPUT_FINISH_FLAG.getKey(), true);
         // 当读取完成后，则索引位置不加
         readIndex = 0;
+
+        //所有完成后，需要进行关闭操作
+
+
       } else {
         position = 0;
         streamChannel = context.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey());
@@ -87,16 +96,16 @@ public class ReaderSwitchCheck implements FlowServiceInf {
       return false;
     }
 
+    // 获取文件路径
+    String basePath = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_BASE_PATH.getKey());
+
     index = index + 1;
     // 重新将索引位置写入至流程中
     context.put(DocrawReaderEnum.DOCRAW_INPUT_FILE_INDEX.getKey(), index);
 
-    // 获取文件路径
-    String basePath = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_BASE_PATH.getKey());
-
     String filePath = basePath + SymbolMsg.PATH + fileList[index];
-
-    FileInputStream input = new FileInputStream(filePath);
+    File checkFile = new File(filePath);
+    FileInputStream input = new FileInputStream(checkFile);
 
     FileChannel channel = input.getChannel();
 

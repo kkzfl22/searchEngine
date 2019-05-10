@@ -1,5 +1,7 @@
 package com.liujun.search.algorithm.boyerMoore;
 
+import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -45,5 +47,19 @@ public class TestCharMatcherBoyerMoore {
 
     int findIndex = instance.bm(src.toCharArray(), matchers.toCharArray(), index);
     Assert.assertEquals(7, findIndex);
+  }
+
+  /** 字符串的查找操作，验证好后缀的规则 */
+  @Test
+  public void testCharIgnoreCase() {
+    String src = "abCDEfg";
+    String matchers = "cde";
+
+    CharMatcherBMBadChars CHAR_MATCHER = CharMatcherBMBadChars.getGoodSuffixInstance(matchers);
+
+    int index = 0;
+
+    int findIndex = CHAR_MATCHER.matcherIndexIgnoreCase(src.toCharArray(), index);
+    Assert.assertEquals(2, findIndex);
   }
 }

@@ -1,5 +1,7 @@
 package com.liujun.search.algorithm.boyerMoore.use;
 
+import com.liujun.search.utilscode.io.constant.SysConfig;
+
 /**
  * 高效的字符串匹配算法bm算法,使用坏字符的规则
  *
@@ -170,6 +172,64 @@ public class CharMatcherBMBadChars {
   }
 
   /**
+   * 使用bm算法进行字符串的匹配操作,可以进行英文不区分大小写的匹配
+   *
+   * @param str 原始字符信息
+   * @param inputStart 起始索引位置
+   * @return 查找到的位置
+   */
+  public int matcherIndexIgnoreCase(char[] str, int inputStart) {
+
+    // 起始搜索位置
+    int startIndex = inputStart;
+
+    int srcLength = str.length;
+
+    while (startIndex <= srcLength - matcherLength) {
+      // 模式串的匹配规则，从后向前匹配
+      int matchIndex;
+      for (matchIndex = matcherLength - 1; matchIndex >= 0; matchIndex--) {
+        // 检查当前是否不能匹配,如果不能匹配，坏字符就是当前matchIndex所对应的位置
+        if (getIgnoreCase(str[startIndex + matchIndex]) != matcherChars[matchIndex]) {
+          break;
+        }
+      }
+
+      // 如果当前一直到模式串匹配完成，都能匹配，说明字符已经找到，则返回
+      if (matchIndex < 0) {
+        return startIndex;
+      }
+
+      int jumpBits = 0;
+
+      int badCharCode = getIgnoreCase(str[startIndex + matchIndex]);
+
+      // 检查是否超过了字符集的大小
+      // 如果超过了当前字符集的大小，则将到当前坏字符的位置全部跳过
+      if (badCharCode >= BUFFER_SIZE || badCharCode < 0) {
+        jumpBits = matchIndex + 1;
+      } else {
+        // 如果出现坏字符，找到坏字符出现在模式串中的位置
+        int badIndex = badChar[badCharCode];
+        // 计算械串可跳过的位数
+        jumpBits = matchIndex - badIndex;
+      }
+
+      int moveGoodSuffix = 0;
+
+      // 使用好后缀的规则来进行计算滑动的位数
+      // 在仅使用坏字符的规则下，此返回1
+      if (matchIndex < matcherLength - 1) {
+        moveGoodSuffix = this.countMoveGoodSuffix(matchIndex);
+      }
+
+      startIndex = startIndex + Math.max(jumpBits, moveGoodSuffix);
+    }
+
+    return -1;
+  }
+
+  /**
    * 使用好后后缀规则来进行计算的方法
    *
    * @param badIndex 坏字符索引位置
@@ -189,5 +249,23 @@ public class CharMatcherBMBadChars {
 
   public char[] getMatcherChars() {
     return matcherChars;
+  }
+
+  /**
+   * 进行不区分大小写的字符检查获取
+   *
+   * @param mainChar 字符信息
+   * @return
+   */
+  private char getIgnoreCase(char mainChar) {
+
+    int charindex = (int) mainChar;
+
+    // 如果检查发现在大写字符的范围内，则转换为小写字符的索引位置
+    if (charindex >= SysConfig.UPPER_CASE_START && charindex <= SysConfig.UPPER_CASE_END) {
+      return (char) (charindex + SysConfig.UPPER_TO_LOWER);
+    }
+
+    return mainChar;
   }
 }

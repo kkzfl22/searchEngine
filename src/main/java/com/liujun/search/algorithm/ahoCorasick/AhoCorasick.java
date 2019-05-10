@@ -1,6 +1,7 @@
 package com.liujun.search.algorithm.ahoCorasick;
 
 import com.liujun.search.algorithm.ahoCorasick.pojo.MatcherBusi;
+import com.liujun.search.utilscode.io.constant.SysConfig;
 
 import java.util.*;
 
@@ -15,15 +16,6 @@ public abstract class AhoCorasick {
 
   /** ac自动机的大小 */
   private final int AC_SIZE = getAcSize();
-
-  /** 大写字母的开始号 */
-  private static final int UPPER_CASE_START = 65;
-
-  /** 大写字母的结束 */
-  private static final int UPPER_CASE_END = 90;
-
-  /** 小写字符与大写字符的差值 */
-  private static final int UPPER_TO_LOWER = 32;
 
   /**
    * 获取当前ac自动机的字符集大小
@@ -444,8 +436,8 @@ public abstract class AhoCorasick {
       return -1;
     } else {
       // 如果检查发现在大写字符的范围内，则转换为小写字符的索引位置
-      if (index >= UPPER_CASE_START && index <= UPPER_CASE_END) {
-        return index + UPPER_TO_LOWER;
+      if (index >= SysConfig.UPPER_CASE_START && index <= SysConfig.UPPER_CASE_END) {
+        return index + SysConfig.UPPER_TO_LOWER;
       }
     }
 

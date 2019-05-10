@@ -6,6 +6,8 @@ import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 进行文件的首次读取
@@ -42,6 +44,15 @@ public class ReaderInit implements FlowServiceInf {
 
       context.put(DocrawReaderEnum.DOCRAW_PROC_INPUT_STREAM.getKey(), input);
       context.put(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey(), input.getChannel());
+
+      // 添加缓存数据的集合
+      List<byte[]> bufferList =
+          context.getObject(DocrawReaderEnum.DOCRAW_PROC_CACHE_BUFFERLIST.getKey());
+
+      if (null == bufferList) {
+        bufferList = new ArrayList<>();
+        context.put(DocrawReaderEnum.DOCRAW_PROC_CACHE_BUFFERLIST.getKey(), bufferList);
+      }
     }
 
     return true;

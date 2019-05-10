@@ -1,5 +1,6 @@
 package com.liujun.search.engine.collect.operation.docraw;
 
+import com.liujun.search.engine.analyze.operation.docraw.docrawReader.LineEndMatcher;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
@@ -34,6 +35,9 @@ public class DocRawFileManager {
 
   /** url与id对应的关系的文件存储路径 */
   protected static final String DOC_FILEPATH = PathCfg.BASEPATH + PathCfg.COLLEC_PATH;
+
+  /** 使用32K的缓存来进行临时存储,4个用于将上次读取的最后3个字符保留，防止跨页匹配的问题 */
+  public static final int BUFFER_SIZE = 32 * 1024;
 
   /** 当前文件的索引号 */
   private AtomicInteger currFileIndex = new AtomicInteger(0);

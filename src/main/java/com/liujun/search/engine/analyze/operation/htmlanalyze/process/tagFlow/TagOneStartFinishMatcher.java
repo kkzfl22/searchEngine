@@ -47,6 +47,10 @@ public class TagOneStartFinishMatcher implements FlowServiceInf {
       // 进行结束位置查找
       MatcherBusi matchEndBusi = ACMATCH_ONE_INSTANCE.matcherOne(mainChars, position);
 
+      if (matchEndBusi.getMatcherIndex() == -1) {
+        throw new RuntimeException("tag error  start :" + startTagMatch);
+      }
+
       // 再次进行索引位置的更新
       position = matchEndBusi.getMatcherIndex() + matchEndBusi.getMatcherKey().length();
       context.put(HtmlTagFlowEnum.TAG_INPUT_POSITION_START.getKey(), position);

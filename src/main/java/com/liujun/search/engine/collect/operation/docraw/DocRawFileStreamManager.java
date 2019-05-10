@@ -60,17 +60,10 @@ public class DocRawFileStreamManager extends DocRawFileManager {
   public void fileSizeCheanAndSwitch() {
     // 检查文件是否超过了文件大小限制
     if (this.getCurrFileSize() > getMaxFileSize()) {
-      int fileIndex = super.getFileIndex();
-      boolean lockRsp = false;
       try {
         lock.lock();
-
-        lockRsp = true;
-
-        int fileIndex2 = super.getFileIndex();
-
-        // 执行二次加锁的确认操作,有可能被其他线程已经更新掉了文件索引号
-        if (fileIndex == fileIndex2) {
+        // 上于没有作二次文件大小的检查，当并发处于同步点时，将发生新文件已经生成又生成新的文件
+        if (this.getCurrFileSize() > getMaxFileSize()) {
           // 切换文件
           super.switchNextFileIndex();
           // 1,先次原来的文件通道 关闭
@@ -85,10 +78,8 @@ public class DocRawFileStreamManager extends DocRawFileManager {
         e.printStackTrace();
         logger.error("DocRawFileStreamManager switchOpen Exception", e);
       } finally {
-        if (lockRsp) {
-          // 加锁成功后，必须释放锁
-          lock.unlock();
-        }
+        // 加锁成功后，必须释放锁
+        lock.unlock();
       }
     }
   }
@@ -100,17 +91,12 @@ public class DocRawFileStreamManager extends DocRawFileManager {
    */
   public int getMaxFileSize() {
 
-    if (maxFileSize == 0) {
+    if (maxFileSize <= 0) {
+      int dataMaxSize =
+          SysPropertiesUtils.getInstance()
+              .getIntegerValueOrDef(SysPropertyEnum.FILE_MAX_SIZE, DEF_FILE_MAX_SIZE);
 
-      int maxFileSizeDef = DEF_FILE_MAX_SIZE;
-      Integer dataMaxSize =
-          SysPropertiesUtils.getInstance().getIntValue(SysPropertyEnum.FILE_MAX_SIZE);
-
-      if (null != dataMaxSize) {
-        maxFileSizeDef = dataMaxSize;
-      }
-
-      maxFileSize = maxFileSizeDef;
+      maxFileSize = dataMaxSize;
     }
     return maxFileSize;
   }
@@ -124,6 +110,4 @@ public class DocRawFileStreamManager extends DocRawFileManager {
     LocalIOUtils.close(channel);
     LocalIOUtils.close(outputStream);
   }
-
-
 }

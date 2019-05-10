@@ -14,8 +14,6 @@ public class DataCollect {
 
   public static final DataCollect INSTANCE = new DataCollect();
 
-
-
   public static void main(String[] args) {
 
     // 加载配制文件

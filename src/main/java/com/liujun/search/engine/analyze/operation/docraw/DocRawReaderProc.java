@@ -7,11 +7,9 @@ import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.engine.analyze.operation.docraw.docrawReader.*;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
 import com.liujun.search.engine.collect.operation.docraw.DocRawFileManager;
-import com.liujun.search.engine.collect.operation.docraw.DocRawFileStreamManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sound.sampled.DataLine;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
@@ -26,9 +24,6 @@ import java.util.List;
  * @date 2019/03/04
  */
 public class DocRawReaderProc extends DocRawFileManager {
-
-  /** 使用32K的缓存来进行临时存储,4个用于将上次读取的最后3个字符保留，防止跨页匹配的问题 */
-  private static final int FIND_BUFFER_SIZE = 32 * 1024 + LineEndMatcher.MATCH_CACHE_SIZE;
 
   /** 日志信息 */
   private Logger logger = LoggerFactory.getLogger(DocRawReaderProc.class);
@@ -46,13 +41,21 @@ public class DocRawReaderProc extends DocRawFileManager {
     FLOW.add(ReaderInit.INSTANCE);
     // 进行文件切换
     FLOW.add(ReaderSwitchCheck.INSTANCE);
+    // 进行上一次数据余下的读取操作
+    FLOW.add(LineLastMatcher.INSTANCE);
     // 行结束符查找
     FLOW.add(LineEndMatcher.INSTANCE);
-    // 将字符转换为网页对象
-    FLOW.add(BytesToEntityConvert.INSTANCE);
-    // 进行每次获取的检查
-    FLOW.add(PageListLimit.INSTANCE);
+    // 结束符检查
+    FLOW.add(FinishCheck.INSTANCE);
 
+    // 进行流程的初始化操作
+    InitFlow();
+  }
+
+  public static final DocRawReaderProc INSTANCE = new DocRawReaderProc();
+
+  /** 进行流程的初始化操作 */
+  public static void InitFlow() {
     // 扫描文件夹，得到文件列表
     String[] dirList = FileList();
 
@@ -63,12 +66,8 @@ public class DocRawReaderProc extends DocRawFileManager {
     // 分配缓冲区
     FlowCon.put(
         DocrawReaderEnum.DOCRAW_INPUT_READER_BUFFER.getKey(),
-        ByteBuffer.allocateDirect(FIND_BUFFER_SIZE));
-    // 用于封装返回对象
-    FlowCon.put(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey(), new ArrayList<>());
+        ByteBuffer.allocateDirect(BUFFER_SIZE));
   }
-
-  public static final DocRawReaderProc INSTANCE = new DocRawReaderProc();
 
   /**
    * 检查当前读取是否已经结束
@@ -87,11 +86,9 @@ public class DocRawReaderProc extends DocRawFileManager {
    */
   public List<RawDataLine> reader(int limit) {
 
-    List<RawDataLine> reslut =
-        FlowCon.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
-    // 读取之前进行一次清空操作
-    reslut.clear();
-
+    FlowCon.remove(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
+    // 用于封装返回对象
+    FlowCon.put(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey(), new ArrayList<>());
     // 输入的限制
     FlowCon.put(DocrawReaderEnum.DOCRAW_INPUT_PAGELIMIT.getKey(), limit);
 
@@ -132,9 +129,6 @@ public class DocRawReaderProc extends DocRawFileManager {
     List<RawDataLine> result =
         FlowCon.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
 
-    // 进行流程的清理操作
-    FlowCon.cleanParam();
-
     return result;
   }
 
@@ -148,10 +142,19 @@ public class DocRawReaderProc extends DocRawFileManager {
   }
 
   /** 进行关闭操读取操作 */
-  public void closeReader() {
+  private void closeReader() {
     InputStream input = FlowCon.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_STREAM.getKey());
     Channel channel = FlowCon.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey());
     LocalIOUtils.close(channel);
     LocalIOUtils.close(input);
+  }
+
+  public void cleanAll() {
+    this.closeReader();
+    FlowCon.cleanParam();
+  }
+
+  public void setFinish(boolean runFlag) {
+    this.finish = runFlag;
   }
 }

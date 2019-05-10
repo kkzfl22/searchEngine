@@ -1,4 +1,4 @@
-package com.liujun.search.engine.analyze.operation.docraw.docrawReader;
+package com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess;
 
 import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
 import com.liujun.search.common.flow.FlowServiceContext;
@@ -6,6 +6,7 @@ import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.common.io.ByteUtils;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
+import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
 import java.util.List;
 
@@ -62,32 +63,28 @@ public class BytesToEntityConvert implements FlowServiceInf {
     RawDataLine dataLine = new RawDataLine();
 
     // 查找得到网页的id
-    int seqNumEnd = CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, startIndex);
-
-
-    if(seqNumEnd == -1)
-    {
-      System.out.println("查找到错误点");
-    }
+    int seqNumEndIndex =
+        CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, startIndex);
 
     // 得到网页的id
-    String htmlId = new String(dataVale, startIndex, seqNumEnd);
+    String htmlId = new String(dataVale, startIndex, seqNumEndIndex);
 
     dataLine.setId(Long.parseLong(htmlId));
     // 得到长度
     int htmlLength =
-        CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, seqNumEnd + 1);
+        CommCharMatcherInstance.LINE_COLUMN_MATCHER.matcherIndex(dataVale, seqNumEndIndex + 1);
 
     if (htmlLength == -1) {
       throw new RuntimeException("curr exception:" + htmlLength);
     }
 
-    String htmlLenChars = new String(dataVale, seqNumEnd + 1, htmlLength - seqNumEnd - 1);
+    String htmlLenChars = new String(dataVale, seqNumEndIndex + 1, htmlLength - seqNumEndIndex - 1);
     dataLine.setLength(Long.parseLong(htmlLenChars));
-
     htmlLength = htmlLength + 1;
+
+    int contextLength = dataVale.length - htmlLength - SymbolMsg.LINE_OVER.length();
     // 返回最终的数据集
-    String htmlContext = new String(dataVale, htmlLength, dataVale.length - htmlLength);
+    String htmlContext = new String(dataVale, htmlLength, contextLength);
     dataLine.setHtmlContext(htmlContext);
 
     return dataLine;

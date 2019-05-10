@@ -2,7 +2,6 @@ package com.liujun.search.engine.analyze.operation.docraw;
 
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
 import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -74,7 +73,7 @@ public class TestDocRawReaderProc {
   // @After
   public void clean() {
     DocRawWriteProc.INSTANCE.threadClean();
-    DocRawReaderProc.INSTANCE.closeReader();
+    DocRawReaderProc.INSTANCE.cleanAll();
     DocRawWriteProc.INSTANCE.cleanAll();
   }
 
@@ -86,7 +85,7 @@ public class TestDocRawReaderProc {
       List<RawDataLine> list = DocRawReaderProc.INSTANCE.reader(100);
       Assert.assertNotNull(list);
 
-      //this.print(list);
+      // this.print(list);
 
       sum += list.size();
     }

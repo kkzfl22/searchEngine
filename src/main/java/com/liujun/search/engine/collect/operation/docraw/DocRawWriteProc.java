@@ -20,9 +20,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class DocRawWriteProc extends DocRawFileStreamManager {
 
-  /** 缓冲区大小，32K */
-  private static final int BUFFER_SIZE = 1024 * 32;
-
   public static final DocRawWriteProc INSTANCE = new DocRawWriteProc();
 
   /** 线程局部变量 */
@@ -76,7 +73,7 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
    *
    * @param htmlCode html的内容信息
    */
-  public void putHtml(long id, String htmlCode) {
+  public int putHtml(long id, String htmlCode) {
 
     // 获取当前线程的缓冲区
     ByteBuffer buffer = threadLocal.get();
@@ -94,9 +91,11 @@ public class DocRawWriteProc extends DocRawFileStreamManager {
       // 写入数据先需要获取锁
       lock.lock();
       // 将数据写入文件通道中,统计需要以最终的写入大小为准
-      int wirteBytes = ByteBufferUtils.wirteChannel(buffer, channel, lineData);
+      int writeBytes = ByteBufferUtils.wirteChannel(buffer, channel, lineData);
       // 写入完成更新文件大小
-      super.fileSizeAdd(wirteBytes);
+      super.fileSizeAdd(writeBytes);
+
+      return writeBytes;
     } finally {
       // 使用完毕后需要解锁操作
       lock.unlock();

@@ -28,9 +28,6 @@ import java.util.List;
  */
 public class DocRawFindProc extends DocRawFileStreamManager {
 
-  /** 使用32K的缓存来进行临时存储 */
-  private static final int FIND_BUFFER_SIZE = 32 * 1024;
-
   public static final DocRawFindProc INSTANCE = new DocRawFindProc();
 
   /** 日志信息 */
@@ -56,7 +53,7 @@ public class DocRawFindProc extends DocRawFileStreamManager {
    */
   public String findContextById(long id) {
 
-    ByteBuffer readBuffer = ByteBuffer.allocate(FIND_BUFFER_SIZE);
+    ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     FlowServiceContext context = new FlowServiceContext();
 
     context.put(DocRawFindEnum.INPUT_FIND_ID.getKey(), id);

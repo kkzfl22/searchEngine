@@ -1,4 +1,4 @@
-package com.liujun.search.engine.analyze.operation.docraw.docrawReader;
+package com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
@@ -24,11 +24,9 @@ public class PageListLimit implements FlowServiceInf {
     List<RawDataLine> dataLinesArrays =
         context.getObject(DocrawReaderEnum.DOCRAW_INOUTPUT_RESULT_LIST.getKey());
 
-    Boolean outFinish = context.getObject(DocrawReaderEnum.DOCRAW_OUTPUT_FINISH_FLAG.getKey());
-
     int limit = context.getObject(DocrawReaderEnum.DOCRAW_INPUT_PAGELIMIT.getKey());
 
-    if (dataLinesArrays.size() == limit || (outFinish != null && outFinish)) {
+    if (dataLinesArrays.size() == limit) {
       context.put(DocrawReaderEnum.DOCRAW_OUTPUT_RETURN_FLAG.getKey(), true);
       return false;
     }

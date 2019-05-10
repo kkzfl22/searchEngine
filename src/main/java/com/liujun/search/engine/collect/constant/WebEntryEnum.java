@@ -15,7 +15,14 @@ public enum WebEntryEnum {
   WY163("https://www.163.com/", "163"),
 
   SINA("https://www.sina.com.cn/", "sina"),
-  ;
+
+  CSDN("https://www.csdn.net/", "csdn"),
+
+  CARHOME("https://www.autohome.com.cn", "autohome"),
+
+  ZOL("http://www.zol.com.cn/", "zol"),
+
+  ITEYE("https://www.iteye.com/", "iteye");
 
   /** 网站地址信息 */
   private String urlAddress;

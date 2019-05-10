@@ -1,19 +1,21 @@
 package com.liujun.search.element.download;
 
-import com.liujun.search.common.properties.SysPropertiesUtils;
-import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
+import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.element.download.charsetFlow.HtmlCharsetFlow;
+import com.liujun.search.utilscode.io.constant.SysConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,8 @@ public class HttpsHtmlDownloadImpl implements HtmlDownLoadInf {
 
     CloseableHttpResponse response = null;
 
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(SysConfig.SYS_MAX_BUFFER_SIZE);
+
     try {
       // 创建get方式请求对象
       HttpGet get = new HttpGet(url);
@@ -73,10 +77,23 @@ public class HttpsHtmlDownloadImpl implements HtmlDownLoadInf {
             contextLength);
 
         // 如果当前文件非流，则进行下载文本操作
-        if (HttpConnUtils.ContextTypeChec(entity.getContentType().getValue())) {
-          // 按指定编码转换结果实体为String类型
-          body = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-          EntityUtils.consume(entity);
+        if (HttpUtils.ContextTypeChec(entity.getContentType().getValue())) {
+
+          InputStream input = entity.getContent();
+
+          byte[] buffer = new byte[SysConfig.SYS_DEFA_BUFFER_SIZE];
+
+          int index = -1;
+          while ((index = input.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, index);
+          }
+
+          buffer = null;
+          byte[] outDataBytes = outputStream.toByteArray();
+          ContentType type = ContentType.get(entity);
+
+          // 进行分析
+          body = HtmlCharsetFlow.INSTANCE.htmlCharsetValue(outDataBytes, type);
         }
       }
 
@@ -86,8 +103,12 @@ public class HttpsHtmlDownloadImpl implements HtmlDownLoadInf {
     } catch (IOException e) {
       e.printStackTrace();
       logger.error("https download error ,IOException", e);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error("https download error ,Exception", e);
     } finally {
-      HttpConnUtils.close(response);
+      LocalIOUtils.close(outputStream);
+      HttpUtils.close(response);
     }
 
     long endTime = System.currentTimeMillis();

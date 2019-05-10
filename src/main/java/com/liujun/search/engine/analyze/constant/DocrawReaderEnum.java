@@ -42,11 +42,11 @@ public enum DocrawReaderEnum {
   /** 用于缓存临时数据的 */
   DOCRAW_PROC_CACHE_BUFFERLIST("docraw_proc_cahce_buffer_list"),
 
-  /** 用于标识当前是否添加了页结束标识,在读取完成后清除 */
-  DOCRAW_PROC_PAGE_END_APPEND("docraw_proc_page_end_append"),
-
   /** 输出的返回标识 */
   DOCRAW_OUTPUT_RETURN_FLAG("docraw_output_return_flag"),
+
+  /** 缓冲下次读取的数据，作为下次优先读取的内容 */
+  DOCRAW_PROC_CACHE_NEXTBUFFER("docraw_proc_cache_nextbuffer"),
 
   /** 标识当前读取已经完成 */
   DOCRAW_OUTPUT_FINISH_FLAG("docraw_output_finish_flag"),
