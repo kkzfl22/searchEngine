@@ -1,6 +1,6 @@
 package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,8 +62,8 @@ public class FilterWordLoader {
       LOGGER.error("Wordloader loader IOException", e);
       throw new RuntimeException(e);
     } finally {
-      LocalIOUtils.close(bufferReader);
-      LocalIOUtils.close(reader);
+      CommonIOUtils.close(bufferReader);
+      CommonIOUtils.close(reader);
     }
   }
 

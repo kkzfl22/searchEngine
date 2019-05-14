@@ -1,6 +1,6 @@
 package com.liujun.search.engine.collect.operation.filequeue;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +110,7 @@ public class FileQueueOffset {
       e.printStackTrace();
       log.error("FileQueue readAndSetOffset IOException", e);
     } finally {
-      LocalIOUtils.close(input);
+      CommonIOUtils.close(input);
     }
 
     return DATA_DEF;
@@ -150,7 +150,7 @@ public class FileQueueOffset {
       e.printStackTrace();
       log.error("FileQueue writeOffset IOException", e);
     } finally {
-      LocalIOUtils.close(outputStream);
+      CommonIOUtils.close(outputStream);
     }
   }
 

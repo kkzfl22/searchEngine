@@ -1,6 +1,6 @@
 package com.liujun.search.engine.collect.flow;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.element.download.HttpsClientManager;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.operation.DocIdproc;
@@ -95,6 +95,6 @@ public class TestHtmlAnalyzeFlow {
 
   @AfterClass
   public static void clean() {
-    LocalIOUtils.close(Client);
+    CommonIOUtils.close(Client);
   }
 }

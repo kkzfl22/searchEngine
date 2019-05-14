@@ -1,6 +1,6 @@
 package com.liujun.search.engine.collect.operation.filequeue;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
@@ -318,15 +318,15 @@ public class FileQueue {
   /** 关闭写入通道 */
   private void closeWrite() {
     // 关闭写入
-    LocalIOUtils.close(writeChannel);
-    LocalIOUtils.close(writeOutput);
+    CommonIOUtils.close(writeChannel);
+    CommonIOUtils.close(writeOutput);
   }
 
   /** 关闭读取 */
   private void closeRead() {
     // 再关闭读取
-    LocalIOUtils.close(readChannel);
-    LocalIOUtils.close(readInput);
+    CommonIOUtils.close(readChannel);
+    CommonIOUtils.close(readInput);
   }
 
   /**

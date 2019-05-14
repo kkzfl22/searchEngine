@@ -1,6 +1,6 @@
 package com.liujun.search.element.download;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.element.download.charsetFlow.HtmlCharsetFlow;
 import com.liujun.search.utilscode.io.constant.SysConfig;
 import org.apache.commons.lang3.StringUtils;
@@ -107,7 +107,7 @@ public class HttpsHtmlDownloadImpl implements HtmlDownLoadInf {
       e.printStackTrace();
       logger.error("https download error ,Exception", e);
     } finally {
-      LocalIOUtils.close(outputStream);
+      CommonIOUtils.close(outputStream);
       HttpUtils.close(response);
     }
 

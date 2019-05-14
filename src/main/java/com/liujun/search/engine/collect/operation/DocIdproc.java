@@ -1,7 +1,7 @@
 package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.algorithm.ahoCorasick.AhoCorasickNum;
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class DocIdproc {
 
   /** 文件与id的对应关系 */
-  private static final String DOC_ID_FILE = "doc_id.bin";
+  public static final String DOC_ID_FILE = "doc_id.bin";
 
   /** url与id对应的关系的文件存储路径 */
   private static final String DOC_FILEPATH = PathCfg.BASEPATH + PathCfg.COLLEC_PATH + DOC_ID_FILE;
@@ -65,8 +65,8 @@ public class DocIdproc {
 
   /** 关闭文件 */
   public void close() {
-    LocalIOUtils.close(bufferWriter);
-    LocalIOUtils.close(write);
+    CommonIOUtils.close(bufferWriter);
+    CommonIOUtils.close(write);
   }
 
   /**
@@ -81,8 +81,7 @@ public class DocIdproc {
     try {
       // 进行写数据操作
       bufferWriter.write(data);
-      // 换行操作
-      bufferWriter.newLine();
+
     } catch (IOException e) {
       e.printStackTrace();
       logger.error("DocIdproc putDoc IOException", e);
@@ -151,8 +150,8 @@ public class DocIdproc {
       e.printStackTrace();
       logger.error("DocIdproc getDoc IOException", e);
     } finally {
-      LocalIOUtils.close(bufferReader);
-      LocalIOUtils.close(reader);
+      CommonIOUtils.close(bufferReader);
+      CommonIOUtils.close(reader);
     }
 
     return findMap;
@@ -211,8 +210,7 @@ public class DocIdproc {
       logger.error("DocIdproc getLastHrefId FileNotFoundException:", e);
     } catch (IOException e) {
       e.printStackTrace();
-      logger.error(
-          "DocIdproc getLastHrefId IOExceptio                                          n:", e);
+      logger.error("DocIdproc getLastHrefId IOException:", e);
     }
 
     return -1;
@@ -230,6 +228,7 @@ public class DocIdproc {
     outMsg.append(id);
     outMsg.append(SymbolMsg.DATA_COLUMN);
     outMsg.append(url);
+    outMsg.append(SymbolMsg.LINE);
 
     return outMsg.toString();
   }

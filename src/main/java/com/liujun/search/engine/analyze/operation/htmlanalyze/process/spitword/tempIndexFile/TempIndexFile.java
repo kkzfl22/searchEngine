@@ -1,6 +1,6 @@
 package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.tempIndexFile;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.common.properties.SysPropertiesUtils;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
@@ -146,7 +146,7 @@ public class TempIndexFile {
    * @param stream
    */
   public void close(Closeable stream) {
-    LocalIOUtils.close(stream);
+    CommonIOUtils.close(stream);
   }
 
   /**

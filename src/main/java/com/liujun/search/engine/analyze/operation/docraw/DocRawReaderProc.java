@@ -2,7 +2,7 @@ package com.liujun.search.engine.analyze.operation.docraw;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.engine.analyze.operation.docraw.docrawReader.*;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
@@ -145,8 +145,8 @@ public class DocRawReaderProc extends DocRawFileManager {
   private void closeReader() {
     InputStream input = FlowCon.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_STREAM.getKey());
     Channel channel = FlowCon.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_CHANNEL.getKey());
-    LocalIOUtils.close(channel);
-    LocalIOUtils.close(input);
+    CommonIOUtils.close(channel);
+    CommonIOUtils.close(input);
   }
 
   public void cleanAll() {

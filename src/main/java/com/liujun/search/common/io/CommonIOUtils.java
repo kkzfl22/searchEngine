@@ -1,6 +1,5 @@
 package com.liujun.search.common.io;
 
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,10 @@ import java.io.IOException;
  * @version 0.0.1
  * @date 2019/03/03
  */
-public class LocalIOUtils {
+public class CommonIOUtils {
 
   /** 日志 */
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocalIOUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommonIOUtils.class);
 
   public static void close(Closeable close) {
     if (close != null) {
@@ -23,7 +22,7 @@ public class LocalIOUtils {
         close.close();
       } catch (IOException e) {
         e.printStackTrace();
-        LOGGER.error("LocalIOUtils close IOException", e);
+        LOGGER.error("CommonIOUtils close IOException", e);
       }
     }
   }

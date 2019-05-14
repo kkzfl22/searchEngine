@@ -1,6 +1,6 @@
 package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.loader;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.analyze.constant.SpitWordFileEnum;
 import com.liujun.search.utilscode.io.constant.PathCfg;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
@@ -93,8 +93,8 @@ public class WordLoader {
       LOGGER.error("Wordloader loader IOException", e);
       throw new RuntimeException(e);
     } finally {
-      LocalIOUtils.close(bufferReader);
-      LocalIOUtils.close(reader);
+      CommonIOUtils.close(bufferReader);
+      CommonIOUtils.close(reader);
     }
   }
 
@@ -124,8 +124,8 @@ public class WordLoader {
       e.printStackTrace();
       LOGGER.error("Wordloader loader loaderKeys IOException", e);
     } finally {
-      LocalIOUtils.close(bufferReader);
-      LocalIOUtils.close(reader);
+      CommonIOUtils.close(bufferReader);
+      CommonIOUtils.close(reader);
     }
   }
 
@@ -194,8 +194,8 @@ public class WordLoader {
       e.printStackTrace();
       LOGGER.error("WordWriter IOException :", e);
     } finally {
-      LocalIOUtils.close(bufferWirte);
-      LocalIOUtils.close(writer);
+      CommonIOUtils.close(bufferWirte);
+      CommonIOUtils.close(writer);
     }
   }
 

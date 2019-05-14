@@ -91,8 +91,8 @@ public class TestByteBufferUtils {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } finally {
-      LocalIOUtils.close(channel);
-      LocalIOUtils.close(input);
+      CommonIOUtils.close(channel);
+      CommonIOUtils.close(input);
     }
 
     return 0;

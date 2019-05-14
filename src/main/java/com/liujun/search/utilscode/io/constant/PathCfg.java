@@ -27,4 +27,7 @@ public class PathCfg {
 
   /** 临时索引文件排序 完成后的输出目录 */
   public static final String INDEX_TEMP_SORT_INDEX_PATH = "sortindex";
+
+  /** 倒排索引输出目录 */
+  public static final String INDEX_OUTPUT_DESCINDEX_PATH = "descindex";
 }

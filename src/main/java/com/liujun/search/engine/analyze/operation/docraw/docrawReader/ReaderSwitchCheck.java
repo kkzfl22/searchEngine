@@ -2,7 +2,7 @@ package com.liujun.search.engine.analyze.operation.docraw.docrawReader;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.utilscode.io.constant.SymbolMsg;
 
@@ -45,8 +45,8 @@ public class ReaderSwitchCheck implements FlowServiceInf {
       FileInputStream inputStream =
           context.getObject(DocrawReaderEnum.DOCRAW_PROC_INPUT_STREAM.getKey());
 
-      LocalIOUtils.close(streamChannel);
-      LocalIOUtils.close(inputStream);
+      CommonIOUtils.close(streamChannel);
+      CommonIOUtils.close(inputStream);
 
       boolean switchFlag = openNext(context);
 

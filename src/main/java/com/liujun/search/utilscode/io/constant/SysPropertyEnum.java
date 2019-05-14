@@ -32,6 +32,9 @@ public enum SysPropertyEnum {
 
   /** 网页分词分析结果，限制最大单文件大小 */
   ANALYZE_MAX_FILE("analyze.max.file"),
+
+  /** 倒排索引阶段，单文件的最大大小 */
+  DESC_INDEX_MAXFILE_SIZE("desc.index.max.file"),
   ;
 
   private String key;

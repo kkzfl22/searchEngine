@@ -1,6 +1,6 @@
 package com.liujun.search.engine.collect.thread;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.element.download.HttpsClientManager;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
 import com.liujun.search.engine.collect.flow.HtmlAnalyzeFLow;
@@ -109,7 +109,7 @@ public class HtmCollectThread implements Runnable {
   /** 进特线程的资源靖理 */
   public void cleanResource() {
     // 关闭http的连接
-    LocalIOUtils.close(client);
+    CommonIOUtils.close(client);
     // 清理线程资源
     DocRawWriteProc.INSTANCE.threadClean();
     // 保存当前变量指针的值

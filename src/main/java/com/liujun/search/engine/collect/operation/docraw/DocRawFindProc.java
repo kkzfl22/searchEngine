@@ -2,7 +2,7 @@ package com.liujun.search.engine.collect.operation.docraw;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.collect.constant.DocRawFindEnum;
 import com.liujun.search.engine.collect.operation.docraw.docrawFind.DataConvert;
 import com.liujun.search.engine.collect.operation.docraw.docrawFind.DataFindId;
@@ -134,8 +134,8 @@ public class DocRawFindProc extends DocRawFileStreamManager {
       e.printStackTrace();
       logger.error("DocRawFindProc fileMatcher Exception ", e);
     } finally {
-      LocalIOUtils.close(channel);
-      LocalIOUtils.close(input);
+      CommonIOUtils.close(channel);
+      CommonIOUtils.close(input);
     }
 
     return null;

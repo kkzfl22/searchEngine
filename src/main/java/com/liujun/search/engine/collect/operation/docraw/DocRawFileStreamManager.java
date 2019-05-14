@@ -1,16 +1,14 @@
 package com.liujun.search.engine.collect.operation.docraw;
 
-import com.liujun.search.common.io.LocalIOUtils;
+import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.common.properties.SysPropertiesUtils;
 import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -107,7 +105,7 @@ public class DocRawFileStreamManager extends DocRawFileManager {
 
   /** 数据关闭对象 */
   public void close() {
-    LocalIOUtils.close(channel);
-    LocalIOUtils.close(outputStream);
+    CommonIOUtils.close(channel);
+    CommonIOUtils.close(outputStream);
   }
 }
