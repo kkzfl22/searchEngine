@@ -45,4 +45,46 @@ public class TestDescIndexReaderProcess {
     Assert.assertNotNull(list);
     Assert.assertNotEquals(0, list.size());
   }
+
+  /** 测试倒排索引文件的读取操作 */
+  @Test
+  public void testDescIndexReader2() {
+    List<WordOffsetBusi> busiList = new ArrayList<>();
+
+    WordOffsetBusi busi2 = new WordOffsetBusi();
+
+    busi2.setFileIndex(0);
+    busi2.setWordId(251666);
+    busi2.setOffset(337729057);
+    busi2.setLength(58);
+    busiList.add(busi2);
+
+    int index = 0;
+
+    Map<Integer, List<Long>> list = DescIndexReaderProcess.INSTANCE.getWordList(index, busiList);
+
+    Assert.assertNotNull(list);
+    Assert.assertNotEquals(0, list.size());
+  }
+
+  /** 测试倒排索引文件的读取操作 */
+  @Test
+  public void testDescIndexReader3() {
+    List<WordOffsetBusi> busiList = new ArrayList<>();
+
+    WordOffsetBusi busi2 = new WordOffsetBusi();
+
+    busi2.setFileIndex(0);
+    busi2.setWordId(253046);
+    busi2.setOffset(337730612);
+    busi2.setLength(12);
+    busiList.add(busi2);
+
+    int index = 0;
+
+    Map<Integer, List<Long>> list = DescIndexReaderProcess.INSTANCE.getWordList(index, busiList);
+
+    Assert.assertNotNull(list);
+    Assert.assertNotEquals(0, list.size());
+  }
 }

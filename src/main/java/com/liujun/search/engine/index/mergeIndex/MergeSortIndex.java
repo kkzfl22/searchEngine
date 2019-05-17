@@ -5,10 +5,7 @@ import com.liujun.search.engine.index.pojo.SortTempIndexData;
 import com.liujun.search.engine.index.pojo.TempIndexData;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 进行有序的索引文件合并操作
@@ -80,6 +77,15 @@ public class MergeSortIndex {
       runNum++;
 
     } while (nextReadCheck());
+
+    // 当最后还存在数据，则城要进行输出操作
+    if (!tempIndexList.isEmpty()) {
+      // 完成后检查一遍，作最后的输出操作
+      // 数据进行输出，然后清空对应的集合信息
+      DescIndexOutput.INSTANCE.writeIndex(tempIndexList);
+
+      DescIndexOutput.INSTANCE.close();
+    }
   }
 
   /**

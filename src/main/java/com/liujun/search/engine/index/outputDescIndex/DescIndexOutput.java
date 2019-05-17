@@ -146,6 +146,9 @@ public class DescIndexOutput {
 
   /** 进行文件的关闭操作 */
   public void close() {
+    // 优先关闭offset
+    DescIndexOffsetOutput.INSTANCE.close();
+
     CommonIOUtils.close(bufferedOutput);
     CommonIOUtils.close(fileOutput);
   }

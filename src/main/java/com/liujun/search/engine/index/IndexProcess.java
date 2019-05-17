@@ -12,6 +12,8 @@ import com.liujun.search.engine.index.mergeIndex.MergeSortIndex;
  */
 public class IndexProcess {
 
+  public static final IndexProcess INSTANCE = new IndexProcess();
+
   public void indexOut() {
     // 1，进行临时索引的排序
     TempIndexSort.INSTANCE.tempIndexSort();
