@@ -2,7 +2,7 @@ package com.liujun.search.element.download;
 
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.element.download.charsetFlow.HtmlCharsetFlow;
-import com.liujun.search.utilscode.io.constant.SysConfig;
+import com.liujun.search.common.constant.SysConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;

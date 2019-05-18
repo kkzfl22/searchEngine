@@ -4,6 +4,8 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.query.constant.QueryFlowEnum;
 import com.liujun.search.engine.query.pojo.SortDocIdBusi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -17,6 +19,8 @@ import java.util.*;
 public class CountAndOrder implements FlowServiceInf {
 
   public static final CountAndOrder INSTANCE = new CountAndOrder();
+
+  private Logger logger = LoggerFactory.getLogger(CountAndOrder.class);
 
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
@@ -34,6 +38,8 @@ public class CountAndOrder implements FlowServiceInf {
     Collections.sort(list);
 
     context.put(QueryFlowEnum.PROC_DOCLIST.getKey(), list);
+
+    logger.info("query count and order finish");
 
     return true;
   }

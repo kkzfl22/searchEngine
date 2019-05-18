@@ -1,8 +1,7 @@
 package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.tempIndexFile;
 
 import com.liujun.search.common.properties.SysPropertiesUtils;
-import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
-import org.junit.After;
+import com.liujun.search.common.constant.SysPropertyEnum;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;

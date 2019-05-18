@@ -5,9 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.HashSet;
 
 /**
@@ -23,7 +22,7 @@ public class FilterWordLoader {
   private static final HashSet<String> FILTER_WORD = new HashSet<>(1900);
 
   /** 过滤的分词 */
-  private static final String STOP_WORDS_FILE = "./participle/stopwords.txt";
+  private static final String STOP_WORDS_FILE = "/participle/stopwords.txt";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WordLoader.class);
 
@@ -31,7 +30,6 @@ public class FilterWordLoader {
     // 进行过滤的文件的加载操作
     LoadFile();
   }
-
 
   public static final FilterWordLoader INSTANCE = new FilterWordLoader();
 
@@ -44,12 +42,26 @@ public class FilterWordLoader {
 
     FileReader reader = null;
     BufferedReader bufferReader = null;
+    InputStream input = null;
+    InputStreamReader inpuReader = null;
     try {
 
-      String readPath = WordLoader.class.getClassLoader().getResource(STOP_WORDS_FILE).getPath();
+      URL url = WordLoader.class.getClassLoader().getResource(STOP_WORDS_FILE);
 
-      reader = new FileReader(readPath);
-      bufferReader = new BufferedReader(reader);
+      // 普通运行时的加载
+      if (null != url) {
+        String readPath = url.getPath();
+        reader = new FileReader(readPath);
+        bufferReader = new BufferedReader(reader);
+      } else {
+        // 在jar运行时，将使用此方式进行加载
+        input = GetResource(STOP_WORDS_FILE);
+        if (null == input) {
+          throw new RuntimeException("file not exists,path:" + STOP_WORDS_FILE);
+        }
+        inpuReader = new InputStreamReader(input);
+        bufferReader = new BufferedReader(inpuReader);
+      }
 
       String line = null;
 
@@ -62,9 +74,21 @@ public class FilterWordLoader {
       LOGGER.error("Wordloader loader IOException", e);
       throw new RuntimeException(e);
     } finally {
+      CommonIOUtils.close(inpuReader);
+      CommonIOUtils.close(input);
       CommonIOUtils.close(bufferReader);
       CommonIOUtils.close(reader);
     }
+  }
+
+  /**
+   * 获取系统资源
+   *
+   * @param path 路径信息
+   * @return 文件流
+   */
+  public static InputStream GetResource(String path) {
+    return FilterWordLoader.class.getResourceAsStream(path);
   }
 
   /**

@@ -4,15 +4,9 @@ import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
-import com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess.BytesToEntityConvert;
 import com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess.LineDataProcFlow;
-import com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess.PageListLimit;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.liujun.search.common.constant.SymbolMsg;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

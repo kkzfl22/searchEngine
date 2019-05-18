@@ -3,6 +3,8 @@ package com.liujun.search.engine.index.mergeIndex;
 import com.liujun.search.engine.index.outputDescIndex.DescIndexOutput;
 import com.liujun.search.engine.index.pojo.SortTempIndexData;
 import com.liujun.search.engine.index.pojo.TempIndexData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
@@ -24,8 +26,13 @@ public class MergeSortIndex {
   /** 临时索引文件信息 */
   private SortTempIndexData[] cacheSortDatasFile;
 
+  private Logger logger = LoggerFactory.getLogger(MergeSortIndex.class);
+
   /** 进行倒排索引文件的合并排序操作 */
   public void mergeIndex() {
+
+    logger.info("search engine merge temp index start");
+
     // 1,获取文件集合
     File[] lists = SortIndexFile.INSTANCE.indexFiles();
 
@@ -86,6 +93,8 @@ public class MergeSortIndex {
 
       DescIndexOutput.INSTANCE.close();
     }
+
+    logger.info("search engine merge temp index finish");
   }
 
   /**

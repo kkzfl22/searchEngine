@@ -1,7 +1,7 @@
 package com.liujun.search.algorithm.ahoCorasick;
 
 import com.liujun.search.algorithm.ahoCorasick.pojo.MatcherBusi;
-import com.liujun.search.utilscode.io.constant.SysConfig;
+import com.liujun.search.common.constant.SysConfig;
 
 import java.util.*;
 

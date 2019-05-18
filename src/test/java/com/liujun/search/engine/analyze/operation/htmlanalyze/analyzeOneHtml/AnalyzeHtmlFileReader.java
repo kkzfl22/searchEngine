@@ -3,7 +3,7 @@ package com.liujun.search.engine.analyze.operation.htmlanalyze.analyzeOneHtml;
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
 import com.liujun.search.utilscode.io.code.PathUtils;
-import com.liujun.search.utilscode.io.constant.PathEnum;
+import com.liujun.search.utils.PathEnum;
 
 import java.io.*;
 

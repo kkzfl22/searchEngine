@@ -22,9 +22,6 @@ public class QueryFlow {
   /** 运行的流程 */
   private static final List<FlowServiceInf> RUNFLOW = new ArrayList<>();
 
-  /** 日志 */
-  private Logger logger = LoggerFactory.getLogger(QueryFlow.class);
-
   static {
     // 1,进行分词操作
     RUNFLOW.add(SpitWord.INSTANCE);
@@ -41,6 +38,13 @@ public class QueryFlow {
     // 通过id获取网页的url
     RUNFLOW.add(GetUrlByDocId.INSTANCE);
   }
+
+  public static final QueryFlow INSTANCE = new QueryFlow();
+
+
+  private Logger logger = LoggerFactory.getLogger(QueryFlow.class);
+
+
 
   /**
    * 进行查询

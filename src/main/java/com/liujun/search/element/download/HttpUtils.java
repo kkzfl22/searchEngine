@@ -1,6 +1,6 @@
 package com.liujun.search.element.download;
 
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

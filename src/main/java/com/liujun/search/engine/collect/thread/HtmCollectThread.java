@@ -7,7 +7,7 @@ import com.liujun.search.engine.collect.flow.HtmlAnalyzeFLow;
 import com.liujun.search.engine.collect.operation.docraw.DocRawWriteProc;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueue;
 import com.liujun.search.engine.collect.operation.filequeue.FileQueueManager;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 

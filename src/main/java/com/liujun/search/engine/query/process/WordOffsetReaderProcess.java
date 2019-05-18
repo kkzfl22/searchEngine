@@ -3,12 +3,11 @@ package com.liujun.search.engine.query.process;
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.index.outputDescIndex.DescIndexFileName;
 import com.liujun.search.engine.query.pojo.WordOffsetBusi;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

@@ -5,7 +5,7 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.engine.analyze.operation.docraw.docrawReader.lineProcess.LineDataProcFlow;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 
 import java.nio.ByteBuffer;
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.liujun.search.algorithm.boyerMoore;
 
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

@@ -6,7 +6,7 @@ import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.common.io.ByteUtils;
 import com.liujun.search.engine.analyze.constant.DocrawReaderEnum;
 import com.liujun.search.engine.analyze.pojo.RawDataLine;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 
 import java.util.List;
 

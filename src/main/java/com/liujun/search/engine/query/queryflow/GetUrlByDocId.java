@@ -6,6 +6,8 @@ import com.liujun.search.engine.query.cache.DocIdCache;
 import com.liujun.search.engine.query.constant.QueryFlowEnum;
 import com.liujun.search.engine.query.pojo.QueryRsp;
 import com.liujun.search.engine.query.pojo.SortDocIdBusi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,8 @@ public class GetUrlByDocId implements FlowServiceInf {
 
   public static final GetUrlByDocId INSTANCE = new GetUrlByDocId();
 
+  private Logger logger = LoggerFactory.getLogger(GetUrlByDocId.class);
+
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
@@ -31,10 +35,13 @@ public class GetUrlByDocId implements FlowServiceInf {
     for (SortDocIdBusi docIdItem : list) {
       String url = DocIdCache.INSTANCE.getUrl(docIdItem.getDocId());
       QueryRsp rsp = new QueryRsp(docIdItem.getDocId(), url);
+      rsp.setCountNum(docIdItem.getCountDocId());
       queryRspList.add(rsp);
     }
 
     context.put(QueryFlowEnum.OUTOUT_QUERYRSP.getKey(), queryRspList);
+
+    logger.info("query get url response {}", queryRspList);
 
     return true;
   }

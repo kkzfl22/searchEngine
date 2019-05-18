@@ -1,4 +1,4 @@
-package com.liujun.search.utilscode.io.constant;
+package com.liujun.search.common.constant;
 
 /**
  * 属性文件操作

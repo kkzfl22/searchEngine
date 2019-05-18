@@ -5,7 +5,7 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.element.constant.HttpCharsetFlowEnum;
 import com.liujun.search.element.download.HttpUtils;
-import com.liujun.search.utilscode.io.constant.SysConfig;
+import com.liujun.search.common.constant.SysConfig;
 
 /**
  * html4中的网页内容编码获取

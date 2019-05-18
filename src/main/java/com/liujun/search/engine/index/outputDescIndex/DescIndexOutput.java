@@ -3,8 +3,8 @@ package com.liujun.search.engine.index.outputDescIndex;
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.common.properties.SysPropertiesUtils;
 import com.liujun.search.engine.index.pojo.TempIndexData;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
-import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
+import com.liujun.search.common.constant.SymbolMsg;
+import com.liujun.search.common.constant.SysPropertyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

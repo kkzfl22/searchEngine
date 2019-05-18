@@ -38,8 +38,12 @@ public class HtmlHrefAnalyze {
     FLOW.add(HrefCheckFilter.INSTANCE);
     // 进行网页链接编码
     FLOW.add(HrefEncoder.INSTANCE);
-    // 添加到集合中
-    FLOW.add(HrefAddList.INSTANCE);
+    // 进行网页链接的内容处理
+    FLOW.add(HrefContextProc.INSTANCE);
+    // 检查网页链接是否已经下载过
+    FLOW.add(HrefBloomFilter.INSTANCE);
+    // 将已经处理好的链接添加到集合中
+    FLOW.add(HrefAddSet.INSTANCE);
   }
 
   private Logger logger = LoggerFactory.getLogger(HtmlHrefAnalyze.class);

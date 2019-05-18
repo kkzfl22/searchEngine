@@ -1,7 +1,7 @@
 package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.utilscode.io.code.PathUtils;
-import com.liujun.search.utilscode.io.constant.PathEnum;
+import com.liujun.search.utils.PathEnum;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;

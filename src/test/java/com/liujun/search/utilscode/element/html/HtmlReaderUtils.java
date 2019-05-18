@@ -2,7 +2,7 @@ package com.liujun.search.utilscode.element.html;
 
 import com.liujun.search.utilscode.element.constant.HtmlHrefFileEnum;
 import com.liujun.search.utilscode.io.code.PathUtils;
-import com.liujun.search.utilscode.io.constant.PathEnum;
+import com.liujun.search.utils.PathEnum;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

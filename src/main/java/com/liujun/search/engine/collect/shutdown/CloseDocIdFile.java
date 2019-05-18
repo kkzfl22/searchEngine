@@ -2,7 +2,6 @@ package com.liujun.search.engine.collect.shutdown;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.operation.BloomFilter;
 import com.liujun.search.engine.collect.operation.DocIdproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -15,6 +15,9 @@ public class QueryRsp {
   /** 网页的内容 */
   private String docUrl;
 
+  /** 统计出现的次数 */
+  private int countNum;
+
   /** 预留，用做网页的摘要 */
   private String docTitle;
 
@@ -47,11 +50,20 @@ public class QueryRsp {
     this.docTitle = docTitle;
   }
 
+  public int getCountNum() {
+    return countNum;
+  }
+
+  public void setCountNum(int countNum) {
+    this.countNum = countNum;
+  }
+
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("QueryRsp{");
     sb.append("docId=").append(docId);
     sb.append(", docUrl='").append(docUrl).append('\'');
+    sb.append(", countNum=").append(countNum);
     sb.append(", docTitle='").append(docTitle).append('\'');
     sb.append('}');
     return sb.toString();

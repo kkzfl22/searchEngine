@@ -5,6 +5,8 @@ import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.query.cache.WordOffsetCache;
 import com.liujun.search.engine.query.constant.QueryFlowEnum;
 import com.liujun.search.engine.query.pojo.WordOffsetBusi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +22,8 @@ public class GetWordOffset implements FlowServiceInf {
 
   public static final GetWordOffset INSTANCE = new GetWordOffset();
 
+  private Logger logger = LoggerFactory.getLogger(GetWordOffset.class);
+
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
@@ -32,6 +36,8 @@ public class GetWordOffset implements FlowServiceInf {
     }
 
     context.put(QueryFlowEnum.PROC_WORDOFFSET.getKey(), wordMap);
+
+    logger.info("query read word offset :", wordMap);
 
     return true;
   }

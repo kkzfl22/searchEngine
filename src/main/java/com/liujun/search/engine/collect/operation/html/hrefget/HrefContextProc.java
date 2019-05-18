@@ -4,21 +4,20 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.HrefGetEnum;
 import com.liujun.search.engine.collect.operation.html.HrefContentOperation;
-import com.liujun.search.engine.collect.operation.html.HtmlHrefFilter;
 import com.liujun.search.engine.collect.pojo.AnalyzeBusi;
 
 import java.util.Set;
 
 /**
- * 链接的检查以及添加到集合中
+ * 进行链接的处理
  *
  * @author liujun
  * @version 0.0.1
  * @date 2019/03/31
  */
-public class HrefAddList implements FlowServiceInf {
+public class HrefContextProc implements FlowServiceInf {
 
-  public static final HrefAddList INSTANCE = new HrefAddList();
+  public static final HrefContextProc INSTANCE = new HrefContextProc();
 
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
@@ -27,12 +26,10 @@ public class HrefAddList implements FlowServiceInf {
 
     String hrefContex = busi.getHref();
 
-
-    Set<String> hrefList = context.getObject(HrefGetEnum.HREF_RESULT_SET_OBJECT.getHrefKey());
     // 进行链接内容的处理
     hrefContex = HrefContentOperation.INSTANCE.hrefContext(hrefContex);
 
-    hrefList.add(hrefContex);
+    busi.setHref(hrefContex);
 
     return true;
   }

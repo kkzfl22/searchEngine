@@ -1,6 +1,6 @@
 package com.liujun.search.engine.index.mergeIndex;
 
-import com.liujun.search.utilscode.io.constant.PathCfg;
+import com.liujun.search.common.constant.PathCfg;
 
 import java.io.File;
 

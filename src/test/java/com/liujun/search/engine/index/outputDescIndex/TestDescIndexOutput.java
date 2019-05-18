@@ -2,7 +2,7 @@ package com.liujun.search.engine.index.outputDescIndex;
 
 import com.liujun.search.common.classes.ObjectFieldOper;
 import com.liujun.search.engine.index.pojo.TempIndexData;
-import com.liujun.search.utilscode.io.constant.PathCfg;
+import com.liujun.search.common.constant.PathCfg;
 import org.junit.Assert;
 import org.junit.Test;
 

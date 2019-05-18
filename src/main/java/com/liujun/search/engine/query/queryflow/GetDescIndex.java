@@ -5,6 +5,8 @@ import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.query.constant.QueryFlowEnum;
 import com.liujun.search.engine.query.pojo.WordOffsetBusi;
 import com.liujun.search.engine.query.process.DescIndexReaderProcess;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.Map;
 public class GetDescIndex implements FlowServiceInf {
 
   public static final GetDescIndex INSTANCE = new GetDescIndex();
+
+  private Logger logger = LoggerFactory.getLogger(GetDescIndex.class);
 
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
@@ -37,6 +41,8 @@ public class GetDescIndex implements FlowServiceInf {
 
     // 通过网页分词获得了所有的网页id
     context.put(QueryFlowEnum.PROC_WORDOFFSET.getKey(), wordList);
+
+    logger.info("query desc index size {}",wordList.size());
 
     return true;
   }

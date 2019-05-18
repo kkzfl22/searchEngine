@@ -1,4 +1,4 @@
-package com.liujun.search.utilscode.io.constant;
+package com.liujun.search.utils;
 
 /**
  * 进行路径的枚举

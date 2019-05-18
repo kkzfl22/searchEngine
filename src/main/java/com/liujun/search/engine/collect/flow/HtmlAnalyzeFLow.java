@@ -2,10 +2,8 @@ package com.liujun.search.engine.collect.flow;
 
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.common.number.NumberLoopSeq;
 import com.liujun.search.engine.collect.constant.CollectAnalyzeFlowKeyEnum;
 import com.liujun.search.engine.collect.constant.WebEntryEnum;
-import com.liujun.search.engine.collect.operation.html.HtmlFormatCheck;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +32,12 @@ public class HtmlAnalyzeFLow {
   static {
     // 1，下载网页操作
     FLOW.add(DownLoadHtml.INSTANCE);
-    //2, 检查当前是否为网页,如果不为网页，则跳过
+    // 2, 检查当前是否为网页,如果不为网页，则跳过
     FLOW.add(HtmlTagCheck.INSTANCE);
+    // 进行网页链接的判重操作
+    FLOW.add(HtmlUrlBoomFilter.INSTANCE);
     // 2,进行网页判重操作
-    FLOW.add(HtmlBoomFilter.INSTANCE);
+    FLOW.add(HtmlContextBoomFilter.INSTANCE);
     // 3,分配网页的id操作
     FLOW.add(HtmlNumberId.INSTANCE);
     // 4,将网页与网页id存储到doc_id.bin文件中

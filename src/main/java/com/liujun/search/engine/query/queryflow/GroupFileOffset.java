@@ -4,6 +4,8 @@ import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.query.constant.QueryFlowEnum;
 import com.liujun.search.engine.query.pojo.WordOffsetBusi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,8 @@ public class GroupFileOffset implements FlowServiceInf {
 
   public static final GroupFileOffset INSTANCE = new GroupFileOffset();
 
+  private Logger logger = LoggerFactory.getLogger(GroupFileOffset.class);
+
   @Override
   public boolean runFlow(FlowServiceContext context) throws Exception {
 
@@ -28,7 +32,7 @@ public class GroupFileOffset implements FlowServiceInf {
 
     // 获取单启所对应的偏移信息
     Map<Integer, WordOffsetBusi> wordOffsetMap =
-        context.getObject(QueryFlowEnum.PROC_SPITWORD.getKey());
+        context.getObject(QueryFlowEnum.PROC_WORDOFFSET.getKey());
 
     // 提取单词偏移信息
     List<WordOffsetBusi> offsetList = this.getWordOffsetList(wordList, wordOffsetMap);
@@ -37,6 +41,8 @@ public class GroupFileOffset implements FlowServiceInf {
     Map<Integer, List<WordOffsetBusi>> groupOffsetList = this.groupWordOffset(offsetList);
 
     context.put(QueryFlowEnum.PROC_GROUPOFFSET.getKey(), groupOffsetList);
+
+    logger.info("query group by file size {}", groupOffsetList.size());
 
     return true;
   }

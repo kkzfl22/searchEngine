@@ -1,7 +1,7 @@
 package com.liujun.search.common.properties;
 
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
-import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
+import com.liujun.search.common.constant.SymbolMsg;
+import com.liujun.search.common.constant.SysPropertyEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

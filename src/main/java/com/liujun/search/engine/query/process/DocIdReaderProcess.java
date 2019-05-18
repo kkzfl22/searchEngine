@@ -3,8 +3,8 @@ package com.liujun.search.engine.query.process;
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.collect.operation.DocIdproc;
 import com.liujun.search.engine.query.pojo.DocIdBusi;
-import com.liujun.search.utilscode.io.constant.PathCfg;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.PathCfg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

@@ -2,13 +2,14 @@ package com.liujun.search.engine.analyze.operation.htmlanalyze.process.spitword.
 
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.analyze.constant.SpitWordFileEnum;
-import com.liujun.search.utilscode.io.constant.PathCfg;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.PathCfg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,16 +27,18 @@ public class WordLoader {
   protected static final Map<String, Integer> KEYWORD = new HashMap<>(27000);
 
   /** 基础路径 */
-  private static final String BASE_PATH = "./participle/";
+  private static final String BASE_PATH = "/participle/";
 
   /** 分词以及编号对应信息 */
   protected static final String KEY_WORD_FILE = "key_word.txt";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WordLoader.class);
 
+  /** 分析的路径 */
+  private static final String ANALYZE_PATH = PathCfg.BASEPATH + PathCfg.ANALYZE_PATH;
+
   /** 将分词与单词号进行存储路径 */
-  private static final String ANALYZE_KEYS_PATH =
-      PathCfg.BASEPATH + PathCfg.ANALYZE_PATH + KEY_WORD_FILE;
+  private static final String ANALYZE_KEYS_PATH = ANALYZE_PATH + KEY_WORD_FILE;
 
   public static final WordLoader INSTANCE = new WordLoader();
 
@@ -57,6 +60,13 @@ public class WordLoader {
 
       LOGGER.info("word loader finish , word numer : {} ", KEYWORD.size());
 
+      File dirCheck = new File(ANALYZE_PATH);
+
+      // 当文件夹不存在时，则执行创建操作
+      if (!dirCheck.exists()) {
+        dirCheck.mkdirs();
+      }
+
       // 进行分词文件的写入
       writeKeys();
     } else {
@@ -73,13 +83,27 @@ public class WordLoader {
 
     FileReader reader = null;
     BufferedReader bufferReader = null;
+    InputStream input = null;
+    InputStreamReader inpuReader = null;
 
     try {
       String filePath = BASE_PATH + fileEnum.getFile();
-      String readPath = WordLoader.class.getClassLoader().getResource(filePath).getPath();
 
-      reader = new FileReader(readPath);
-      bufferReader = new BufferedReader(reader);
+      URL fileURL = WordLoader.class.getClassLoader().getResource(filePath);
+
+      if (null == fileURL) {
+        input = GetResource(filePath);
+        if (null == input) {
+          throw new RuntimeException("file not exists,path:" + filePath);
+        }
+
+        inpuReader = new InputStreamReader(input);
+        bufferReader = new BufferedReader(inpuReader);
+      } else {
+        String readPath = fileURL.getPath();
+        reader = new FileReader(readPath);
+        bufferReader = new BufferedReader(reader);
+      }
 
       String line = null;
 
@@ -93,9 +117,21 @@ public class WordLoader {
       LOGGER.error("Wordloader loader IOException", e);
       throw new RuntimeException(e);
     } finally {
+      CommonIOUtils.close(inpuReader);
+      CommonIOUtils.close(input);
       CommonIOUtils.close(bufferReader);
       CommonIOUtils.close(reader);
     }
+  }
+
+  /**
+   * 获取系统资源
+   *
+   * @param path 路径信息
+   * @return 文件流
+   */
+  public static InputStream GetResource(String path) {
+    return WordLoader.class.getResourceAsStream(path);
   }
 
   /**

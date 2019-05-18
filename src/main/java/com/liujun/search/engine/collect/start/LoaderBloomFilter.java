@@ -1,8 +1,10 @@
 package com.liujun.search.engine.collect.start;
 
+import com.liujun.search.algorithm.bloomFilter.HtmlContextFilter;
+import com.liujun.search.algorithm.bloomFilter.HtmlUrlFilter;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
-import com.liujun.search.engine.collect.operation.BloomFilter;
+import com.liujun.search.algorithm.bloomFilter.BloomFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +28,8 @@ public class LoaderBloomFilter implements FlowServiceInf {
     logger.info("collect start loader bloom filter start..");
 
     // 加载布隆过滤器的数据
-    BloomFilter.INSTANCE.loader();
+    HtmlContextFilter.INSTANCE.loader();
+    HtmlUrlFilter.INSTANCE.loader();
 
     logger.info("collect start loader bloom filter finish..");
 

@@ -1,7 +1,7 @@
 package com.liujun.search.algorithm.boyerMoore;
 
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 
 /**
  * 公共字符匹配的实例

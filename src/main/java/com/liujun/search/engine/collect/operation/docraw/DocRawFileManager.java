@@ -1,8 +1,7 @@
 package com.liujun.search.engine.collect.operation.docraw;
 
-import com.liujun.search.engine.analyze.operation.docraw.docrawReader.LineEndMatcher;
-import com.liujun.search.utilscode.io.constant.PathCfg;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.PathCfg;
+import com.liujun.search.common.constant.SymbolMsg;
 
 import java.io.File;
 import java.io.IOException;

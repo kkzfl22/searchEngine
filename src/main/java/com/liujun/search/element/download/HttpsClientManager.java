@@ -3,7 +3,7 @@ package com.liujun.search.element.download;
 import com.liujun.search.common.properties.SysPropertiesUtils;
 import com.liujun.search.element.constant.HttpDefConnCfg;
 import com.liujun.search.element.constant.HttpVersionEnum;
-import com.liujun.search.utilscode.io.constant.SysPropertyEnum;
+import com.liujun.search.common.constant.SysPropertyEnum;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;

@@ -2,8 +2,8 @@ package com.liujun.search.engine.collect.operation;
 
 import com.liujun.search.algorithm.ahoCorasick.AhoCorasickNum;
 import com.liujun.search.common.io.CommonIOUtils;
-import com.liujun.search.utilscode.io.constant.PathCfg;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.PathCfg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

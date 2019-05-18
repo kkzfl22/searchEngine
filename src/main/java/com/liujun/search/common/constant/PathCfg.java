@@ -1,5 +1,6 @@
-package com.liujun.search.utilscode.io.constant;
+package com.liujun.search.common.constant;
 
+import com.liujun.search.common.constant.SysPropertyEnum;
 import com.liujun.search.common.properties.SysPropertiesUtils;
 
 /**

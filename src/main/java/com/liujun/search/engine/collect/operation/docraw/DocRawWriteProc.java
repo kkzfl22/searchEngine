@@ -1,9 +1,7 @@
 package com.liujun.search.engine.collect.operation.docraw;
 
 import com.liujun.search.common.io.ByteBufferUtils;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.liujun.search.common.constant.SymbolMsg;
 
 import java.io.*;
 import java.nio.ByteBuffer;

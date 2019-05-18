@@ -1,7 +1,7 @@
 package com.liujun.search.engine.collect.operation.html;
 
 import com.liujun.search.utilscode.io.code.PathUtils;
-import com.liujun.search.utilscode.io.constant.PathEnum;
+import com.liujun.search.utils.PathEnum;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
 
 /**
  * 进行网页内容的检查

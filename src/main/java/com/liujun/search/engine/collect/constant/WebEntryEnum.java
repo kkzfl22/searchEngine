@@ -22,7 +22,14 @@ public enum WebEntryEnum {
 
   ZOL("http://www.zol.com.cn/", "zol"),
 
-  ITEYE("https://www.iteye.com/", "iteye");
+  XH("http://www.xinhuanet.com/", "xh"),
+
+  RM("http://www.people.com.cn/", "rm"),
+
+  CCTV("http://www.cctv.com/", "cctv"),
+
+  FENG("https://www.ifeng.com/", "fh"),
+  ;
 
   /** 网站地址信息 */
   private String urlAddress;

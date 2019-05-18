@@ -2,7 +2,7 @@ package com.liujun.search.engine.index.mergeIndex;
 
 import com.liujun.search.common.io.CommonIOUtils;
 import com.liujun.search.engine.index.pojo.TempIndexData;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

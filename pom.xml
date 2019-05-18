@@ -134,7 +134,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.liujun.search.engine.collect.DataCollect</mainClass>
+                            <mainClass>com.liujun.search.engine.SearchEngineMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -13,7 +13,7 @@ public enum QueryFlowEnum {
   INPUT_CONTEXT("input_context"),
 
   /** 进行页最大限制的提取 */
-  INPUT_LIMITPAGE("input_context"),
+  INPUT_LIMITPAGE("input_limitpage"),
 
   /** 处理的分词数据 */
   PROC_SPITWORD("proc_spitword"),

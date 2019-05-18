@@ -8,7 +8,7 @@ import com.liujun.search.engine.analyze.operation.htmlanalyze.process.contextFil
 import com.liujun.search.engine.analyze.operation.htmlanalyze.process.contextFilter.FilterOneSymbol;
 import com.liujun.search.engine.analyze.operation.htmlanalyze.process.tagFlow.*;
 import com.liujun.search.engine.analyze.pojo.DataTagPosition;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

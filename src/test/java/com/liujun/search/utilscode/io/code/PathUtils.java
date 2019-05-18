@@ -1,6 +1,6 @@
 package com.liujun.search.utilscode.io.code;
 
-import com.liujun.search.utilscode.io.constant.PathEnum;
+import com.liujun.search.utils.PathEnum;
 
 import java.io.File;
 import java.net.URL;

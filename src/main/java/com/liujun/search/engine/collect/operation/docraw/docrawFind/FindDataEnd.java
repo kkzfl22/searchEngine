@@ -1,8 +1,6 @@
 package com.liujun.search.engine.collect.operation.docraw.docrawFind;
 
 import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
-import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
 import com.liujun.search.common.flow.FlowServiceContext;
 import com.liujun.search.common.flow.FlowServiceInf;
 import com.liujun.search.engine.collect.constant.DocRawFindEnum;

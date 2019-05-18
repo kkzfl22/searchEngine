@@ -20,7 +20,7 @@ public class DataCollectFlow {
   private static final List<FlowServiceInf> FLOW = new ArrayList<>();
 
   /** 日志数据 */
-  private static final Logger LOGGER = LoggerFactory.getLogger(DataCollect.class);
+  private  Logger logger = LoggerFactory.getLogger(DataCollectFlow.class);
 
   static {
     // 读取最后的文件序列
@@ -48,7 +48,7 @@ public class DataCollectFlow {
       }
     } catch (Exception e) {
       e.printStackTrace();
-      LOGGER.error("DataCollect Exception", e);
+      logger.error("DataCollect Exception", e);
     }
   }
 }

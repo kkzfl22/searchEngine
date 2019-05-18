@@ -4,7 +4,7 @@ import com.liujun.search.algorithm.ahoCorasick.pojo.MatcherBusi;
 import com.liujun.search.algorithm.boyerMoore.CommCharMatcherInstance;
 import com.liujun.search.algorithm.boyerMoore.use.CharMatcherBMBadChars;
 import com.liujun.search.engine.analyze.constant.HtmlTagSectionEnum;
-import com.liujun.search.utilscode.io.constant.SymbolMsg;
+import com.liujun.search.common.constant.SymbolMsg;
 
 import java.util.HashMap;
 import java.util.Map;
