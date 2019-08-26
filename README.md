@@ -1,7 +1,6 @@
 # searchEngine
 demo search engine
-
-main 
+ 
 入口1：
 收集、分析、索引
 com.liujun.search.engine.SearchEngineMain
